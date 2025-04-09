@@ -57,10 +57,7 @@ const Login = () => {
         response = await loginUser(username, password);
 
         if (response && !response.errorMessage) {
-          // Save first name and last name to local storage
-          console.log('Saving to localStorage after login:', { firstName: response.firstName, lastName: response.lastName });
-          localStorage.setItem('firstName', response.firstName);
-          localStorage.setItem('lastName', response.lastName);
+          // Ensure firstName and lastName are present in the response
 
           // Redirect to dashboard
           setTimeout(() => {
@@ -84,11 +81,7 @@ const Login = () => {
         response = await registerUser(username, password, firstName, lastName);
 
         if (response && !response.errorMessage) {
-          // Save first name and last name to local storage
-          console.log('Saving to localStorage after registration:', { firstName, lastName });
-          localStorage.setItem('firstName', firstName);
-          localStorage.setItem('lastName', lastName);
-
+        
           // Redirect to login page
           setTimeout(() => {
             setIsLogin(true);
