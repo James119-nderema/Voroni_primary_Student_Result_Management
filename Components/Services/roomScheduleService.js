@@ -1,0 +1,163 @@
+import API_BASE_URL from "./HostConfig";
+
+const roomScheduleUrl = `${API_BASE_URL}/rooms`;
+
+// Fetch rooms data from API
+const fetchRooms = async () => {
+  try {
+    const response = await fetch(`${roomScheduleUrl}/`);
+    if (!response.ok) {
+      throw new Error(`Error fetching rooms: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+// Fetch days data from API
+const fetchDays = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/days`);
+    if (!response.ok) {
+      throw new Error(`Error fetching days: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+// Fetch timeslots data from API
+const fetchTimeslots = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/timeslots`);
+    if (!response.ok) {
+      throw new Error(`Error fetching timeslots: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) { 
+    console.error(error);
+    return [];
+  }
+};
+
+export const fetchAvailableRoomSchedules = async (departmentId) => {
+  const response = await fetch(`${roomScheduleUrl}/schedule/available/${departmentId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch available room schedules");
+  }
+  const data = await response.json();
+  console.log("Raw available schedules:", data);
+
+  // Fetch rooms, days, and timeslots for mapping
+  const [rooms, days, timeslots] = await Promise.all([
+    fetchRooms(),
+    fetchDays(),
+    fetchTimeslots(),
+  ]);
+
+  // Log fetched data before mapping
+  console.log("Fetched Rooms:", rooms);
+  console.log("Fetched Days:", days);
+  console.log("Fetched Timeslots:", timeslots);
+
+  // Map IDs to names but preserve original IDs for adding
+  return data.map((schedule) => {
+    const room = rooms.find((r) => r.roomId === schedule.roomId);
+    const day = days.find((d) => d.dayId === schedule.dayId);
+    const timeslot = timeslots.find((t) => t.id === schedule.timeslotId);
+
+    return {
+      // Display names for UI
+      roomName: room ? room.roomName : "Unknown Room",
+      roomType: room ? room.roomType : "Unknown Type",
+      dayName: day ? day.dayName : "Unknown Day",
+      startTime: timeslot ? timeslot.startTime : "Unknown Start Time",
+      endTime: timeslot ? timeslot.endTime : "Unknown End Time",
+      
+      // Preserve original IDs for adding
+      roomId: schedule.roomId,
+      dayId: schedule.dayId,
+      timeslotId: schedule.timeslotId,
+      departmentId: schedule.departmentId,
+      isOccupied: schedule.isOccupied,
+      isChosen: schedule.isChosen
+    };
+  });
+};
+
+export const fetchSelectedRoomSchedules = async (departmentId) => {
+  const response = await fetch(`${roomScheduleUrl}/schedule/selected/${departmentId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch selected room schedules");
+  }
+  const data = await response.json();
+  console.log("Raw selected schedules:", data);
+
+  // Fetch rooms, days, and timeslots for mapping
+  const [rooms, days, timeslots] = await Promise.all([
+    fetchRooms(),
+    fetchDays(),
+    fetchTimeslots(),
+  ]);
+
+  // Log fetched data before mapping
+  console.log("Fetched Rooms:", rooms);
+  console.log("Fetched Days:", days);
+  console.log("Fetched Timeslots:", timeslots);
+
+  // Map IDs to names but preserve original IDs for adding
+  return data.map((schedule) => {
+    const room = rooms.find((r) => r.roomId === schedule.roomId);
+    const day = days.find((d) => d.dayId === schedule.dayId);
+    const timeslot = timeslots.find((t) => t.id === schedule.timeslotId);
+
+    return {
+      // Display names for UI
+      roomName: room ? room.roomName : "Unknown Room",
+      roomType: room ? room.roomType : "Unknown Type",
+      dayName: day ? day.dayName : "Unknown Day",
+      startTime: timeslot ? timeslot.startTime : "Unknown Start Time",
+      endTime: timeslot ? timeslot.endTime : "Unknown End Time",
+      
+      // Preserve original IDs for adding or deleting
+      roomId: schedule.roomId,
+      dayId: schedule.dayId,
+      timeslotId: schedule.timeslotId,
+      departmentId: schedule.departmentId,
+      isOccupied: schedule.isOccupied,
+      isChosen: schedule.isChosen
+    };
+  });
+};
+
+export const addRoomSchedule = async (schedule) => {
+  const response = await fetch(`${roomScheduleUrl}/schedule/add`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(schedule), // Sends IDs
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to add room schedule");
+  }
+};
+
+export const removeRoomSchedule = async (schedule) => {
+  const response = await fetch(`${roomScheduleUrl}/schedule/remove`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(schedule), // Sends the schedule object as the body
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to remove room schedule");
+  }
+};
