@@ -1,17 +1,15 @@
 'use client';
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { getCourseById, editCourse } from "../../Services/courses";
 
 const EditCourse = () => {
   const router = useRouter();
   const { courseId } = useParams();
-  const path = "http://localhost:9921/course";
 
   const [courseData, setCourseData] = useState({
     courseCode: "",
     courseName: "",
-    
   });
 
   const [loading, setLoading] = useState(true);
@@ -22,8 +20,8 @@ const EditCourse = () => {
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
-        const response = await axios.get(`${path}/${courseId}`);
-        setCourseData(response.data);
+        const data = await getCourseById(courseId);
+        setCourseData(data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching course details:", error);
@@ -44,11 +42,15 @@ const EditCourse = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:9921/course/${courseId}`, courseData);
-      setSuccess(true);
-      setTimeout(() => {
-        router.back();
-      }, 2000);
+      const response = await editCourse(courseId, courseData);
+      if (response.success) {
+        setSuccess(true);
+        setTimeout(() => {
+          router.back();
+        }, 2000);
+      } else {
+        setError(response.message);
+      }
     } catch (error) {
       console.error("Error updating course:", error);
       setError("Failed to update course.");

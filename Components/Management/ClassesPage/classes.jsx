@@ -187,28 +187,32 @@ const AddClasses = () => {
       </div>
 
       {popupData && (
-        <AddEditClassPopup
-          data={popupData}
-          onClose={handleClosePopup}
-          onSave={(updatedClass) => {
-            if (updatedClass.classId) {
-              // Update existing class
-              setClasses((prev) =>
-                prev.map((cls) => (cls.classId === updatedClass.classId ? updatedClass : cls))
-              );
-              setFeedbackMessage("Class updated successfully!");
-            } else {
-              // Add new class
-              setClasses((prev) => [...prev, updatedClass]);
-              setFeedbackMessage("Class added successfully!");
-            }
-            setFilteredClasses((prev) =>
-              prev.map((cls) => (cls.classId === updatedClass.classId ? updatedClass : cls))
-            );
-            setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
-            handleClosePopup();
-          }}
-        />
+        <div className="absolute inset-0 z-50 bg-black bg-opacity-50">
+          <div className="relative w-full p-4">
+            <AddEditClassPopup
+              data={popupData}
+              onClose={handleClosePopup}
+              onSave={(updatedClass) => {
+                if (updatedClass.classId) {
+                  // Update existing class
+                  setClasses((prev) =>
+                    prev.map((cls) => (cls.classId === updatedClass.classId ? updatedClass : cls))
+                  );
+                  setFeedbackMessage("Class updated successfully!");
+                } else {
+                  // Add new class
+                  setClasses((prev) => [...prev, updatedClass]);
+                  setFeedbackMessage("Class added successfully!");
+                }
+                setFilteredClasses((prev) =>
+                  prev.map((cls) => (cls.classId === updatedClass.classId ? updatedClass : cls))
+                );
+                setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
+                handleClosePopup();
+              }}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

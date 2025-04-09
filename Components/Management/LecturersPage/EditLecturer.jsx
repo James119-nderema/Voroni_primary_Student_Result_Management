@@ -1,12 +1,11 @@
 'use client';
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { updateLecturer, fetchLecturers } from "../../Services/LecturerService"; // Import functions from LecturerService
 
 const EditLecturer = () => {
   const router = useRouter();
   const { lecturerId } = useParams();
-  const path = "http://localhost:9921/lecturer";
 
   const [lecturerData, setLecturerData] = useState({
     firstName: '',
@@ -22,8 +21,13 @@ const EditLecturer = () => {
   useEffect(() => {
     const fetchLecturerDetails = async () => {
       try {
-        const response = await axios.get(`${path}/${lecturerId}`);
-        setLecturerData(response.data);
+        const lecturers = await fetchLecturers(); // Fetch all lecturers
+        const lecturer = lecturers.find((l) => l.id === lecturerId); // Find the specific lecturer by ID
+        if (lecturer) {
+          setLecturerData(lecturer);
+        } else {
+          setError("Lecturer not found.");
+        }
         setLoading(false);
       } catch (error) {
         console.error("Error fetching lecturer details:", error);
@@ -44,11 +48,15 @@ const EditLecturer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:9921/lecturer/${lecturerId}`, lecturerData);
-      setSuccess(true);
-      setTimeout(() => {
-        router.back();
-      }, 2000);
+      const response = await updateLecturer({ ...lecturerData, id: lecturerId }); // Use updateLecturer from LecturerService
+      if (response.success) {
+        setSuccess(true);
+        setTimeout(() => {
+          router.back();
+        }, 2000);
+      } else {
+        setError(response.message);
+      }
     } catch (error) {
       console.error("Error updating lecturer:", error);
       setError("Failed to update lecturer.");

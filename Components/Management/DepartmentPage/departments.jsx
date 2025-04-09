@@ -17,8 +17,17 @@ const DepartmentsPage = () => {
     const getDepartments = async () => {
       try {
         const data = await fetchDepartments();
-        setDepartments(data);
-        setFilteredDepartments(data);
+        console.log("Fetched departments data:", data); // Debugging log
+        const departmentsArray = Array.isArray(data) ? data : (data?.departments || []); // Ensure data is an array
+        if (Array.isArray(departmentsArray)) {
+          setDepartments(departmentsArray);
+          setFilteredDepartments(departmentsArray);
+        } else {
+          console.error("Invalid data format received:", data); // Log invalid data
+          setDepartments([]); // Fallback to an empty array
+          setFilteredDepartments([]);
+          throw new Error("Invalid data format: Expected an array.");
+        }
       } catch (error) {
         if (error.response && error.response.status === 404) {
           setFeedbackError("Departments not found.");
@@ -119,7 +128,7 @@ const DepartmentsPage = () => {
                       {department.departmentName}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {department.facultyId}
+                      {department.facultyName}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <div className="flex gap-2">
@@ -152,32 +161,36 @@ const DepartmentsPage = () => {
       </div>
 
       {popupData && (
-        <AddEditDepartmentPopup
-          data={popupData}
-          onClose={handleClosePopup}
-          onSave={(updatedDepartment) => {
-            if (updatedDepartment.departmentId) {
-              // Update existing department
-              setDepartments((prev) =>
-                prev.map((dept) =>
-                  dept.departmentId === updatedDepartment.departmentId ? updatedDepartment : dept
-                )
-              );
-              setFeedbackMessage("Department updated successfully!");
-            } else {
-              // Add new department
-              setDepartments((prev) => [...prev, updatedDepartment]);
-              setFeedbackMessage("Department added successfully!");
-            }
-            setFilteredDepartments((prev) =>
-              prev.map((dept) =>
-                dept.departmentId === updatedDepartment.departmentId ? updatedDepartment : dept
-              )
-            );
-            setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
-            handleClosePopup();
-          }}
-        />
+        <div className="absolute inset-0 z-50 bg-black bg-opacity-50">
+          <div className="relative w-full p-4">
+            <AddEditDepartmentPopup
+              data={popupData}
+              onClose={handleClosePopup}
+              onSave={(updatedDepartment) => {
+                if (updatedDepartment.departmentId) {
+                  // Update existing department
+                  setDepartments((prev) =>
+                    prev.map((dept) =>
+                      dept.departmentId === updatedDepartment.departmentId ? updatedDepartment : dept
+                    )
+                  );
+                  setFeedbackMessage("Department updated successfully!");
+                } else {
+                  // Add new department
+                  setDepartments((prev) => [...prev, updatedDepartment]);
+                  setFeedbackMessage("Department added successfully!");
+                }
+                setFilteredDepartments((prev) =>
+                  prev.map((dept) =>
+                    dept.departmentId === updatedDepartment.departmentId ? updatedDepartment : dept
+                  )
+                );
+                setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
+                handleClosePopup();
+              }}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

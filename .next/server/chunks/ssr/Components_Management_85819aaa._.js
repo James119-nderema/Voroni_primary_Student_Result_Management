@@ -444,7 +444,7 @@ const AddRoom = ()=>{
                                                 id: "roomType",
                                                 value: formData.roomType,
                                                 onChange: handleInputChange,
-                                                className: "block w-full rounded-md py-2 pl-3 pr-10 border border-gray-300  text-gray-900 bg-white focus:outline-none focus:ring-indigo-500  focus:border-indigo-500 shadow-sm sm:text-sm",
+                                                className: "block w-full rounded-md py-2 pl-3 pr-10 border border-gray-300    text-gray-900 bg-white focus:outline-none focus:ring-indigo-500    focus:border-indigo-500 shadow-sm sm:text-sm",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                         value: "Lecture Halls",
@@ -940,7 +940,7 @@ const RoomsPage = ()=>{
                             scale: 0.95
                         },
                         onClick: handleAddRoom,
-                        className: "px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700  transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2",
+                        className: "px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700    transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
                                 xmlns: "http://www.w3.org/2000/svg",
@@ -2154,7 +2154,7 @@ const LecturersPage = ()=>{
                             scale: 0.95
                         },
                         onClick: handleAddLecturer,
-                        className: "px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700  transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2",
+                        className: "px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700    transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
                                 xmlns: "http://www.w3.org/2000/svg",

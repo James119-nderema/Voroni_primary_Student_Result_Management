@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { AddLecturer, updateLecturer } from "../../Services/LecturerService"; // Import both add and update functions
+import { AddLecturer, updateLecturer } from "../../Services/LecturerService"; // Ensure correct imports
 
 const AddLecturerPage = ({ onSuccess, onCancel, initialData = {}, mode = "add" }) => { // Accept initialData and mode
   const [formData, setFormData] = useState({
@@ -32,9 +32,9 @@ const AddLecturerPage = ({ onSuccess, onCancel, initialData = {}, mode = "add" }
     try {
       let result;
       if (mode === "add") {
-        result = await AddLecturer(formData); // Add lecturer
+        result = await AddLecturer(formData); // Use AddLecturer from LecturerService
       } else {
-        result = await updateLecturer(formData); // Update lecturer
+        result = await updateLecturer(formData); // Use updateLecturer from LecturerService
       }
 
       if (result.success) {
@@ -43,7 +43,7 @@ const AddLecturerPage = ({ onSuccess, onCancel, initialData = {}, mode = "add" }
 
         // Delay closing the modal to allow feedback to be visible
         setTimeout(() => {
-          onSuccess({ ...formData, lecturerId: formData.lecturerId || Date.now() }); // Notify parent of success
+          onSuccess({ firstName: formData.firstName, lastName: formData.lastName }); // Notify parent of success without lecturerId
         }, 2000); // 2-second delay
       } else {
         setError(result.message);

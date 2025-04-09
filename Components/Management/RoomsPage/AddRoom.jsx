@@ -1,293 +1,183 @@
-'use client';
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, useRef } from 'react';
+import { roomsService } from '../../Services/rooms';
 
-const AddRoom = () => {
-  const router = useRouter();
+const AddRoom = ({ onClose, onRoomAdded, triggerRef }) => {
   const [formData, setFormData] = useState({
     roomName: '',
-    roomType: 'Lecture Halls',
-    roomCapacity: '',
+    roomType: '',
+    capacity:''
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    // Set position based on the trigger button's location
+    if (triggerRef && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      // Position the modal below the add button
+      setPosition({
+        top: rect.bottom + scrollTop + 10, // 10px padding
+        left: rect.right - (modalRef.current?.clientWidth || 400) // Align to the right of the button
+      });
+    } else {
+      // Fallback to position in the current viewport
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+      const modalHeight = modalRef.current?.clientHeight || 400;
+      const modalWidth = modalRef.current?.clientWidth || 400;
+      
+      setPosition({
+        top: Math.max(window.scrollY + (viewportHeight - modalHeight) / 2, window.scrollY + 50),
+        left: Math.max((viewportWidth - modalWidth) / 2, 20)
+      });
+    }
+  }, [triggerRef, modalRef.current]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: name === 'capacity' ? parseInt(value, 10) : value
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(false);
-
-    // Form validation
-    if (!formData.roomName.trim()) {
-      setError('Room name is required');
-      setLoading(false);
-      return;
-    }
-
-    if (!formData.roomCapacity || parseInt(formData.roomCapacity) <= 0) {
-      setError('Room capacity must be greater than 0');
-      setLoading(false);
-      return;
-    }
+    setError('');
 
     try {
-      await axios.post('http://localhost:9921/rooms', formData);
-      setSuccess(true);
-      // Reset form data after successful submission
-      setFormData({
-        roomName: '',
-        roomType: 'Lecture Halls',
-        roomCapacity: '',
-      });
-      setTimeout(() => {
-        router.back();
-      }, 2000);
+      await roomsService.createRoom(formData);
+      onRoomAdded();
+      onClose();
     } catch (error) {
-      setError(error.response?.data?.message || 'Failed to add room');
+      setError('Failed to add room. Please try again.');
+      console.error('Error adding room:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
-
-    // Clear error when user starts typing
-    if (error) setError(null);
+  // Click outside to close
+  const handleOutsideClick = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      onClose();
+    }
   };
 
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
-      <div className="max-w-2xl w-full bg-white shadow-md rounded-lg p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Add New Room</h1>
-            <p className="mt-1 text-sm text-gray-500" aria-label="Enter room details">
-              Enter the details for the new room
-            </p>
-          </div>
-          <button
-            onClick={() => router.back()}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-            aria-label="Cancel adding room"
-          >
-            Cancel
+    <div className="fixed inset-0 bg-black bg-opacity-30 z-50" style={{ backdropFilter: 'blur(2px)' }}>
+      <div 
+        ref={modalRef}
+        className="absolute bg-white rounded-lg shadow-xl p-6 w-full max-w-md text-sm" // Adjusted font size to match AddLecturerPage
+        style={{ 
+          top: `${position.top}px`, 
+          left: `${position.left}px`,
+          transform: 'translateY(-10px)',
+          animation: 'fadeIn 0.2s ease-out forwards'
+        }}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold">Add New Room</h2> {/* Adjusted font size */}
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            ✕
           </button>
         </div>
-
-        {/* Notification Messages */}
-        {success && (
-          <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6 animate-fadeIn">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-5 w-5 text-green-400"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-green-800">Room added successfully! Redirecting...</p>
-              </div>
-            </div>
-          </div>
-        )}
-
+        
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6 animate-fadeIn">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-5 w-5 text-red-400"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-red-800">{error}</p>
-              </div>
-              <div className="ml-auto pl-3">
-                <div className="-mx-1.5 -my-1.5">
-                  <button
-                    onClick={() => setError(null)}
-                    className="inline-flex rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                  >
-                    <span className="sr-only">Dismiss</span>
-                    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path
-                        fillRule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
+            {error}
           </div>
         )}
-
-        {/* Form */}
-        <div className="bg-white shadow rounded-lg overflow-hidden">
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            <div>
-              <label htmlFor="roomName" className="block text-sm font-medium text-gray-700 mb-1">
-                Room Name <span className="text-red-500">*</span>
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <input
-                  type="text"
-                  id="roomName"
-                  value={formData.roomName}
-                  onChange={handleInputChange}
-                  className={`block w-full rounded-md py-2 px-3 border ${error && !formData.roomName.trim()
-                    ? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500'
-                    : 'border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500'
-                    } shadow-sm sm:text-sm placeholder-gray-500`}
-                  placeholder="E.g., Room 101, Auditorium A"
-                  required
-                  aria-invalid={error && !formData.roomName.trim() ? 'true' : 'false'}
-                  aria-describedby={error && !formData.roomName.trim() ? "roomName-error" : ""}
-                />
-              </div>
-              {error && !formData.roomName.trim() && (
-                <p className="mt-2 text-sm text-red-600" id="roomName-error">
-                  Room name is required
-                </p>
-              )}
-              <p className="mt-1 text-xs text-gray-500">
-                Enter a unique, descriptive name for the room
-              </p>
-            </div>
-
-            <div>
-              <label htmlFor="roomType" className="block text-sm font-medium text-gray-700 mb-1">
-                Room Type <span className="text-red-500">*</span>
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <select
-                  id="roomType"
-                  value={formData.roomType}
-                  onChange={handleInputChange}
-                  className="block w-full rounded-md py-2 pl-3 pr-10 border border-gray-300 
-    text-gray-900 bg-white focus:outline-none focus:ring-indigo-500 
-    focus:border-indigo-500 shadow-sm sm:text-sm"
-                >
-                  <option value="Lecture Halls" className="text-gray-900 bg-white">Lecture Hall</option>
-                  <option value="Labs" className="text-gray-900 bg-white">Lab</option>
-                  <option value="Meeting Rooms" className="text-gray-900 bg-white">Meeting Room</option>
-                  <option value="Classrooms" className="text-gray-900 bg-white">Classroom</option>
-                  <option value="Auditoriums" className="text-gray-900 bg-white">Auditorium</option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-              <p className="mt-1 text-xs text-gray-500">
-                Select the category that best describes this room
-              </p>
-            </div>
-
-            <div>
-              <label htmlFor="roomCapacity" className="block text-sm font-medium text-gray-700 mb-1">
-                Capacity <span className="text-red-500">*</span>
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <input
-                  type="number"
-                  id="roomCapacity"
-                  value={formData.roomCapacity}
-                  onChange={handleInputChange}
-                  className={`block w-full rounded-md py-2 px-3 border ${error && (!formData.roomCapacity || parseInt(formData.roomCapacity) <= 0)
-                    ? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500'
-                    : 'border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500'
-                    } shadow-sm sm:text-sm placeholder-gray-500`}
-                  placeholder="Number of people"
-                  min="1"
-                  required
-                  aria-invalid={error && (!formData.roomCapacity || parseInt(formData.roomCapacity) <= 0) ? 'true' : 'false'}
-                  aria-describedby={error && (!formData.roomCapacity || parseInt(formData.roomCapacity) <= 0) ? "capacity-error" : ""}
-                />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-              {error && (!formData.roomCapacity || parseInt(formData.roomCapacity) <= 0) && (
-                <p className="mt-2 text-sm text-red-600" id="capacity-error">
-                  Room capacity must be greater than 0
-                </p>
-              )}
-              <p className="mt-1 text-xs text-gray-500">
-                Maximum number of people the room can accommodate
-              </p>
-            </div>
-
-            <div className="flex justify-end pt-6">
-              <button
-                type="button"
-                onClick={() => "../rooms"}
-                className="mr-3 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className={`px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''
-                  }`}
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Adding Room...
-                  </span>
-                ) : (
-                  'Add Room'
-                )}
-              </button>
-            </div>
-          </form>
-        </div>
+        
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-medium mb-1">
+              Room Name
+            </label>
+            <input
+              type="text"
+              name="roomName"
+              value={formData.roomName}
+              onChange={handleChange}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+              required
+            />
+          </div>
+          
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-medium mb-1">
+              Room Type
+            </label>
+            <select
+              name="roomType"
+              value={formData.roomType}
+              onChange={handleChange}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+              required
+            >
+              <option value="Lecture Hall">Lecture Hall</option>
+              <option value="Classroom">Classroom</option>
+              <option value="Lab">Lab</option>
+            </select>
+          </div>
+          
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-medium mb-1">
+              Capacity
+            </label>
+            <input
+              type="number"
+              name="capacity"
+              value={formData.capacity}
+              onChange={handleChange}
+              min="1"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+              required
+            />
+          </div>
+          
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded mr-2 text-sm"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded text-sm"
+              disabled={loading}
+            >
+              {loading ? 'Adding...' : 'Add Room'}
+            </button>
+          </div>
+        </form>
       </div>
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };

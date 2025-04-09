@@ -2164,7 +2164,7 @@ const LecturerSchedulePage = ()=>{
         columnNumber: 5
     }, this);
 };
-_s(LecturerSchedulePage, "x8qfS+mhqHpLgOwuZJmUrPGKftA=", false, function() {
+_s(LecturerSchedulePage, "WHiPhPr+fIqjN/hwKNFfbzyOw9w=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$material$2f$esm$2f$styles$2f$useTheme$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__useTheme$3e$__["useTheme"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$material$2f$esm$2f$useMediaQuery$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__useMediaQuery$3e$__["useMediaQuery"]

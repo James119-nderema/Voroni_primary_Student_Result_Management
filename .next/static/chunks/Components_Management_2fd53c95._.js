@@ -449,7 +449,7 @@ const AddRoom = ()=>{
                                                 id: "roomType",
                                                 value: formData.roomType,
                                                 onChange: handleInputChange,
-                                                className: "block w-full rounded-md py-2 pl-3 pr-10 border border-gray-300  text-gray-900 bg-white focus:outline-none focus:ring-indigo-500  focus:border-indigo-500 shadow-sm sm:text-sm",
+                                                className: "block w-full rounded-md py-2 pl-3 pr-10 border border-gray-300    text-gray-900 bg-white focus:outline-none focus:ring-indigo-500    focus:border-indigo-500 shadow-sm sm:text-sm",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                         value: "Lecture Halls",
@@ -737,7 +737,7 @@ const AddRoom = ()=>{
         columnNumber: 5
     }, this);
 };
-_s(AddRoom, "yfPwQWahXPBL+IsOV3EmlwYyweQ=", false, function() {
+_s(AddRoom, "nEhJrnOCNVLn8bbsy0wfKRKkNM4=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
     ];
@@ -970,7 +970,7 @@ const RoomsPage = ()=>{
                             scale: 0.95
                         },
                         onClick: handleAddRoom,
-                        className: "px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700  transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2",
+                        className: "px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700    transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
                                 xmlns: "http://www.w3.org/2000/svg",
@@ -1987,7 +1987,7 @@ const AddLecturerPage = ({ onSuccess, onCancel, initialData = {}, mode = "add" }
         columnNumber: 5
     }, this);
 };
-_s(AddLecturerPage, "XKFhDOjc8QGZsB+ir+QwHv+RXpg=");
+_s(AddLecturerPage, "ojblsg/5HOWwSoQ+htxMiQhnu34=");
 _c = AddLecturerPage;
 const __TURBOPACK__default__export__ = AddLecturerPage;
 var _c;
@@ -2220,7 +2220,7 @@ const LecturersPage = ()=>{
                             scale: 0.95
                         },
                         onClick: handleAddLecturer,
-                        className: "px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700  transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2",
+                        className: "px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700    transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
                                 xmlns: "http://www.w3.org/2000/svg",
@@ -3181,7 +3181,7 @@ const AddEditClassPopup = ({ data, onClose, onSave })=>{
         columnNumber: 5
     }, this);
 };
-_s(AddEditClassPopup, "hs7P1eMxDqhoZURmmGCznmtuwf0=");
+_s(AddEditClassPopup, "kGAX6z9q1rW+ag90uSAv0tiPpkQ=");
 _c = AddEditClassPopup;
 const __TURBOPACK__default__export__ = AddEditClassPopup;
 var _c;
@@ -4820,7 +4820,7 @@ const ClassSchedulePage = ()=>{
         columnNumber: 5
     }, this);
 };
-_s(ClassSchedulePage, "ogSRFvxE47tJ3M2w+M63kPdRyD0=", false, function() {
+_s(ClassSchedulePage, "YY+qfEQWYOKdwrdKUDrGL+KJFYs=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
     ];
@@ -5959,7 +5959,7 @@ const AddEditDepartmentPopup = ({ data, onClose, onSave })=>{
         columnNumber: 5
     }, this);
 };
-_s(AddEditDepartmentPopup, "4EA7WkJ6/AoaxpleDRfLqBhKUAQ=");
+_s(AddEditDepartmentPopup, "hPgveM3+Q999rISQN5MgM+7AApw=");
 _c = AddEditDepartmentPopup;
 const __TURBOPACK__default__export__ = AddEditDepartmentPopup;
 var _c;
