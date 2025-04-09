@@ -5,13 +5,11 @@
 (globalThis.TURBOPACK_CHUNK_LISTS = globalThis.TURBOPACK_CHUNK_LISTS || []).push({
   "path": "static/chunks/app_dashboard_page_4dd1e642.js",
   "chunks": [
-    "static/chunks/Components_TimetablePage_39904498._.js",
-    "static/chunks/Components_RoomsPage_2dae497c._.js",
-    "static/chunks/Components_LecturerSchedule_ac38b8b0._.js",
-    "static/chunks/Components_ClassesPage_03b4bac5._.js",
-    "static/chunks/Components_ProgramCourses_90a6ed92._.js",
+    "static/chunks/Components_Core_b69066d1._.js",
+    "static/chunks/Components_Management_2fd53c95._.js",
+    "static/chunks/Components_Configurations_c0ae4bd6._.js",
     "static/chunks/Components_InsightPage_insight_jsx_aca512e6._.js",
-    "static/chunks/Components_6efee6a5._.js",
+    "static/chunks/Components_72de8f2d._.js",
     "static/chunks/app_19d853dd._.js",
     "static/chunks/node_modules_lodash_20634561._.js",
     "static/chunks/node_modules_recharts_es6_dddff71f._.js",

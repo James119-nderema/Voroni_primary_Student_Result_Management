@@ -1,5 +1,5 @@
 'use client';
-import AddCourse from '@/Components/CoursePage/AddCourse';
+import AddCourse from '@/Components/Management/CoursePage/AddCourse';
 
 export default function AddCoursePage() {
   return <AddCourse />;

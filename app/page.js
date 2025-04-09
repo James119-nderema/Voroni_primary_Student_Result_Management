@@ -7,22 +7,22 @@ import {
 } from 'lucide-react';  
 
 // Import all page components  
-import DashboardPage from '@/Components/DashboardPage/dashboard';  
-import TimetablePage from '@/Components/TimetablePage/timetable';  
-import RoomsPage from '@/Components/RoomsPage/rooms';  
-import LecturersPage from '@/Components/LecturersPage/lecturers';
+import DashboardPage from '@/Components/Core/DashboardPage/dashboard';  
+import TimetablePage from '@/Components/Core/TimetablePage/timetable';  
+import RoomsPage from '@/Components/Management/RoomsPage/rooms';  
+import LecturersPage from '@/Components/Management/LecturersPage/lecturers';
 import LecturerSchedulePage from './lecturers/schedules/page';  
-import ClassesPage from '@/Components/ClassesPage/classes';
-import ClassSchedulePage from '@/Components/ClassesPage/ClassSchedule';
-import ProgramCourse from '@/Components/ProgramCourses/programCourse';
-import CoursePage from '@/Components/CoursePage/courses';  
-import FacultyPage from '@/Components/FacultyPage/faculty';  
-import ProgramPage from '@/Components/ProgramPage/program';  
-import DepartmentPage from '@/Components/DepartmentPage/departments';  
+import ClassesPage from '@/Components/Management/ClassesPage/classes';
+import ClassSchedulePage from '@/Components/Management/ClassesPage/ClassSchedule';
+import ProgramCourse from '@/Components/Configurations/ProgramCourses/programCourse';
+import CoursePage from '@/Components/Management/CoursePage/courses';  
+import FacultyPage from '@/Components/Management/FacultyPage/faculty';  
+import ProgramPage from '@/Components/Management/ProgramPage/program';  
+import DepartmentPage from '@/Components/Management/DepartmentPage/departments';  
 import TimetableResourceAnalysis from '@/Components/InsightPage/insight';
-import RoomsDepartment from '@/Components/RoomsDepartment/roomsDepartment';
-import RoomSchedule from '@/Components/RoomSchedule/roomSchedule';
-import FailedSchedule from '@/Components/FailedSchedule/failedSchedule';
+import RoomsDepartment from '@/Components/Configurations/RoomsDepartment/roomsDepartment';
+import RoomSchedule from '@/Components/Configurations/RoomSchedule/roomSchedule';
+import FailedSchedule from '@/Components/Configurations/FailedSchedule/failedSchedule';
 
 const TimetableManagementDashboard = () => {  
   const [activePage, setActivePage] = useState('dashboard');  
