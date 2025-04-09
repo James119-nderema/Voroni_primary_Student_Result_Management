@@ -1,13 +1,13 @@
 import axios from "axios";
+import { addAuthHeaders } from '../LoginService';
+const header = addAuthHeaders();
 
 import API_BASE_URL from './HostConfig';
-import { addAuthHeaders } from '../LoginService'; // Import addAuthHeaders
 const departmentServiceUrl = `${API_BASE_URL}/departments`;
-const headers = addAuthHeaders();
 
 export const fetchDepartments = async () => {
   try {
-    const response = await axios.get(`${departmentServiceUrl}/`, { headers });
+    const response = await axios.get(`${departmentServiceUrl}/`, {header});
     return response.data;
   } catch (error) {
     if (error.response?.status === 404) {
@@ -20,7 +20,7 @@ export const fetchDepartments = async () => {
 
 export const addDepartment = async (departmentData) => {
   try {
-    const response = await axios.post(`${departmentServiceUrl}/create`, departmentData, { headers });
+    const response = await axios.post(`${departmentServiceUrl}/create`, departmentData);
     return response.data;
   } catch (error) {
     if (error.response?.status === 404) {
@@ -33,7 +33,7 @@ export const addDepartment = async (departmentData) => {
 
 export const updateDepartment = async (departmentId, departmentData) => {
   try {
-    const response = await axios.put(`${departmentServiceUrl}/update/${departmentId}`, departmentData, { headers });
+    const response = await axios.put(`${departmentServiceUrl}/update/${departmentId}`, departmentData);
     return response.data;
   } catch (error) {
     if (error.response?.status === 404) {
@@ -46,7 +46,7 @@ export const updateDepartment = async (departmentId, departmentData) => {
 
 export const deleteDepartment = async (departmentId) => {
   try {
-    const response = await axios.delete(`${departmentServiceUrl}/delete${departmentId}`, { headers });
+    const response = await axios.delete(`${departmentServiceUrl}/delete/${departmentId}`);
     return response.data;
   } catch (error) {
     if (error.response?.status === 404) {

@@ -1,27 +1,22 @@
 import axios from "axios";
-import { addAuthHeaders } from "../LoginService"; // Import addAuthHeaders
-
-const API_URL = "http://localhost:9921";
+import API_BASE_URL from './HostConfig';
+const timetableServiceUrl = `${API_BASE_URL}`;
 
 const TimetableService = {
   getTimetable: async () => {
     try {
-      const headers = addAuthHeaders();
-      const response = await axios.get(`${API_URL}/timetable/`, { headers });
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching timetable:", error);
-      return [];
-    }
+        const response = await axios.get(`${timetableServiceUrl}/timetable/`);
+        console.log("response", response);
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching lecturers:", error);
+        return [];
+      }
   },
 
   generateTimetable: async () => {
     try {
-      const headers = addAuthHeaders();
-      const response = await fetch(`${API_URL}/timetable/generate`, {
-        method: "GET",
-        headers,
-      });
+      const response = await fetch(`${timetableServiceUrl}/timetable/generate`, { method: "GET" });
       if (!response.ok) throw new Error("Failed to generate timetable");
     } catch (error) {
       console.error(error);
@@ -30,8 +25,7 @@ const TimetableService = {
 
   downloadTimetable: async (activeDay, daysWithDates) => {
     const dayIndex = daysWithDates.findIndex(day => day.name === activeDay) + 1; // 1-based index
-    const headers = addAuthHeaders();
-    const response = await fetch(`${API_URL}/timetable/pdf/days/${dayIndex}`, { headers });
+    const response = await fetch(`${timetableServiceUrl}/timetable/pdf/days/${dayIndex}`);
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -43,11 +37,11 @@ const TimetableService = {
     window.URL.revokeObjectURL(url);
   },
 
+  // New functions to fetch lecturers, classes and rooms
   getLecturers: async () => {
     try {
-      const headers = addAuthHeaders();
-      const response = await axios.get(`${API_URL}/lecturers/`, { headers });
-      return response.data;
+      const response = await axios.get(`${timetableServiceUrl}/lecturers/`);
+      return response.data; // Use the full lecturer object directly
     } catch (error) {
       console.error("Error fetching lecturers:", error);
       return [];
@@ -56,9 +50,8 @@ const TimetableService = {
 
   getClasses: async () => {
     try {
-      const headers = addAuthHeaders();
-      const response = await axios.get(`${API_URL}/classes/all`, { headers });
-      return response.data;
+      const response = await axios.get(`${timetableServiceUrl}/classes/all`);
+      return response.data; // Use the full class object directly
     } catch (error) {
       console.error("Error fetching classes:", error);
       return [];
@@ -67,64 +60,48 @@ const TimetableService = {
 
   getRooms: async () => {
     try {
-      const headers = addAuthHeaders();
-      const response = await axios.get(`${API_URL}/rooms/`, { headers });
-      return response.data;
+      const response = await axios.get(`${timetableServiceUrl}/rooms/`);
+      return response.data; // Use the full room object directly
     } catch (error) {
       console.error("Error fetching rooms:", error);
       return [];
     }
   },
 
+  // New function to download timetable for a specific entity
   downloadEntityTimetable: async (entityType, entityId, dayIndex, entityName) => {
     try {
       let endpoint;
-      let isZip = false;
-
       switch (entityType) {
         case 'lecturer':
-          if (entityId === 'all') {
-            endpoint = `${API_URL}/timetable/pdf/lecturers/all`;
-            isZip = true;
-          } else {
-            endpoint = `${API_URL}/timetable/pdf/lecturers/${entityId}`;
-          }
+          endpoint = `${timetableServiceUrl}/timetable/pdf/lecturers/${entityId}`;
           break;
         case 'class':
-          if (entityId === 'all') {
-            endpoint = `${API_URL}/timetable/pdf/classes/all`;
-            isZip = true;
-          } else {
-            endpoint = `${API_URL}/timetable/pdf/classes/${entityId}`;
-          }
+          endpoint = `${timetableServiceUrl}/timetable/pdf/classes/${entityId}`;
           break;
         case 'room':
-          endpoint = `${API_URL}/timetable/pdf/rooms/${entityId}`;
+          endpoint = `${timetableServiceUrl}/timetable/pdf/rooms/${entityId}`;
           break;
         case 'day':
-          endpoint = `${API_URL}/timetable/pdf/days/${dayIndex}`;
+          endpoint = `${timetableServiceUrl}/timetable/pdf/days/${dayIndex}`;
           break;
-        case "All":
-          endpoint = `${API_URL}/timetable/pdf/all`;
-          break;  
         default:
           throw new Error('Invalid entity type');
       }
-
-      const headers = addAuthHeaders();
-      const response = await fetch(endpoint, { headers });
+      
+      const response = await fetch(endpoint);
       if (!response.ok) throw new Error(`Failed to download ${entityType} timetable`);
-
+      
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = isZip ? `${entityName}-Timetables.zip` : `${entityName}-Timetable.pdf`;
+      a.download = `${entityName}-Timetable.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-
+      
       return true;
     } catch (error) {
       console.error("Error downloading timetable:", error);

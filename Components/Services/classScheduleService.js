@@ -1,12 +1,9 @@
 import API_BASE_URL from './HostConfig';
-import { addAuthHeaders } from '../LoginService'; // Import addAuth
-
 const classScheduleUrl = `${API_BASE_URL}/classes`;
 
 export const fetchSelectedSchedules = async (classId) => {
   try {
-    const response = await fetch(`${classScheduleUrl}/schedule/selected/${classId}`, {
-      headers});
+    const response = await fetch(`${classScheduleUrl}/schedule/selected/${classId}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch selected schedules: ${response.status}`);
     }
@@ -19,9 +16,7 @@ export const fetchSelectedSchedules = async (classId) => {
 
 export const fetchAvailableSchedules = async (classId) => {
   try {
-    const response = await fetch(`${classScheduleUrl}/schedule/available/${classId}`, {
-
-    });
+    const response = await fetch(`${classScheduleUrl}/schedule/available/${classId}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch available schedules: ${response.status}`);
     }
@@ -34,6 +29,8 @@ export const fetchAvailableSchedules = async (classId) => {
 
 export const addSchedule = async (scheduleData) => {
   try {
+    console.log("Sending schedule data to API:", scheduleData);
+
     if (!scheduleData.classId || !scheduleData.dayName || !scheduleData.startTime || !scheduleData.endTime) {
       console.error("Missing required schedule data:", scheduleData);
       throw new Error("Missing required schedule data");
@@ -41,9 +38,9 @@ export const addSchedule = async (scheduleData) => {
 
     const response = await fetch(`${classScheduleUrl}/schedule/create`, {
       method: 'POST',
-      headers: addAuthHeaders({
+      headers: {
         'Content-Type': 'application/json',
-      }),
+      },
       body: JSON.stringify(scheduleData),
     });
 
@@ -53,7 +50,9 @@ export const addSchedule = async (scheduleData) => {
       throw new Error(`Failed to add schedule: ${response.status}`);
     }
 
+    // Handle plain text response
     const responseText = await response.text();
+    console.log("Server response:", responseText);
     return { message: responseText }; // Wrap plain text in an object
   } catch (error) {
     console.error("Error adding schedule:", error);
@@ -63,16 +62,19 @@ export const addSchedule = async (scheduleData) => {
 
 export const deleteSchedule = async (schedule) => {
   try {
+    console.log("Sending schedule data to API for deletion:", schedule);
+
+    // Ensure the schedule object contains all required fields
     if (!schedule.classId || !schedule.dayName || !schedule.startTime || !schedule.endTime) {
       console.error("Missing required schedule data for deletion:", schedule);
       throw new Error("Missing required schedule data for deletion");
     }
 
-    const response = await fetch(`${classScheduleUrl}/schedule/delete`, {
+    const response = await fetch(`${API_BASE_URL}/schedule/delete`, {
       method: 'DELETE',
-      headers: addAuthHeaders({
+      headers: {
         'Content-Type': 'application/json',
-      }),
+      },
       body: JSON.stringify(schedule),
     });
 
@@ -82,6 +84,7 @@ export const deleteSchedule = async (schedule) => {
       throw new Error(`Failed to delete schedule: ${response.status}`);
     }
 
+    console.log("Schedule deleted successfully");
     return true;
   } catch (error) {
     console.error("Error deleting schedule:", error);

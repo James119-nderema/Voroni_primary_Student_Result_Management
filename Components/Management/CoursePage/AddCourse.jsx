@@ -1,262 +1,227 @@
 'use client';
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { addCourse, editCourse } from "../../Services/courses";
+import { motion } from "framer-motion";
 
-const AddCourse = () => {
-  const router = useRouter();
+const AddCoursePage = ({ mode = "add", initialData = null, onSuccess, onCancel }) => {
+  // Define state for form fields
   const [formData, setFormData] = useState({
-    
-    courseCode: '',
-    courseName: '',
-    
+    courseCode: "",
+    courseName: "",
+    courseType: "Standard" // Adding a default value for courseType
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  // If in edit mode, populate form with initial data
+  useEffect(() => {
+    if (mode === "edit" && initialData) {
+      setFormData({
+        courseCode: initialData.courseCode || "",
+        courseName: initialData.courseName || "",
+        courseType: initialData.courseType || "Standard" // Preserve existing courseType
+      });
+    }
+  }, [mode, initialData]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear messages when user starts typing
+    setError("");
+    setSuccessMessage("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(false);
+    setIsSubmitting(true);
+    setError("");
+    setSuccessMessage("");
 
-    // Form validation
-    if (!formData.courseCode.trim()) {
-        setError('Course code is required');
-        setLoading(false);
+    try {
+      // Validate form data
+      if (!formData.courseCode.trim() || !formData.courseName.trim()) {
+        setError("Course code and name are required");
+        setIsSubmitting(false);
         return;
       }
 
-    if (!formData.courseName.trim()) {
-      setError('Course name is required');
-      setLoading(false);
-      return;
-    }
+      // Create a payload that matches what the API expects
+      const payload = {
+        courseCode: formData.courseCode,
+        courseName: formData.courseName,
+        courseType: formData.courseType
+      };
 
-    
+      console.log("Submitting course data:", payload);
 
-    try {
-      await axios.post('http://localhost:9921/course', formData);
-      setSuccess(true);
-      // Reset form data after successful submission
-      setFormData({
+      let result;
+      let updatedCourse;
+      
+      if (mode === "add") {
+        // Add new course
+        result = await addCourse(payload);
+        console.log("Add course result:", result);
         
-        courseCode: '',
-        courseName: '',
+        // Check if the API returned the created course
+        if (result.success && result.data) {
+          // Use the returned course data if available
+          updatedCourse = result.data;
+        } else {
+          // If API doesn't return the created course, create a placeholder
+          // This is temporary until the page refreshes
+          updatedCourse = { 
+            ...payload, 
+            courseId: Math.floor(Math.random() * 10000) // Temporary ID for UI updates
+          };
+        }
+      } else {
+        // Edit existing course
+        result = await editCourse(initialData.courseId, payload);
+        console.log("Edit course result:", result);
         
-      });
-      setTimeout(() => {
-        router.back();
-      }, 2000);
+        // For edit, combine with initial data
+        updatedCourse = { 
+          ...initialData, 
+          ...payload 
+        };
+      }
+
+      if (result.success) {
+        // Set success message
+        setSuccessMessage(mode === "add" 
+          ? "Course added successfully!" 
+          : "Course updated successfully!");
+        
+        console.log("Operation successful, returning course:", updatedCourse);
+        
+        // Wait a moment to show the success message before closing
+        setTimeout(() => {
+          onSuccess(updatedCourse);
+        }, 1500);
+      } else {
+        setError(result.message || "Failed to save course");
+      }
     } catch (error) {
-      setError(error.response?.data?.message || 'Failed to add course');
+      console.error("Error in course submission:", error);
+      setError("Failed to save course. Please try again.");
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
-  };
-
-  const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
-
-    // Clear error when user starts typing
-    if (error) setError(null);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
-      <div className="max-w-2xl w-full bg-white shadow-md rounded-lg p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Add New Course</h1>
-            <p className="mt-1 text-sm text-gray-500" aria-label="Enter course details">
-              Enter the details for the course
-            </p>
-          </div>
+    <div className="w-full">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-gray-800">
+          {mode === "add" ? "Add New Course" : "Edit Course"}
+        </h2>
+        <button
+          onClick={onCancel}
+          className="text-gray-500 hover:text-gray-700"
+          aria-label="Close"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Error message */}
+      {error && (
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded flex items-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+          </svg>
+          {error}
+        </motion.div>
+      )}
+
+      {/* Success message */}
+      {successMessage && (
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded flex items-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          </svg>
+          {successMessage}
+        </motion.div>
+      )}
+
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label htmlFor="courseCode" className="block text-sm font-medium text-gray-700 mb-1">
+            Course Code
+          </label>
+          <input
+            type="text"
+            id="courseCode"
+            name="courseCode"
+            value={formData.courseCode}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="e.g. CS101"
+            required
+          />
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="courseName" className="block text-sm font-medium text-gray-700 mb-1">
+            Course Name
+          </label>
+          <input
+            type="text"
+            id="courseName"
+            name="courseName"
+            value={formData.courseName}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="e.g. Introduction to Computer Science"
+            required
+          />
+        </div>
+
+        <div className="flex justify-end space-x-3">
           <button
-            onClick={() => router.back()}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-            aria-label="Cancel adding course"
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            disabled={isSubmitting}
           >
             Cancel
           </button>
-        </div>
-
-        {/* Notification Messages */}
-        {success && (
-          <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6 animate-fadeIn">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-5 w-5 text-green-400"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
+          <button
+            type="submit"
+            disabled={isSubmitting || successMessage !== ""}
+            className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+              (isSubmitting || successMessage !== "") ? "opacity-70 cursor-not-allowed" : ""
+            }`}
+          >
+            {isSubmitting ? (
+              <div className="flex items-center">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
+                Saving...
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-green-800">Course added successfully! Redirecting...</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6 animate-fadeIn">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-5 w-5 text-red-400"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-red-800">{error}</p>
-              </div>
-              <div className="ml-auto pl-3">
-                <div className="-mx-1.5 -my-1.5">
-                  <button
-                    onClick={() => setError(null)}
-                    className="inline-flex rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                  >
-                    <span className="sr-only">Dismiss</span>
-                    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path
-                        fillRule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Form */}
-        <div className="bg-white shadow rounded-lg overflow-hidden">
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          <div>
-              <label htmlFor="courseCode" className="block text-sm font-medium text-gray-700 mb-1">
-                Course Code <span className="text-red-500">*</span>
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <input
-                  type="text"
-                  id="courseCode"
-                  value={formData.courseCode}
-                  onChange={handleInputChange}
-                  className={`block w-full rounded-md py-2 px-3 border ${error && !formData.courseName.trim()
-                    ? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500'
-                    : 'border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500'
-                    } shadow-sm sm:text-sm placeholder-gray-500`}
-                  placeholder="E.g., CSE 4208"
-                  required
-                  aria-invalid={error && !formData.courseCode.trim() ? 'true' : 'false'}
-                  aria-describedby={error && !formData.courseCode.trim() ? "courseCode-error" : ""}
-                />
-              </div>
-              {error && !formData.courseCode.trim() && (
-                <p className="mt-2 text-sm text-red-600" id="courseCode-error">
-                  Course code is required
-                </p>
-              )}
-              <p className="mt-1 text-xs text-gray-500">
-                Enter code for the course
-              </p>
-            </div>
-
-            <div>
-              <label htmlFor="courseName" className="block text-sm font-medium text-gray-700 mb-1">
-                Course Name <span className="text-red-500">*</span>
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <input
-                  type="text"
-                  id="courseName"
-                  value={formData.courseName}
-                  onChange={handleInputChange}
-                  className={`block w-full rounded-md py-2 px-3 border ${error && !formData.courseName.trim()
-                    ? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500'
-                    : 'border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500'
-                    } shadow-sm sm:text-sm placeholder-gray-500`}
-                  placeholder="E.g., Programing Methodology"
-                  required
-                  aria-invalid={error && !formData.courseName.trim() ? 'true' : 'false'}
-                  aria-describedby={error && !formData.courseName.trim() ? "courseName-error" : ""}
-                />
-              </div>
-              {error && !formData.courseName.trim() && (
-                <p className="mt-2 text-sm text-red-600" id="courseName-error">
-                  Course name is required
-                </p>
-              )}
-              <p className="mt-1 text-xs text-gray-500">
-                Enter the name for the course
-              </p>
-            </div>
-            <div className="flex justify-end pt-6">
-              <button
-                type="button"
-                onClick={() => router.back()}
-                className="mr-3 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className={`px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''
-                  }`}
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Adding Course...
-                  </span>
-                ) : (
-                  'Add Course'
-                )}
-              </button>
-            </div>
-          </form>
+            ) : (
+              mode === "add" ? "Add Course" : "Save Changes"
+            )}
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
 
-export default AddCourse;
+export default AddCoursePage;

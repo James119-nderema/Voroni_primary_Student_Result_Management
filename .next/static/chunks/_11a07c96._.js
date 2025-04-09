@@ -99,12 +99,15 @@ const registerUser = async (username, password, firstName, lastName)=>{
     }
 };
 const addAuthHeaders = (headers = {})=>{
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-        return {
-            ...headers,
-            Authorization: `Bearer ${accessToken}`
-        };
+    if ("TURBOPACK compile-time truthy", 1) {
+        // Ensure this code runs only in the browser
+        const accessToken = localStorage.getItem('accessToken');
+        if (accessToken) {
+            return {
+                ...headers,
+                Authorization: `Bearer ${accessToken}`
+            };
+        }
     }
     return headers;
 };
