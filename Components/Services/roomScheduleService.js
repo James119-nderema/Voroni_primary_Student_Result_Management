@@ -1,11 +1,13 @@
 import API_BASE_URL from "./HostConfig";
 
 const roomScheduleUrl = `${API_BASE_URL}/rooms`;
+ import { addAuthHeaders } from '../LoginService';
+ const headers = addAuthHeaders();
 
 // Fetch rooms data from API
 const fetchRooms = async () => {
   try {
-    const response = await fetch(`${roomScheduleUrl}/`);
+    const response = await fetch(`${roomScheduleUrl}/`, {headers});
     if (!response.ok) {
       throw new Error(`Error fetching rooms: ${response.statusText}`);
     }
@@ -19,7 +21,7 @@ const fetchRooms = async () => {
 // Fetch days data from API
 const fetchDays = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/days`);
+    const response = await fetch(`${API_BASE_URL}/days`, {headers});
     if (!response.ok) {
       throw new Error(`Error fetching days: ${response.statusText}`);
     }
@@ -33,7 +35,7 @@ const fetchDays = async () => {
 // Fetch timeslots data from API
 const fetchTimeslots = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/timeslots`);
+    const response = await fetch(`${API_BASE_URL}/timeslots`, {headers});
     if (!response.ok) {
       throw new Error(`Error fetching timeslots: ${response.statusText}`);
     }
@@ -45,7 +47,7 @@ const fetchTimeslots = async () => {
 };
 
 export const fetchAvailableRoomSchedules = async (departmentId) => {
-  const response = await fetch(`${roomScheduleUrl}/schedule/available/${departmentId}`);
+  const response = await fetch(`${roomScheduleUrl}/schedule/available/${departmentId}`, {headers});
   if (!response.ok) {
     throw new Error("Failed to fetch available room schedules");
   }
@@ -90,7 +92,7 @@ export const fetchAvailableRoomSchedules = async (departmentId) => {
 };
 
 export const fetchSelectedRoomSchedules = async (departmentId) => {
-  const response = await fetch(`${roomScheduleUrl}/schedule/selected/${departmentId}`);
+  const response = await fetch(`${roomScheduleUrl}/schedule/selected/${departmentId}`, {headers});
   if (!response.ok) {
     throw new Error("Failed to fetch selected room schedules");
   }
@@ -141,7 +143,7 @@ export const addRoomSchedule = async (schedule) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(schedule), // Sends IDs
-  });
+  }, {headers});
 
   if (!response.ok) {
     throw new Error("Failed to add room schedule");
@@ -155,7 +157,7 @@ export const removeRoomSchedule = async (schedule) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(schedule), // Sends the schedule object as the body
-  });
+  }, {headers});
 
   if (!response.ok) {
     throw new Error("Failed to remove room schedule");

@@ -562,9 +562,10 @@ __turbopack_context__.s({
     "fetchSelectedSchedules": (()=>fetchSelectedSchedules)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$HostConfig$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/HostConfig.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/LoginService.js [app-client] (ecmascript)"); // Import addAuth
+var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/LoginService.js [app-client] (ecmascript)");
 ;
 ;
+const headers = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addAuthHeaders"])();
 const classScheduleUrl = `${__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$HostConfig$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]}/classes`;
 const fetchSelectedSchedules = async (classId)=>{
     try {
@@ -582,7 +583,9 @@ const fetchSelectedSchedules = async (classId)=>{
 };
 const fetchAvailableSchedules = async (classId)=>{
     try {
-        const response = await fetch(`${classScheduleUrl}/schedule/available/${classId}`, {});
+        const response = await fetch(`${classScheduleUrl}/schedule/available/${classId}`, {
+            headers
+        });
         if (!response.ok) {
             throw new Error(`Failed to fetch available schedules: ${response.status}`);
         }
@@ -853,12 +856,17 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/axios/lib/axios.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$HostConfig$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/HostConfig.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/LoginService.js [app-client] (ecmascript)");
 ;
 ;
+;
+const headers = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addAuthHeaders"])();
 const roomDepartmentUrl = `${__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$HostConfig$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]}/rooms`;
 const fetchSelectedRoomDepartments = async (departmentId)=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`${roomDepartmentUrl}/department/selected/${departmentId}`);
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`${roomDepartmentUrl}/department/selected/${departmentId}`, {
+            headers
+        });
         return response.data;
     } catch (error) {
         console.error('Error fetching selected room departments:', error);
@@ -867,7 +875,9 @@ const fetchSelectedRoomDepartments = async (departmentId)=>{
 };
 const fetchAvailableRoomDepartments = async (departmentId)=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`${roomDepartmentUrl}/department/available/${departmentId}`);
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`${roomDepartmentUrl}/department/available/${departmentId}`, {
+            headers
+        });
         return response.data;
     } catch (error) {
         console.error('Error fetching available room departments:', error);
@@ -879,6 +889,8 @@ const addRoomToDepartment = async (departmentId, roomId)=>{
         const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post(`${roomDepartmentUrl}/department/create`, {
             departmentId,
             roomId
+        }, {
+            headers
         });
         return response.data;
     } catch (error) {
@@ -922,14 +934,18 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
 {
-// Fetch timeslot data from API
 __turbopack_context__.s({
     "fetchDays": (()=>fetchDays),
     "fetchTimeslots": (()=>fetchTimeslots)
 });
+var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/LoginService.js [app-client] (ecmascript)");
+;
+const headers = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addAuthHeaders"])();
 const fetchTimeslots = async ()=>{
     try {
-        const response = await fetch("http://localhost:9921/timeslots");
+        const response = await fetch("http://localhost:9921/timeslots", {
+            headers
+        });
         if (!response.ok) {
             throw new Error(`Error fetching timeslots: ${response.statusText}`);
         }
@@ -941,7 +957,9 @@ const fetchTimeslots = async ()=>{
 };
 const fetchDays = async ()=>{
     try {
-        const response = await fetch("http://localhost:9921/days");
+        const response = await fetch("http://localhost:9921/days", {
+            headers
+        });
         if (!response.ok) {
             throw new Error(`Error fetching days: ${response.statusText}`);
         }
@@ -967,12 +985,17 @@ __turbopack_context__.s({
     "removeRoomSchedule": (()=>removeRoomSchedule)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$HostConfig$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/HostConfig.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/LoginService.js [app-client] (ecmascript)");
 ;
 const roomScheduleUrl = `${__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$HostConfig$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]}/rooms`;
+;
+const headers = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addAuthHeaders"])();
 // Fetch rooms data from API
 const fetchRooms = async ()=>{
     try {
-        const response = await fetch(`${roomScheduleUrl}/`);
+        const response = await fetch(`${roomScheduleUrl}/`, {
+            headers
+        });
         if (!response.ok) {
             throw new Error(`Error fetching rooms: ${response.statusText}`);
         }
@@ -1093,6 +1116,8 @@ const addRoomSchedule = async (schedule)=>{
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(schedule)
+    }, {
+        headers
     });
     if (!response.ok) {
         throw new Error("Failed to add room schedule");
@@ -1105,6 +1130,8 @@ const removeRoomSchedule = async (schedule)=>{
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(schedule)
+    }, {
+        headers
     });
     if (!response.ok) {
         throw new Error("Failed to remove room schedule");

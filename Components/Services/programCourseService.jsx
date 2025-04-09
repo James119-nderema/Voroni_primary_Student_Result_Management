@@ -1,11 +1,13 @@
 import axios from 'axios';
 
 import API_BASE_URL from './HostConfig';
+import { addAuthHeaders } from '../LoginService';
+const headers = addAuthHeaders();
 
 // Function to fetch all programs
 export const fetchPrograms = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/programs/`);
+    const response = await axios.get(`${API_BASE_URL}/programs/`, { headers });
     return response.data;
   } catch (error) {
     console.error('Error fetching programs:', error);
@@ -16,7 +18,7 @@ export const fetchPrograms = async () => {
 // Function to fetch all periods
 export const fetchPeriods = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/periods`);
+  const response = await axios.get(`${API_BASE_URL}/periods`, { headers });
     return response.data;
   } catch (error) {
     console.error('Error fetching periods:', error);
@@ -27,7 +29,7 @@ export const fetchPeriods = async () => {
 // Function to fetch all courses
 export const fetchCourses = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/courses/`);
+    const response = await axios.get(`${API_BASE_URL}/courses/`, { headers });
     return response.data;
   } catch (error) {
     console.error('Error fetching courses:', error);
@@ -38,7 +40,7 @@ export const fetchCourses = async () => {
 // Function to fetch courses for a specific program and period
 export const fetchProgramCourses = async (programId, periodId) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/courses/program/${programId}/${periodId}`);
+    const response = await axios.get(`${API_BASE_URL}/courses/program/${programId}/${periodId}`, { headers });
     return response.data;
   } catch (error) {
     console.error('Error fetching program courses:', error);
@@ -53,7 +55,7 @@ export const addCourseToProgram = async (programId, periodId, courseId) => {
       programId,
       periodId,
       courseId
-    });
+    }, { headers });
     return response.data;
   } catch (error) {
     console.error('Error adding course to program:', error);
@@ -64,7 +66,7 @@ export const addCourseToProgram = async (programId, periodId, courseId) => {
 // Function to remove a course from a program
 export const removeCourseFromProgram = async (programCourseId) => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/courses/program/${programCourseId}`);
+    const response = await axios.delete(`${API_BASE_URL}/courses/program/${programCourseId}`, { headers });
     return response.data;
   } catch (error) {
     console.error('Error removing course from program:', error);

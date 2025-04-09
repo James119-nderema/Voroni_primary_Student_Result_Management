@@ -1,11 +1,13 @@
 import axios from 'axios';
 import API_BASE_URL from './HostConfig';
+import { addAuthHeaders } from '../LoginService';
+const headers = addAuthHeaders();
 
 const roomDepartmentUrl = `${API_BASE_URL}/rooms`;
 
 export const fetchSelectedRoomDepartments = async (departmentId) => {
   try {
-    const response = await axios.get(`${roomDepartmentUrl}/department/selected/${departmentId}`);
+    const response = await axios.get(`${roomDepartmentUrl}/department/selected/${departmentId}`, {headers});
     return response.data;
   } catch (error) {
     console.error('Error fetching selected room departments:', error);
@@ -15,7 +17,7 @@ export const fetchSelectedRoomDepartments = async (departmentId) => {
 
 export const fetchAvailableRoomDepartments = async (departmentId) => {
   try {
-    const response = await axios.get(`${roomDepartmentUrl}/department/available/${departmentId}`);
+    const response = await axios.get(`${roomDepartmentUrl}/department/available/${departmentId}`, {headers});
     return response.data;
   } catch (error) {
     console.error('Error fetching available room departments:', error);
@@ -25,7 +27,7 @@ export const fetchAvailableRoomDepartments = async (departmentId) => {
 
 export const addRoomToDepartment = async (departmentId, roomId) => {
   try {
-    const response = await axios.post(`${roomDepartmentUrl}/department/create`, { departmentId, roomId });
+    const response = await axios.post(`${roomDepartmentUrl}/department/create`, { departmentId, roomId }, {headers});
     return response.data;
   } catch (error) {
     console.error('Error adding room to department:', error);

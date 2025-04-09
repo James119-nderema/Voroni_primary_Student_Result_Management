@@ -2,11 +2,13 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
+import { addAuthHeaders } from "@/Components/LoginService";
+const headers = addAuthHeaders();
 
 // Fetch faculties function
 const fetchFaculties = async () => {
   try {
-    const response = await axios.get("http://localhost:9921/faculties/");
+    const response = await axios.get("http://localhost:9921/faculties/", {headers});
     console.log("Fetched faculties:", response.data);
     return Array.isArray(response.data) ? response.data : []; // Ensure response is an array
   } catch (error) {

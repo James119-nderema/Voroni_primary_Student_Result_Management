@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchFailedSchedules } from './failedScheduleService';
+import { fetchFailedSchedules } from '../../Services/failedScheduleService';
 import { 
   Box, 
   Typography, 

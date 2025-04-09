@@ -448,15 +448,7 @@ const getColorScheme = (courseName) => {
             </div>
           </div>
         )}
-      </div>
-
-      {/* Download Popup */}
-      <DownloadPopup 
-        isOpen={downloadPopupOpen}
-        onClose={() => setDownloadPopupOpen(false)}
-        activeDay={activeDay}
-        daysWithDates={daysWithDates}
-      />
+      </div>      
     </div>
   );
 };

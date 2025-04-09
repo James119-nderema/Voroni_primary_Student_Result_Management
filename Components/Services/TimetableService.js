@@ -113,7 +113,11 @@ const TimetableService = {
 
       const headers = addAuthHeaders();
       const response = await fetch(endpoint, { headers });
-      if (!response.ok) throw new Error(`Failed to download ${entityType} timetable`);
+      if (!response.ok) {
+        console.error("Failed to download timetable:", response.statusText);
+        return false;
+      }
+    
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);

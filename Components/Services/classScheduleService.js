@@ -1,5 +1,6 @@
 import API_BASE_URL from './HostConfig';
-import { addAuthHeaders } from '../LoginService'; // Import addAuth
+import { addAuthHeaders } from '../LoginService'; 
+const headers = addAuthHeaders();
 
 const classScheduleUrl = `${API_BASE_URL}/classes`;
 
@@ -20,7 +21,7 @@ export const fetchSelectedSchedules = async (classId) => {
 export const fetchAvailableSchedules = async (classId) => {
   try {
     const response = await fetch(`${classScheduleUrl}/schedule/available/${classId}`, {
-
+        headers
     });
     if (!response.ok) {
       throw new Error(`Failed to fetch available schedules: ${response.status}`);

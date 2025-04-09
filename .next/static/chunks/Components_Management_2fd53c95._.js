@@ -5173,16 +5173,21 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/axios/lib/axios.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/LoginService.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 ;
 ;
+;
+const headers = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addAuthHeaders"])();
 // Fetch faculties function
 const fetchFaculties = async ()=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("http://localhost:9921/faculties/");
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("http://localhost:9921/faculties/", {
+            headers
+        });
         console.log("Fetched faculties:", response.data);
         return Array.isArray(response.data) ? response.data : []; // Ensure response is an array
     } catch (error) {
@@ -5245,7 +5250,7 @@ const FacultiesPage = ()=>{
                                 children: "Faculties Management"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                lineNumber: 64,
+                                lineNumber: 66,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5253,13 +5258,13 @@ const FacultiesPage = ()=>{
                                 children: "Manage and monitor all available faculties"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                lineNumber: 65,
+                                lineNumber: 67,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                        lineNumber: 63,
+                        lineNumber: 65,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5268,13 +5273,13 @@ const FacultiesPage = ()=>{
                         children: "Add New Faculty"
                     }, void 0, false, {
                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                        lineNumber: 67,
+                        lineNumber: 69,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                lineNumber: 62,
+                lineNumber: 64,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5290,12 +5295,12 @@ const FacultiesPage = ()=>{
                                 children: category
                             }, category, false, {
                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                lineNumber: 77,
+                                lineNumber: 79,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                        lineNumber: 75,
+                        lineNumber: 77,
                         columnNumber: 9
                     }, this),
                     loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5303,7 +5308,7 @@ const FacultiesPage = ()=>{
                         children: "Loading faculties..."
                     }, void 0, false, {
                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                        lineNumber: 91,
+                        lineNumber: 93,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
                         className: "min-w-full divide-y divide-gray-200",
@@ -5317,7 +5322,7 @@ const FacultiesPage = ()=>{
                                             children: "Faculty ID"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                            lineNumber: 96,
+                                            lineNumber: 98,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5325,7 +5330,7 @@ const FacultiesPage = ()=>{
                                             children: "Faculty Name"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                            lineNumber: 99,
+                                            lineNumber: 101,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5333,18 +5338,18 @@ const FacultiesPage = ()=>{
                                             children: "Actions"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                            lineNumber: 102,
+                                            lineNumber: 104,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                    lineNumber: 95,
+                                    lineNumber: 97,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                lineNumber: 94,
+                                lineNumber: 96,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -5356,7 +5361,7 @@ const FacultiesPage = ()=>{
                                                 children: faculty.facultyId
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                lineNumber: 111,
+                                                lineNumber: 113,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5364,7 +5369,7 @@ const FacultiesPage = ()=>{
                                                 children: faculty.facultyName
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                lineNumber: 114,
+                                                lineNumber: 116,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5378,7 +5383,7 @@ const FacultiesPage = ()=>{
                                                             children: "Edit"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                            lineNumber: 119,
+                                                            lineNumber: 121,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5387,24 +5392,24 @@ const FacultiesPage = ()=>{
                                                             children: "Delete"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                            lineNumber: 125,
+                                                            lineNumber: 127,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                    lineNumber: 118,
+                                                    lineNumber: 120,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                lineNumber: 117,
+                                                lineNumber: 119,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, faculty.facultyId, true, {
                                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                        lineNumber: 110,
+                                        lineNumber: 112,
                                         columnNumber: 19
                                     }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5413,35 +5418,35 @@ const FacultiesPage = ()=>{
                                         children: "No faculties found."
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                        lineNumber: 137,
+                                        lineNumber: 139,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                    lineNumber: 136,
+                                    lineNumber: 138,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                lineNumber: 107,
+                                lineNumber: 109,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                        lineNumber: 93,
+                        lineNumber: 95,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                lineNumber: 74,
+                lineNumber: 76,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-        lineNumber: 61,
+        lineNumber: 63,
         columnNumber: 5
     }, this);
 };

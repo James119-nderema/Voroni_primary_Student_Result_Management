@@ -50,10 +50,14 @@ export const LecturerScheduleService = {
     }
   },
 
-  // Regenerate schedules for a lecturer
+    // Regenerate schedules for a lecturer
   regenerateLecturerSchedule: async (lecturerId) => {
     try {
-      const response = await axios.post(`${lecturerScheduleUrl}/availabilities/generate/${lecturerId}`, { headers });
+      const response = await axios.post(
+        `${lecturerScheduleUrl}/availabilities/generate/${lecturerId}`,
+        {}, // Empty body for POST request
+        { headers } // Pass headers in the config object
+      );
       console.log('Regenerated lecturer schedule:', response.data);
       return response.data;
     } catch (error) {

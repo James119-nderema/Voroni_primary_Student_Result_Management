@@ -76,13 +76,15 @@ export const registerUser = async (username, password, firstName, lastName) => {
 
 // Function to add authentication headers
 export const addAuthHeaders = (headers = {}) => {
-  const accessToken = localStorage.getItem('accessToken');
-  if (accessToken) {
-
-    return {
-      ...headers,
-      Authorization: `Bearer ${accessToken}`,
-    };
+  if (typeof window !== 'undefined') {
+    // Ensure this code runs only in the browser
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      return {
+        ...headers,
+        Authorization: `Bearer ${accessToken}`,
+      };
+    }
   }
   return headers;
 };
