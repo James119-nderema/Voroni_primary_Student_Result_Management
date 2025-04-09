@@ -22,6 +22,14 @@ export const loginUser = async (username, password) => {
         console.warn('Tokens not found in the response');
       }
 
+      //check user profile
+      if(data.profile && data.profile.firstName && data.profile.lastName) {
+        console.log('User profile:', data.profile);
+        localStorage.setItem('firstName', data.profile.firstName);
+        localStorage.setItem('lastName', data.profile.lastName);
+       
+      }
+
       return data;
     } else {
       const text = await response.text();

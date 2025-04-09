@@ -66,6 +66,12 @@ const loginUser = async (username, password)=>{
             } else {
                 console.warn('Tokens not found in the response');
             }
+            //check user profile
+            if (data.profile && data.profile.firstName && data.profile.lastName) {
+                console.log('User profile:', data.profile);
+                localStorage.setItem('firstName', data.profile.firstName);
+                localStorage.setItem('lastName', data.profile.lastName);
+            }
             return data;
         } else {
             const text = await response.text();
@@ -201,13 +207,7 @@ const Login = ()=>{
             if (isLogin) {
                 response = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["loginUser"])(username, password);
                 if (response && !response.errorMessage) {
-                    // Save first name and last name to local storage
-                    console.log('Saving to localStorage after login:', {
-                        firstName: response.firstName,
-                        lastName: response.lastName
-                    });
-                    localStorage.setItem('firstName', response.firstName);
-                    localStorage.setItem('lastName', response.lastName);
+                    // Ensure firstName and lastName are present in the response
                     // Redirect to dashboard
                     setTimeout(()=>{
                         router.push('/dashboard');
@@ -227,13 +227,6 @@ const Login = ()=>{
                 }
                 response = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["registerUser"])(username, password, firstName, lastName);
                 if (response && !response.errorMessage) {
-                    // Save first name and last name to local storage
-                    console.log('Saving to localStorage after registration:', {
-                        firstName,
-                        lastName
-                    });
-                    localStorage.setItem('firstName', firstName);
-                    localStorage.setItem('lastName', lastName);
                     // Redirect to login page
                     setTimeout(()=>{
                         setIsLogin(true);
@@ -309,7 +302,7 @@ const Login = ()=>{
                             children: isLogin ? 'Welcome back' : 'Create an account'
                         }, void 0, false, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 152,
+                            lineNumber: 145,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -317,13 +310,13 @@ const Login = ()=>{
                             children: isLogin ? 'Sign in to your account' : 'Fill in your details to get started'
                         }, void 0, false, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 155,
+                            lineNumber: 148,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Login.js",
-                    lineNumber: 151,
+                    lineNumber: 144,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -351,18 +344,18 @@ const Login = ()=>{
                                 children: error
                             }, void 0, false, {
                                 fileName: "[project]/Components/Login.js",
-                                lineNumber: 163,
+                                lineNumber: 156,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 161,
+                            lineNumber: 154,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Login.js",
-                    lineNumber: 160,
+                    lineNumber: 153,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -380,7 +373,7 @@ const Login = ()=>{
                                             children: "Username"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Login.js",
-                                            lineNumber: 179,
+                                            lineNumber: 172,
                                             columnNumber: 13
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -394,13 +387,13 @@ const Login = ()=>{
                                             placeholder: "username"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Login.js",
-                                            lineNumber: 182,
+                                            lineNumber: 175,
                                             columnNumber: 13
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Components/Login.js",
-                                    lineNumber: 178,
+                                    lineNumber: 171,
                                     columnNumber: 11
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -414,7 +407,7 @@ const Login = ()=>{
                                                     children: "Password"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Login.js",
-                                                    lineNumber: 196,
+                                                    lineNumber: 189,
                                                     columnNumber: 15
                                                 }, this),
                                                 isLogin && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -426,18 +419,18 @@ const Login = ()=>{
                                                         children: "Forgot password?"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Components/Login.js",
-                                                        lineNumber: 201,
+                                                        lineNumber: 194,
                                                         columnNumber: 19
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Login.js",
-                                                    lineNumber: 200,
+                                                    lineNumber: 193,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Components/Login.js",
-                                            lineNumber: 195,
+                                            lineNumber: 188,
                                             columnNumber: 13
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -450,7 +443,7 @@ const Login = ()=>{
                                             className: "block w-full px-3 py-2 mt-1 border border-blue-200 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-black"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Login.js",
-                                            lineNumber: 211,
+                                            lineNumber: 204,
                                             columnNumber: 13
                                         }, this),
                                         !isLogin && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -458,13 +451,13 @@ const Login = ()=>{
                                             children: "Password must be at least 8 characters"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Login.js",
-                                            lineNumber: 221,
+                                            lineNumber: 214,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Components/Login.js",
-                                    lineNumber: 194,
+                                    lineNumber: 187,
                                     columnNumber: 11
                                 }, this),
                                 !isLogin && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -477,7 +470,7 @@ const Login = ()=>{
                                                     children: "Confirm Password"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Login.js",
-                                                    lineNumber: 228,
+                                                    lineNumber: 221,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -491,13 +484,13 @@ const Login = ()=>{
                                                     required: true
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Login.js",
-                                                    lineNumber: 231,
+                                                    lineNumber: 224,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Components/Login.js",
-                                            lineNumber: 227,
+                                            lineNumber: 220,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -511,7 +504,7 @@ const Login = ()=>{
                                                             children: "First Name"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Login.js",
-                                                            lineNumber: 245,
+                                                            lineNumber: 238,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -525,13 +518,13 @@ const Login = ()=>{
                                                             required: true
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Login.js",
-                                                            lineNumber: 248,
+                                                            lineNumber: 241,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Components/Login.js",
-                                                    lineNumber: 244,
+                                                    lineNumber: 237,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -542,7 +535,7 @@ const Login = ()=>{
                                                             children: "Last Name"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Login.js",
-                                                            lineNumber: 261,
+                                                            lineNumber: 254,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -556,19 +549,19 @@ const Login = ()=>{
                                                             required: true
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Login.js",
-                                                            lineNumber: 264,
+                                                            lineNumber: 257,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Components/Login.js",
-                                                    lineNumber: 260,
+                                                    lineNumber: 253,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Components/Login.js",
-                                            lineNumber: 243,
+                                            lineNumber: 236,
                                             columnNumber: 15
                                         }, this)
                                     ]
@@ -576,7 +569,7 @@ const Login = ()=>{
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 177,
+                            lineNumber: 170,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -607,7 +600,7 @@ const Login = ()=>{
                                                     strokeWidth: "4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Login.js",
-                                                    lineNumber: 289,
+                                                    lineNumber: 282,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -616,13 +609,13 @@ const Login = ()=>{
                                                     d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Login.js",
-                                                    lineNumber: 290,
+                                                    lineNumber: 283,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Components/Login.js",
-                                            lineNumber: 288,
+                                            lineNumber: 281,
                                             columnNumber: 17
                                         }, this),
                                         isLogin ? 'Signing in...' : 'Creating account...'
@@ -630,18 +623,18 @@ const Login = ()=>{
                                 }, void 0, true) : isLogin ? 'Sign in' : 'Create account'
                             }, void 0, false, {
                                 fileName: "[project]/Components/Login.js",
-                                lineNumber: 281,
+                                lineNumber: 274,
                                 columnNumber: 11
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 280,
+                            lineNumber: 273,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Login.js",
-                    lineNumber: 176,
+                    lineNumber: 169,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -664,24 +657,24 @@ const Login = ()=>{
                                 children: isLogin ? 'Sign up' : 'Sign in'
                             }, void 0, false, {
                                 fileName: "[project]/Components/Login.js",
-                                lineNumber: 304,
+                                lineNumber: 297,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Components/Login.js",
-                        lineNumber: 302,
+                        lineNumber: 295,
                         columnNumber: 9
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/Components/Login.js",
-                    lineNumber: 301,
+                    lineNumber: 294,
                     columnNumber: 7
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/Components/Login.js",
-            lineNumber: 150,
+            lineNumber: 143,
             columnNumber: 5
         }, this);
     const renderForgotPasswordForm = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -695,7 +688,7 @@ const Login = ()=>{
                             children: "Reset Password"
                         }, void 0, false, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 321,
+                            lineNumber: 314,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -703,13 +696,13 @@ const Login = ()=>{
                             children: "Enter your email to receive a password reset link"
                         }, void 0, false, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 322,
+                            lineNumber: 315,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Login.js",
-                    lineNumber: 320,
+                    lineNumber: 313,
                     columnNumber: 7
                 }, this),
                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -717,7 +710,7 @@ const Login = ()=>{
                     children: error
                 }, void 0, false, {
                     fileName: "[project]/Components/Login.js",
-                    lineNumber: 328,
+                    lineNumber: 321,
                     columnNumber: 9
                 }, this),
                 resetSent ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -735,12 +728,12 @@ const Login = ()=>{
                                 d: "M5 13l4 4L19 7"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Login.js",
-                                lineNumber: 336,
+                                lineNumber: 329,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 335,
+                            lineNumber: 328,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -748,7 +741,7 @@ const Login = ()=>{
                             children: "Reset Link Sent"
                         }, void 0, false, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 338,
+                            lineNumber: 331,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -756,13 +749,13 @@ const Login = ()=>{
                             children: "We've sent a password reset link to your email address. Please check your inbox and follow the instructions."
                         }, void 0, false, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 339,
+                            lineNumber: 332,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Login.js",
-                    lineNumber: 334,
+                    lineNumber: 327,
                     columnNumber: 9
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                     className: "space-y-5",
@@ -776,7 +769,7 @@ const Login = ()=>{
                                     children: "Email Address"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Login.js",
-                                    lineNumber: 346,
+                                    lineNumber: 339,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -791,13 +784,13 @@ const Login = ()=>{
                                     required: true
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Login.js",
-                                    lineNumber: 349,
+                                    lineNumber: 342,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 345,
+                            lineNumber: 338,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -830,7 +823,7 @@ const Login = ()=>{
                                                         strokeWidth: "4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Components/Login.js",
-                                                        lineNumber: 373,
+                                                        lineNumber: 366,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -839,13 +832,13 @@ const Login = ()=>{
                                                         d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Components/Login.js",
-                                                        lineNumber: 374,
+                                                        lineNumber: 367,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Components/Login.js",
-                                                lineNumber: 372,
+                                                lineNumber: 365,
                                                 columnNumber: 19
                                             }, this),
                                             "Sending..."
@@ -853,7 +846,7 @@ const Login = ()=>{
                                     }, void 0, true) : 'Send Reset Link'
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Login.js",
-                                    lineNumber: 363,
+                                    lineNumber: 356,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -874,25 +867,25 @@ const Login = ()=>{
                                     children: "Back"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Login.js",
-                                    lineNumber: 383,
+                                    lineNumber: 376,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Login.js",
-                            lineNumber: 362,
+                            lineNumber: 355,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Login.js",
-                    lineNumber: 344,
+                    lineNumber: 337,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/Components/Login.js",
-            lineNumber: 319,
+            lineNumber: 312,
             columnNumber: 5
         }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -905,12 +898,12 @@ const Login = ()=>{
             children: showForgotPassword ? renderForgotPasswordForm() : renderLoginSignupForm()
         }, void 0, false, {
             fileName: "[project]/Components/Login.js",
-            lineNumber: 405,
+            lineNumber: 398,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/Components/Login.js",
-        lineNumber: 404,
+        lineNumber: 397,
         columnNumber: 5
     }, this);
 };
