@@ -431,7 +431,7 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
         style: {
             backdropFilter: 'blur(2px)'
         },
-        className: "jsx-86e95f8f26ba1bfc" + " " + "fixed inset-0 bg-black bg-opacity-30 z-50",
+        className: "jsx-5fdae030c3244d6c" + " " + "fixed inset-0 bg-black bg-opacity-30 z-50",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 ref: modalRef,
@@ -441,13 +441,13 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                     transform: 'translateY(-10px)',
                     animation: 'fadeIn 0.2s ease-out forwards'
                 },
-                className: "jsx-86e95f8f26ba1bfc" + " " + "absolute bg-white rounded-lg shadow-xl p-6 w-full max-w-md",
+                className: "jsx-5fdae030c3244d6c" + " " + "absolute bg-white rounded-lg shadow-xl p-6 w-full max-w-md",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "jsx-86e95f8f26ba1bfc" + " " + "flex justify-between items-center mb-4",
+                        className: "jsx-5fdae030c3244d6c" + " " + "flex justify-between items-center mb-4",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                className: "jsx-86e95f8f26ba1bfc" + " " + "text-2xl font-semibold text-gray-900",
+                                className: "jsx-5fdae030c3244d6c" + " " + "text-2xl font-semibold text-gray-900",
                                 children: "Edit Room"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -456,7 +456,7 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: onClose,
-                                className: "jsx-86e95f8f26ba1bfc" + " " + "text-gray-500 hover:text-gray-700",
+                                className: "jsx-5fdae030c3244d6c" + " " + "text-gray-500 hover:text-gray-700",
                                 children: "✕"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -470,9 +470,9 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                         columnNumber: 9
                     }, this),
                     error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "jsx-86e95f8f26ba1bfc" + " " + "bg-red-50 border border-red-200 rounded-md p-4 mb-6",
+                        className: "jsx-5fdae030c3244d6c" + " " + "bg-red-50 border border-red-200 rounded-md p-4 mb-6",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "jsx-86e95f8f26ba1bfc" + " " + "text-sm font-medium text-red-800",
+                            className: "jsx-5fdae030c3244d6c" + " " + "text-sm font-medium text-red-800",
                             children: error
                         }, void 0, false, {
                             fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -485,17 +485,17 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                         columnNumber: 11
                     }, this),
                     fetchLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "jsx-86e95f8f26ba1bfc" + " " + "flex justify-center items-center py-12",
+                        className: "jsx-5fdae030c3244d6c" + " " + "flex justify-center items-center py-12",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "jsx-86e95f8f26ba1bfc" + " " + "animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"
+                                className: "jsx-5fdae030c3244d6c" + " " + "animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
                                 lineNumber: 131,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "jsx-86e95f8f26ba1bfc" + " " + "ml-3 text-sm text-gray-500",
+                                className: "jsx-5fdae030c3244d6c" + " " + "ml-3 text-sm text-gray-500",
                                 children: "Loading room data..."
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -509,13 +509,13 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                         onSubmit: handleSubmit,
-                        className: "jsx-86e95f8f26ba1bfc",
+                        className: "jsx-5fdae030c3244d6c",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "jsx-86e95f8f26ba1bfc" + " " + "mb-4",
+                                className: "jsx-5fdae030c3244d6c" + " " + "mb-4",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                        className: "jsx-86e95f8f26ba1bfc" + " " + "block text-sm font-medium text-gray-700 mb-1",
+                                        className: "jsx-5fdae030c3244d6c" + " " + "block text-sm font-medium text-gray-700 mb-1",
                                         children: "Room Name"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -528,7 +528,7 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                                         value: formData.roomName,
                                         onChange: handleChange,
                                         required: true,
-                                        className: "jsx-86e95f8f26ba1bfc" + " " + "block w-full rounded-md py-2 px-3 border border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm"
+                                        className: "jsx-5fdae030c3244d6c" + " " + "block w-full rounded-md py-2 px-3 border border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
                                         lineNumber: 140,
@@ -541,10 +541,10 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "jsx-86e95f8f26ba1bfc" + " " + "mb-4",
+                                className: "jsx-5fdae030c3244d6c" + " " + "mb-4",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                        className: "jsx-86e95f8f26ba1bfc" + " " + "block text-sm font-medium text-gray-700 mb-1",
+                                        className: "jsx-5fdae030c3244d6c" + " " + "block text-sm font-medium text-gray-700 mb-1",
                                         children: "Room Type"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -556,11 +556,11 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                                         value: formData.roomType,
                                         onChange: handleChange,
                                         required: true,
-                                        className: "jsx-86e95f8f26ba1bfc" + " " + "block w-full rounded-md py-2 px-3 border border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm",
+                                        className: "jsx-5fdae030c3244d6c" + " " + "block w-full rounded-md py-2 px-3 border border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                 value: "",
-                                                className: "jsx-86e95f8f26ba1bfc",
+                                                className: "jsx-5fdae030c3244d6c",
                                                 children: "Select a room type"
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -569,7 +569,7 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                 value: "Lecture Hall",
-                                                className: "jsx-86e95f8f26ba1bfc",
+                                                className: "jsx-5fdae030c3244d6c",
                                                 children: "Lecture Hall"
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -578,7 +578,7 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                 value: "Classroom",
-                                                className: "jsx-86e95f8f26ba1bfc",
+                                                className: "jsx-5fdae030c3244d6c",
                                                 children: "Classroom"
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -587,7 +587,7 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                 value: "Lab",
-                                                className: "jsx-86e95f8f26ba1bfc",
+                                                className: "jsx-5fdae030c3244d6c",
                                                 children: "Lab"
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -607,10 +607,10 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "jsx-86e95f8f26ba1bfc" + " " + "mb-6",
+                                className: "jsx-5fdae030c3244d6c" + " " + "mb-6",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                        className: "jsx-86e95f8f26ba1bfc" + " " + "block text-sm font-medium text-gray-700 mb-1",
+                                        className: "jsx-5fdae030c3244d6c" + " " + "block text-sm font-medium text-gray-700 mb-1",
                                         children: "Capacity"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -624,7 +624,7 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                                         onChange: handleChange,
                                         min: "1",
                                         required: true,
-                                        className: "jsx-86e95f8f26ba1bfc" + " " + "block w-full rounded-md py-2 px-3 border border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm"
+                                        className: "jsx-5fdae030c3244d6c" + " " + "block w-full rounded-md py-2 px-3 border border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
                                         lineNumber: 172,
@@ -637,12 +637,12 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "jsx-86e95f8f26ba1bfc" + " " + "flex justify-end",
+                                className: "jsx-5fdae030c3244d6c" + " " + "flex justify-end",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
                                         onClick: onClose,
-                                        className: "jsx-86e95f8f26ba1bfc" + " " + "mr-3 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+                                        className: "jsx-5fdae030c3244d6c" + " " + "mr-3 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
                                         children: "Cancel"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -652,7 +652,7 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "submit",
                                         disabled: loading,
-                                        className: "jsx-86e95f8f26ba1bfc" + " " + `px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''}`,
+                                        className: "jsx-5fdae030c3244d6c" + " " + `px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''}`,
                                         children: loading ? 'Updating...' : 'Update Room'
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/RoomsPage/EditRoom.jsx",
@@ -678,7 +678,7 @@ const EditRoom = ({ room, onClose, onRoomUpdated, triggerRef })=>{
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                id: "86e95f8f26ba1bfc",
+                id: "5fdae030c3244d6c",
                 children: "@keyframes fadeIn{0%{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}"
             }, void 0, false, void 0, this)
         ]

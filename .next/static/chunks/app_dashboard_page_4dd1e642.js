@@ -7,9 +7,9 @@
   "chunks": [
     "static/chunks/Components_Core_b69066d1._.js",
     "static/chunks/Components_Management_966de860._.js",
-    "static/chunks/Components_Configurations_c0ae4bd6._.js",
+    "static/chunks/Components_Configurations_ae550af6._.js",
     "static/chunks/Components_InsightPage_insight_jsx_aca512e6._.js",
-    "static/chunks/Components_8b38140e._.js",
+    "static/chunks/Components_dcfd4c81._.js",
     "static/chunks/app_19d853dd._.js",
     "static/chunks/node_modules_lodash_20634561._.js",
     "static/chunks/node_modules_recharts_es6_dddff71f._.js",

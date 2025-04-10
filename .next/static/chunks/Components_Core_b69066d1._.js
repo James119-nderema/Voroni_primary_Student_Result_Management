@@ -1206,7 +1206,7 @@ const DashboardPage = ()=>{
         columnNumber: 5
     }, this);
 };
-_s(DashboardPage, "ClJtfdXs+WnY/kqrC0sw/cWYWc0=");
+_s(DashboardPage, "Z9IVDQt9BhCkZgGymuh5feE2ni0=");
 _c = DashboardPage;
 const __TURBOPACK__default__export__ = DashboardPage;
 var _c;

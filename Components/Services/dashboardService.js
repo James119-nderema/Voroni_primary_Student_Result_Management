@@ -8,7 +8,7 @@ import API_BASE_URL from './HostConfig';
 // Existing functions
 export const fetchTodaysSchedules = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/timetable/today`, {header});
+    const response = await axios.get(`${API_BASE_URL}/timetable/today`, { headers: header });
     return response.data;
   } catch (error) {
     console.error('Error fetching today\'s schedules:', error);
@@ -18,7 +18,7 @@ export const fetchTodaysSchedules = async () => {
 
 export const fetchTotalClasses = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/classes/total`);
+    const response = await axios.get(`${API_BASE_URL}/classes/total`, { headers: header });
     return response.data;
   } catch (error) {
     console.error('Error fetching total classes:', error);
@@ -28,7 +28,7 @@ export const fetchTotalClasses = async () => {
 
 export const fetchActiveLecturers = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/lecturers/active`);
+    const response = await axios.get(`${API_BASE_URL}/lecturers/active`, { headers: header });
     return response.data;
   } catch (error) {
     console.error('Error fetching active lecturers:', error);
@@ -38,7 +38,7 @@ export const fetchActiveLecturers = async () => {
 
 export const fetchTotalRooms = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/rooms/total`, {header});
+    const response = await axios.get(`${API_BASE_URL}/rooms/total`, { headers: header });
     return response.data;
   } catch (error) {
     console.error('Error fetching total rooms:', error);
@@ -48,7 +48,7 @@ export const fetchTotalRooms = async () => {
 
 export const fetchTotalTimetables = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/timetable/total`);
+    const response = await axios.get(`${API_BASE_URL}/timetable/total`, { headers: header });
     return response.data;
   } catch (error) {
     console.error('Error fetching total timetables:', error);
@@ -58,7 +58,7 @@ export const fetchTotalTimetables = async () => {
 
 export const fetchDaySummary = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/timetable/summary`);
+    const response = await axios.get(`${API_BASE_URL}/timetable/summary`, { headers: header });
     return response.data;
   } catch (error) {
     console.error('Error fetching day summary:', error);
@@ -70,7 +70,7 @@ export const fetchDaySummary = async () => {
 
 export const fetchResourceUtilization = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/rooms/utilization`);
+    const response = await axios.get(`${API_BASE_URL}/rooms/utilization`, { headers: header });
 
     // Filter and aggregate data for "labs" and "class"
     const aggregatedData = response.data.reduce((acc, item) => {

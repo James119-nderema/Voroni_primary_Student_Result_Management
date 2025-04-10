@@ -1,23 +1,26 @@
 import axios from "axios";
 import API_BASE_URL from './HostConfig';
+import { addAuthHeaders } from '../LoginService'; // Import addAuthHeaders
+const header = addAuthHeaders(); // Add authorization headers
+
 const timetableServiceUrl = `${API_BASE_URL}`;
 
 const TimetableService = {
   getTimetable: async () => {
     try {
-        const response = await axios.get(`${timetableServiceUrl}/timetable/`);
-        console.log("response", response);
-        return response.data;
-      } catch (error) {
-        console.error("Error fetching lecturers:", error);
-        return [];
-      }
+      const response = await axios.get(`${timetableServiceUrl}/timetable/`, { headers: header });
+      console.log("response", response);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching lecturers:", error);
+      return [];
+    }
   },
 
   generateTimetable: async () => {
     try {
-      const response = await fetch(`${timetableServiceUrl}/timetable/generate`, { method: "GET" });
-      if (!response.ok) throw new Error("Failed to generate timetable");
+      const response = await axios.get(`${timetableServiceUrl}/timetable/generate`, { headers: header });
+      return response.data;
     } catch (error) {
       console.error(error);
     }
@@ -37,11 +40,10 @@ const TimetableService = {
     window.URL.revokeObjectURL(url);
   },
 
-  // New functions to fetch lecturers, classes and rooms
   getLecturers: async () => {
     try {
-      const response = await axios.get(`${timetableServiceUrl}/lecturers/`);
-      return response.data; // Use the full lecturer object directly
+      const response = await axios.get(`${timetableServiceUrl}/lecturers/`, { headers: header });
+      return response.data;
     } catch (error) {
       console.error("Error fetching lecturers:", error);
       return [];
@@ -50,8 +52,8 @@ const TimetableService = {
 
   getClasses: async () => {
     try {
-      const response = await axios.get(`${timetableServiceUrl}/classes/all`);
-      return response.data; // Use the full class object directly
+      const response = await axios.get(`${timetableServiceUrl}/classes/all`, { headers: header });
+      return response.data;
     } catch (error) {
       console.error("Error fetching classes:", error);
       return [];
@@ -60,15 +62,14 @@ const TimetableService = {
 
   getRooms: async () => {
     try {
-      const response = await axios.get(`${timetableServiceUrl}/rooms/`);
-      return response.data; // Use the full room object directly
+      const response = await axios.get(`${timetableServiceUrl}/rooms/`, { headers: header });
+      return response.data;
     } catch (error) {
       console.error("Error fetching rooms:", error);
       return [];
     }
   },
 
-  // New function to download timetable for a specific entity
   downloadEntityTimetable: async (entityType, entityId, dayIndex, entityName) => {
     try {
       let endpoint;
