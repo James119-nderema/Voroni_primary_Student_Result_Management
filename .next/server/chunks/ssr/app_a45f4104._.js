@@ -60,7 +60,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Management$2f$
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$InsightPage$2f$insight$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/InsightPage/insight.jsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Configurations$2f$RoomsDepartment$2f$roomsDepartment$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Configurations$2f$RoomSchedule$2f$roomSchedule$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Configurations$2f$FailedSchedule$2f$failedSchedule$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Configurations/FailedSchedule/failedSchedule.jsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Configurations$2f$ScheduleTracker$2f$scheduletracker$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Configurations/ScheduleTracker/scheduletracker.jsx [app-ssr] (ecmascript)");
 'use client';
 ;
 ;
@@ -196,8 +196,8 @@ const TimetableManagementDashboard = ()=>{
                     icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$door$2d$closed$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__DoorClosed$3e$__["DoorClosed"]
                 },
                 {
-                    page: 'failed-schedules',
-                    title: 'Failed Schedules',
+                    page: 'schedule-tracker',
+                    title: 'Schedule Tracker',
                     icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$door$2d$closed$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__DoorClosed$3e$__["DoorClosed"]
                 }
             ]
@@ -306,8 +306,8 @@ const TimetableManagementDashboard = ()=>{
                     lineNumber: 119,
                     columnNumber: 37
                 }, this);
-            case 'failed-schedules':
-                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Configurations$2f$FailedSchedule$2f$failedSchedule$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+            case 'schedule-tracker':
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Configurations$2f$ScheduleTracker$2f$scheduletracker$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                     fileName: "[project]/app/page.js",
                     lineNumber: 120,
                     columnNumber: 39

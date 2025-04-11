@@ -22,7 +22,7 @@ import DepartmentPage from '@/Components/Management/DepartmentPage/departments';
 import TimetableResourceAnalysis from '@/Components/InsightPage/insight';
 import RoomsDepartment from '@/Components/Configurations/RoomsDepartment/roomsDepartment';
 import RoomSchedule from '@/Components/Configurations/RoomSchedule/roomSchedule';
-import FailedSchedule from '@/Components/Configurations/FailedSchedule/failedSchedule';
+import FailedSchedule from '@/Components/Configurations/ScheduleTracker/scheduletracker';
 
 const TimetableManagementDashboard = () => {  
   const [activePage, setActivePage] = useState('dashboard');  
@@ -87,7 +87,7 @@ const TimetableManagementDashboard = () => {
         { page: 'program-courses', title: 'Program Courses', icon: BookOpen },
         { page: 'rooms-department', title: 'Rooms & Departments', icon: DoorOpen },
         { page: 'room-schedules', title: 'Room Schedules', icon: DoorClosed },
-        { page: 'failed-schedules', title: 'Failed Schedules', icon: DoorClosed },
+        { page: 'schedule-tracker', title: 'Schedule Tracker', icon: DoorClosed },
       
       ],
     },
@@ -117,7 +117,7 @@ const TimetableManagementDashboard = () => {
       case 'program-courses': return <ProgramCourse />;
       case 'rooms-department': return <RoomsDepartment />;
       case 'room-schedules': return <RoomSchedule />;
-      case 'failed-schedules': return <FailedSchedule />;
+      case 'schedule-tracker': return <FailedSchedule />;
       default: return <DashboardPage />;  
     }  
   };  
