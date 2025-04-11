@@ -35,7 +35,7 @@ const TimetablePage = () => {
     
     // Create array of day objects with names and dates
     return days.map((day, index) => {
-      const diff = index - currentDay;
+      const diff = index + 1 - currentDay; // Adjust diff calculation
       const date = new Date(today);
       date.setDate(today.getDate() + diff);
       
@@ -147,8 +147,6 @@ const getColorScheme = (courseName) => {
   return colorPalette[hash % colorPalette.length];
 };
 
-
-
   // Filter timetable entries based on search text
   const filteredTimetable = timetable.filter(entry => {
     if (!filterText) return true;
@@ -164,17 +162,41 @@ const getColorScheme = (courseName) => {
     );
   });
 
-  // Group entries by start time for the active day
-  const groupedByTime = timeSlots.map(slot => {
-    const entriesAtTime = filteredTimetable.filter(
-      entry => entry.dayName === activeDay && entry.startTime === slot.time24
-    );
-    
-    return {
-      ...slot,
-      entries: entriesAtTime
-    };
-  }).filter(group => group.entries.length > 0);
+  // Group entries by day and start time for "All" view or by start time for specific day
+  const groupedEntries = () => {
+    if (activeDay === "All") {
+      // Group by day first, then by time within each day
+      const dayGroups = {};
+      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      
+      // Initialize day groups
+      days.forEach(day => {
+        dayGroups[day] = timeSlots.map(slot => ({
+          ...slot,
+          entries: filteredTimetable.filter(
+            entry => entry.dayName === day && entry.startTime === slot.time24
+          )
+        })).filter(group => group.entries.length > 0);
+      });
+      
+      // Filter out days with no entries
+      return Object.entries(dayGroups)
+        .filter(([_, timeGroups]) => timeGroups.length > 0)
+        .map(([day, timeGroups]) => ({ day, timeGroups }));
+    } else {
+      // Group entries by start time for the active day
+      return timeSlots.map(slot => {
+        const entriesAtTime = filteredTimetable.filter(
+          entry => entry.dayName === activeDay && entry.startTime === slot.time24
+        );
+        
+        return {
+          ...slot,
+          entries: entriesAtTime
+        };
+      }).filter(group => group.entries.length > 0);
+    }
+  };
 
   // Render a single timetable entry card
   const renderTimetableCard = (entry, index) => {
@@ -218,6 +240,16 @@ const getColorScheme = (courseName) => {
           </svg>
           <span className="font-medium">{entry.lecturerName}</span>
         </div>
+        
+        {/* When in "All" view, show day name */}
+        {activeDay === "All" && (
+          <div className="flex items-center text-xs mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span className="font-medium">{entry.dayName}</span>
+          </div>
+        )}
         
         {/* Bottom Section with Class Details */}
         <div className="flex justify-between items-center text-xs">
@@ -307,9 +339,25 @@ const getColorScheme = (courseName) => {
           </div>
         </div>
 
-        {/* Day Tabs with Dates */}
+        {/* Day Tabs with Dates and New All Button */}
         <div className="flex overflow-x-auto border-b scrollbar-hide">
           <div className="flex">
+            {/* All button */}
+            <button
+              onClick={() => setActiveDay("All")}
+              className={`
+                px-6 py-3 text-sm font-medium rounded-lg transition-all duration-200 
+                flex flex-col items-center border-b-2 shadow-sm 
+                ${activeDay === "All" 
+                  ? "border-indigo-500 text-indigo-600 bg-indigo-100 shadow-md" 
+                  : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                }
+              `}
+            >
+              <span>All</span>
+              <span className="text-xs mt-1 opacity-80">Days</span>
+            </button>
+            
             {daysWithDates.map(dayInfo => (
               <button
                 key={dayInfo.name}
@@ -401,7 +449,8 @@ const getColorScheme = (courseName) => {
           </div>
         )}
 
-        {!loading && timetable.length > 0 && filteredTimetable.filter(entry => entry.dayName === activeDay).length === 0 && (
+        {!loading && timetable.length > 0 && activeDay !== "All" && 
+         filteredTimetable.filter(entry => entry.dayName === activeDay).length === 0 && (
           <div className="p-10 text-center">
             <p className="text-gray-500">
               {filterText 
@@ -411,10 +460,22 @@ const getColorScheme = (courseName) => {
           </div>
         )}
 
-        {/* Timetable Content */}
-        {!loading && filteredTimetable.filter(entry => entry.dayName === activeDay).length > 0 && (
+        {!loading && timetable.length > 0 && activeDay === "All" && 
+         filteredTimetable.length === 0 && (
+          <div className="p-10 text-center">
+            <p className="text-gray-500">
+              {filterText 
+                ? "No matching entries found. Try adjusting your filter."
+                : "No classes scheduled for the entire week."}
+            </p>
+          </div>
+        )}
+
+        {/* Timetable Content - Single Day View */}
+        {!loading && activeDay !== "All" && 
+         filteredTimetable.filter(entry => entry.dayName === activeDay).length > 0 && (
           <div className="p-4 transition-all duration-300">
-            {groupedByTime.map((timeGroup) => (
+            {groupedEntries().map((timeGroup) => (
               <div key={timeGroup.time24} className="mb-6">
                 {/* Time Header - Simple and clean */}
                 <div className="flex items-center mb-3">
@@ -437,6 +498,47 @@ const getColorScheme = (courseName) => {
           </div>
         )}
 
+        {/* Timetable Content - All Days View */}
+        {!loading && activeDay === "All" && filteredTimetable.length > 0 && (
+          <div className="p-4 transition-all duration-300">
+            {groupedEntries().map((dayGroup) => (
+              <div key={dayGroup.day} className="mb-8">
+                {/* Day Header */}
+                <div className="flex items-center mb-4 border-b pb-2">
+                  <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <h2 className="text-lg font-bold text-gray-800">{dayGroup.day}</h2>
+                </div>
+
+                {/* Time Groups within this day */}
+                {dayGroup.timeGroups.map((timeGroup) => (
+                  <div key={`${dayGroup.day}-${timeGroup.time24}`} className="mb-6 ml-4">
+                    {/* Time Header */}
+                    <div className="flex items-center mb-3">
+                      <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-md font-medium text-gray-800">{timeGroup.time12}</h3>
+                    </div>
+                    
+                    {/* Cards Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {timeGroup.entries.map((entry, index) => 
+                        renderTimetableCard(entry, index)
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Generation Timer - Clean and minimal */}
         {generationTime > 0 && (
           <div className="border-t py-2 flex justify-center">
@@ -448,7 +550,15 @@ const getColorScheme = (courseName) => {
             </div>
           </div>
         )}
-      </div>      
+      </div>
+
+      {/* Download Popup */}
+      <DownloadPopup 
+        isOpen={downloadPopupOpen}
+        onClose={() => setDownloadPopupOpen(false)}
+        activeDay={activeDay}
+        daysWithDates={daysWithDates}
+      />
     </div>
   );
 };

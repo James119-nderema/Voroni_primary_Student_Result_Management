@@ -113,7 +113,7 @@ var { g: global, __dirname } = __turbopack_context__;
 __turbopack_context__.s({
     "default": (()=>__TURBOPACK__default__export__)
 });
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:9921';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://10.21.1.149:9921';
 const __TURBOPACK__default__export__ = API_BASE_URL;
 }}),
 "[project]/Components/Services/dashboardService.js [app-ssr] (ecmascript)": ((__turbopack_context__) => {
