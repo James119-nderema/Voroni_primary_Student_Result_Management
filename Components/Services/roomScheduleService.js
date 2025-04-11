@@ -1,8 +1,8 @@
 import API_BASE_URL from "./HostConfig";
 
 const roomScheduleUrl = `${API_BASE_URL}/rooms`;
- import { addAuthHeaders } from '../LoginService';
- const headers = addAuthHeaders();
+import { addAuthHeaders } from '../LoginService';
+const headers = addAuthHeaders();
 
 // Fetch rooms data from API
 const fetchRooms = async () => {
@@ -161,5 +161,22 @@ export const removeRoomSchedule = async (schedule) => {
 
   if (!response.ok) {
     throw new Error("Failed to remove room schedule");
+  }
+};
+
+export const regenerateSchedules = async (departmentId) => {
+  if (!departmentId) {
+    throw new Error('Department ID is required to regenerate schedules.');
+  }
+
+  const response = await fetch(`${roomScheduleUrl}/schedule/create/${departmentId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to regenerate schedules');
   }
 };

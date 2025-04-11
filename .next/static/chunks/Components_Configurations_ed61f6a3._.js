@@ -4849,6 +4849,45 @@ const RoomSchedule = ()=>{
                 }), 3000);
         }
     };
+    const regenerateSchedules = async ()=>{
+        if (!selectedDepartmentId) {
+            setActionStatus({
+                type: 'error',
+                message: 'Please select a department first.'
+            });
+            setTimeout(()=>setActionStatus({
+                    type: null,
+                    message: null
+                }), 3000);
+            return;
+        }
+        try {
+            setActionStatus({
+                type: 'loading',
+                message: 'Regenerating schedules...'
+            });
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$roomScheduleService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["regenerateSchedules"])(selectedDepartmentId);
+            await fetchRoomScheduleData(selectedDepartmentId);
+            setActionStatus({
+                type: 'success',
+                message: 'Schedules regenerated successfully'
+            });
+            setTimeout(()=>setActionStatus({
+                    type: null,
+                    message: null
+                }), 3000);
+        } catch (err) {
+            console.error('Error regenerating schedules:', err);
+            setActionStatus({
+                type: 'error',
+                message: 'Failed to regenerate schedules. Please try again.'
+            });
+            setTimeout(()=>setActionStatus({
+                    type: null,
+                    message: null
+                }), 3000);
+        }
+    };
     // Filter departments based on search
     const filteredDepartments = departments.filter((dept)=>dept.departmentName.toLowerCase().includes(searchDepartment.toLowerCase()));
     // Filter available schedules based on search
@@ -4863,7 +4902,7 @@ const RoomSchedule = ()=>{
                 children: "Room Schedules"
             }, void 0, false, {
                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                lineNumber: 151,
+                lineNumber: 172,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4873,12 +4912,12 @@ const RoomSchedule = ()=>{
                     children: "It lets you view the available rooms and their schedules, and you can select the one that fits a department."
                 }, void 0, false, {
                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                    lineNumber: 155,
+                    lineNumber: 176,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                lineNumber: 154,
+                lineNumber: 175,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4891,7 +4930,7 @@ const RoomSchedule = ()=>{
                             children: "Department Selection"
                         }, void 0, false, {
                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                            lineNumber: 162,
+                            lineNumber: 183,
                             columnNumber: 11
                         }, this),
                         loading && !selectedDepartmentId ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4912,7 +4951,7 @@ const RoomSchedule = ()=>{
                                             strokeWidth: "4"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                            lineNumber: 167,
+                                            lineNumber: 188,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -4921,13 +4960,13 @@ const RoomSchedule = ()=>{
                                             d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                            lineNumber: 168,
+                                            lineNumber: 189,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 166,
+                                    lineNumber: 187,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4935,13 +4974,13 @@ const RoomSchedule = ()=>{
                                     children: "Loading departments..."
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 170,
+                                    lineNumber: 191,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                            lineNumber: 165,
+                            lineNumber: 186,
                             columnNumber: 13
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
                             value: selectedDepartmentId,
@@ -4953,7 +4992,7 @@ const RoomSchedule = ()=>{
                                     children: "-- Select a Department --"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 178,
+                                    lineNumber: 199,
                                     columnNumber: 15
                                 }, this),
                                 departments.map((dept)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -4961,24 +5000,24 @@ const RoomSchedule = ()=>{
                                         children: dept.departmentName
                                     }, dept.departmentId, false, {
                                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                        lineNumber: 180,
+                                        lineNumber: 201,
                                         columnNumber: 17
                                     }, this))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                            lineNumber: 173,
+                            lineNumber: 194,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                    lineNumber: 161,
+                    lineNumber: 182,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                lineNumber: 160,
+                lineNumber: 181,
                 columnNumber: 7
             }, this),
             selectedDepartmentId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -5000,7 +5039,7 @@ const RoomSchedule = ()=>{
                                     strokeWidth: "4"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 194,
+                                    lineNumber: 215,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -5009,13 +5048,13 @@ const RoomSchedule = ()=>{
                                     d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 195,
+                                    lineNumber: 216,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                            lineNumber: 193,
+                            lineNumber: 214,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5023,13 +5062,13 @@ const RoomSchedule = ()=>{
                             children: "Loading room schedules..."
                         }, void 0, false, {
                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                            lineNumber: 197,
+                            lineNumber: 218,
                             columnNumber: 15
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                    lineNumber: 192,
+                    lineNumber: 213,
                     columnNumber: 13
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     children: [
@@ -5051,7 +5090,7 @@ const RoomSchedule = ()=>{
                                             strokeWidth: "4"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                            lineNumber: 210,
+                                            lineNumber: 231,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -5060,13 +5099,13 @@ const RoomSchedule = ()=>{
                                             d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                            lineNumber: 211,
+                                            lineNumber: 232,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 209,
+                                    lineNumber: 230,
                                     columnNumber: 21
                                 }, this),
                                 actionStatus.type === 'success' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -5080,12 +5119,12 @@ const RoomSchedule = ()=>{
                                         clipRule: "evenodd"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                        lineNumber: 216,
+                                        lineNumber: 237,
                                         columnNumber: 23
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 215,
+                                    lineNumber: 236,
                                     columnNumber: 21
                                 }, this),
                                 actionStatus.type === 'error' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -5099,25 +5138,25 @@ const RoomSchedule = ()=>{
                                         clipRule: "evenodd"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                        lineNumber: 221,
+                                        lineNumber: 242,
                                         columnNumber: 23
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 220,
+                                    lineNumber: 241,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: actionStatus.message
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 224,
+                                    lineNumber: 245,
                                     columnNumber: 19
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                            lineNumber: 203,
+                            lineNumber: 224,
                             columnNumber: 17
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5129,20 +5168,46 @@ const RoomSchedule = ()=>{
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-white",
                                             children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
-                                                    className: "text-lg font-semibold text-blue-800 mb-1",
-                                                    children: "Available Room Schedules"
-                                                }, void 0, false, {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "flex justify-between items-center",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                                                    className: "text-lg font-semibold text-blue-800 mb-1",
+                                                                    children: "Available Room Schedules"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
+                                                                    lineNumber: 256,
+                                                                    columnNumber: 25
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                    className: "text-sm text-gray-500 mb-4",
+                                                                    children: "Click to add a schedule to your department"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
+                                                                    lineNumber: 257,
+                                                                    columnNumber: 25
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
+                                                            lineNumber: 255,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            onClick: regenerateSchedules,
+                                                            className: "px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors",
+                                                            children: "Regenerate Schedules"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
+                                                            lineNumber: 259,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                    lineNumber: 233,
-                                                    columnNumber: 21
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-sm text-gray-500 mb-4",
-                                                    children: "Click to add a schedule to your department"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                    lineNumber: 234,
+                                                    lineNumber: 254,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5156,7 +5221,7 @@ const RoomSchedule = ()=>{
                                                             className: "w-full px-4 py-2 pr-10 border rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                            lineNumber: 237,
+                                                            lineNumber: 267,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5174,29 +5239,29 @@ const RoomSchedule = ()=>{
                                                                     d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                    lineNumber: 246,
+                                                                    lineNumber: 276,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                lineNumber: 245,
+                                                                lineNumber: 275,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                            lineNumber: 244,
+                                                            lineNumber: 274,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                    lineNumber: 236,
+                                                    lineNumber: 266,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                            lineNumber: 232,
+                                            lineNumber: 253,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5217,7 +5282,7 @@ const RoomSchedule = ()=>{
                                                                             children: "Room"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                            lineNumber: 258,
+                                                                            lineNumber: 288,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5225,7 +5290,7 @@ const RoomSchedule = ()=>{
                                                                             children: "Type"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                            lineNumber: 259,
+                                                                            lineNumber: 289,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5233,7 +5298,7 @@ const RoomSchedule = ()=>{
                                                                             children: "Day"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                            lineNumber: 260,
+                                                                            lineNumber: 290,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5241,7 +5306,7 @@ const RoomSchedule = ()=>{
                                                                             children: "Time"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                            lineNumber: 261,
+                                                                            lineNumber: 291,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5249,18 +5314,18 @@ const RoomSchedule = ()=>{
                                                                             children: "Action"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                            lineNumber: 262,
+                                                                            lineNumber: 292,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                    lineNumber: 257,
+                                                                    lineNumber: 287,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                lineNumber: 256,
+                                                                lineNumber: 286,
                                                                 columnNumber: 29
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -5273,7 +5338,7 @@ const RoomSchedule = ()=>{
                                                                                 children: schedule.roomName || "N/A"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                lineNumber: 268,
+                                                                                lineNumber: 298,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5281,7 +5346,7 @@ const RoomSchedule = ()=>{
                                                                                 children: schedule.roomType || "N/A"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                lineNumber: 271,
+                                                                                lineNumber: 301,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5289,7 +5354,7 @@ const RoomSchedule = ()=>{
                                                                                 children: schedule.dayName || "N/A"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                lineNumber: 274,
+                                                                                lineNumber: 304,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5297,7 +5362,7 @@ const RoomSchedule = ()=>{
                                                                                 children: schedule.startTime && schedule.endTime ? `${schedule.startTime} - ${schedule.endTime}` : "N/A"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                lineNumber: 277,
+                                                                                lineNumber: 307,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5317,46 +5382,46 @@ const RoomSchedule = ()=>{
                                                                                                 clipRule: "evenodd"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                                lineNumber: 288,
+                                                                                                lineNumber: 318,
                                                                                                 columnNumber: 41
                                                                                             }, this)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                            lineNumber: 287,
+                                                                                            lineNumber: 317,
                                                                                             columnNumber: 39
                                                                                         }, this),
                                                                                         "Add"
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                    lineNumber: 283,
+                                                                                    lineNumber: 313,
                                                                                     columnNumber: 37
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                lineNumber: 282,
+                                                                                lineNumber: 312,
                                                                                 columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, index, true, {
                                                                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                        lineNumber: 267,
+                                                                        lineNumber: 297,
                                                                         columnNumber: 33
                                                                     }, this))
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                lineNumber: 265,
+                                                                lineNumber: 295,
                                                                 columnNumber: 29
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                        lineNumber: 255,
+                                                        lineNumber: 285,
                                                         columnNumber: 27
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                    lineNumber: 254,
+                                                    lineNumber: 284,
                                                     columnNumber: 25
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "text-center p-8 bg-gray-50 rounded-lg border border-gray-200",
@@ -5373,12 +5438,12 @@ const RoomSchedule = ()=>{
                                                                 d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                lineNumber: 301,
+                                                                lineNumber: 331,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                            lineNumber: 300,
+                                                            lineNumber: 330,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -5386,7 +5451,7 @@ const RoomSchedule = ()=>{
                                                             children: "No available schedules"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                            lineNumber: 303,
+                                                            lineNumber: 333,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5394,23 +5459,23 @@ const RoomSchedule = ()=>{
                                                             children: "There are no available room schedules for this department."
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                            lineNumber: 304,
+                                                            lineNumber: 334,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                    lineNumber: 299,
+                                                    lineNumber: 329,
                                                     columnNumber: 25
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                lineNumber: 252,
+                                                lineNumber: 282,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                            lineNumber: 251,
+                                            lineNumber: 281,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5425,18 +5490,18 @@ const RoomSchedule = ()=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                lineNumber: 310,
+                                                lineNumber: 340,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                            lineNumber: 309,
+                                            lineNumber: 339,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 231,
+                                    lineNumber: 252,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5450,7 +5515,7 @@ const RoomSchedule = ()=>{
                                                     children: "Department Room Schedules"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                    lineNumber: 319,
+                                                    lineNumber: 349,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5458,7 +5523,7 @@ const RoomSchedule = ()=>{
                                                     children: "Currently assigned room schedules for this department"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                    lineNumber: 320,
+                                                    lineNumber: 350,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5472,7 +5537,7 @@ const RoomSchedule = ()=>{
                                                             className: "w-full px-4 py-2 pr-10 border rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                            lineNumber: 323,
+                                                            lineNumber: 353,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5490,29 +5555,29 @@ const RoomSchedule = ()=>{
                                                                     d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                    lineNumber: 332,
+                                                                    lineNumber: 362,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                lineNumber: 331,
+                                                                lineNumber: 361,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                            lineNumber: 330,
+                                                            lineNumber: 360,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                    lineNumber: 322,
+                                                    lineNumber: 352,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                            lineNumber: 318,
+                                            lineNumber: 348,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5533,7 +5598,7 @@ const RoomSchedule = ()=>{
                                                                             children: "Room"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                            lineNumber: 344,
+                                                                            lineNumber: 374,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5541,7 +5606,7 @@ const RoomSchedule = ()=>{
                                                                             children: "Type"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                            lineNumber: 345,
+                                                                            lineNumber: 375,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5549,7 +5614,7 @@ const RoomSchedule = ()=>{
                                                                             children: "Day"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                            lineNumber: 346,
+                                                                            lineNumber: 376,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5557,7 +5622,7 @@ const RoomSchedule = ()=>{
                                                                             children: "Time"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                            lineNumber: 347,
+                                                                            lineNumber: 377,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5565,18 +5630,18 @@ const RoomSchedule = ()=>{
                                                                             children: "Action"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                            lineNumber: 348,
+                                                                            lineNumber: 378,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                    lineNumber: 343,
+                                                                    lineNumber: 373,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                lineNumber: 342,
+                                                                lineNumber: 372,
                                                                 columnNumber: 29
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -5589,7 +5654,7 @@ const RoomSchedule = ()=>{
                                                                                 children: schedule.roomName
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                lineNumber: 354,
+                                                                                lineNumber: 384,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5597,7 +5662,7 @@ const RoomSchedule = ()=>{
                                                                                 children: schedule.roomType
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                lineNumber: 357,
+                                                                                lineNumber: 387,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5605,7 +5670,7 @@ const RoomSchedule = ()=>{
                                                                                 children: schedule.dayName
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                lineNumber: 360,
+                                                                                lineNumber: 390,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5617,7 +5682,7 @@ const RoomSchedule = ()=>{
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                lineNumber: 363,
+                                                                                lineNumber: 393,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5637,46 +5702,46 @@ const RoomSchedule = ()=>{
                                                                                                 clipRule: "evenodd"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                                lineNumber: 372,
+                                                                                                lineNumber: 402,
                                                                                                 columnNumber: 41
                                                                                             }, this)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                            lineNumber: 371,
+                                                                                            lineNumber: 401,
                                                                                             columnNumber: 39
                                                                                         }, this),
                                                                                         "Remove"
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                    lineNumber: 367,
+                                                                                    lineNumber: 397,
                                                                                     columnNumber: 37
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                                lineNumber: 366,
+                                                                                lineNumber: 396,
                                                                                 columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, index, true, {
                                                                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                        lineNumber: 353,
+                                                                        lineNumber: 383,
                                                                         columnNumber: 33
                                                                     }, this))
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                lineNumber: 351,
+                                                                lineNumber: 381,
                                                                 columnNumber: 29
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                        lineNumber: 341,
+                                                        lineNumber: 371,
                                                         columnNumber: 27
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                    lineNumber: 340,
+                                                    lineNumber: 370,
                                                     columnNumber: 25
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "text-center p-8 bg-gray-50 rounded-lg border border-gray-200",
@@ -5693,12 +5758,12 @@ const RoomSchedule = ()=>{
                                                                 d: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                                lineNumber: 385,
+                                                                lineNumber: 415,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                            lineNumber: 384,
+                                                            lineNumber: 414,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -5706,7 +5771,7 @@ const RoomSchedule = ()=>{
                                                             children: "No schedules"
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                            lineNumber: 387,
+                                                            lineNumber: 417,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5714,23 +5779,23 @@ const RoomSchedule = ()=>{
                                                             children: "No room schedules assigned to this department yet."
                                                         }, void 0, false, {
                                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                            lineNumber: 388,
+                                                            lineNumber: 418,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                    lineNumber: 383,
+                                                    lineNumber: 413,
                                                     columnNumber: 25
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                lineNumber: 338,
+                                                lineNumber: 368,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                            lineNumber: 337,
+                                            lineNumber: 367,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5745,30 +5810,30 @@ const RoomSchedule = ()=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                                lineNumber: 394,
+                                                lineNumber: 424,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                            lineNumber: 393,
+                                            lineNumber: 423,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                    lineNumber: 317,
+                                    lineNumber: 347,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                            lineNumber: 229,
+                            lineNumber: 250,
                             columnNumber: 15
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                    lineNumber: 200,
+                    lineNumber: 221,
                     columnNumber: 13
                 }, this)
             }, void 0, false),
@@ -5786,19 +5851,19 @@ const RoomSchedule = ()=>{
                             clipRule: "evenodd"
                         }, void 0, false, {
                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                            lineNumber: 408,
+                            lineNumber: 438,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                        lineNumber: 407,
+                        lineNumber: 437,
                         columnNumber: 11
                     }, this),
                     error
                 ]
             }, void 0, true, {
                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                lineNumber: 406,
+                lineNumber: 436,
                 columnNumber: 9
             }, this),
             actionStatus.message && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5819,7 +5884,7 @@ const RoomSchedule = ()=>{
                                 strokeWidth: "4"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                lineNumber: 422,
+                                lineNumber: 452,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -5828,13 +5893,13 @@ const RoomSchedule = ()=>{
                                 d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                                lineNumber: 423,
+                                lineNumber: 453,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                        lineNumber: 421,
+                        lineNumber: 451,
                         columnNumber: 13
                     }, this),
                     actionStatus.type === 'success' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -5848,12 +5913,12 @@ const RoomSchedule = ()=>{
                             clipRule: "evenodd"
                         }, void 0, false, {
                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                            lineNumber: 428,
+                            lineNumber: 458,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                        lineNumber: 427,
+                        lineNumber: 457,
                         columnNumber: 13
                     }, this),
                     actionStatus.type === 'error' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -5867,31 +5932,31 @@ const RoomSchedule = ()=>{
                             clipRule: "evenodd"
                         }, void 0, false, {
                             fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                            lineNumber: 433,
+                            lineNumber: 463,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                        lineNumber: 432,
+                        lineNumber: 462,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         children: actionStatus.message
                     }, void 0, false, {
                         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                        lineNumber: 436,
+                        lineNumber: 466,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-                lineNumber: 415,
+                lineNumber: 445,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx",
-        lineNumber: 149,
+        lineNumber: 170,
         columnNumber: 5
     }, this);
 };

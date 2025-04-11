@@ -1574,6 +1574,7 @@ __turbopack_context__.s({
     "addRoomSchedule": (()=>addRoomSchedule),
     "fetchAvailableRoomSchedules": (()=>fetchAvailableRoomSchedules),
     "fetchSelectedRoomSchedules": (()=>fetchSelectedRoomSchedules),
+    "regenerateSchedules": (()=>regenerateSchedules),
     "removeRoomSchedule": (()=>removeRoomSchedule)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$HostConfig$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/HostConfig.js [app-client] (ecmascript)");
@@ -1737,6 +1738,20 @@ const removeRoomSchedule = async (schedule)=>{
         throw new Error("Failed to remove room schedule");
     }
 };
+const regenerateSchedules = async (departmentId)=>{
+    if (!departmentId) {
+        throw new Error('Department ID is required to regenerate schedules.');
+    }
+    const response = await fetch(`${roomScheduleUrl}/schedule/create/${departmentId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Failed to regenerate schedules');
+    }
+};
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
 }
@@ -1762,7 +1777,7 @@ const getScheduleTracker = async ()=>{
         });
         return response.data;
     } catch (error) {
-        console.error('Error fetching dchedule trackers:', error);
+        console.error('Error fetching schedule trackers:', error);
         throw error;
     }
 };

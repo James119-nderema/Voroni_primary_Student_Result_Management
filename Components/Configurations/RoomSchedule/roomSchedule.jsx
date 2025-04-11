@@ -9,6 +9,7 @@ import {
   fetchSelectedRoomSchedules,
   addRoomSchedule,
   removeRoomSchedule,
+  regenerateSchedules as regenerateSchedulesService,
 } from "../../Services/roomScheduleService";
 
 const RoomSchedule = () => {
@@ -126,6 +127,26 @@ const RoomSchedule = () => {
     }
   };
 
+  const regenerateSchedules = async () => {
+    if (!selectedDepartmentId) {
+      setActionStatus({ type: 'error', message: 'Please select a department first.' });
+      setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
+      return;
+    }
+
+    try {
+      setActionStatus({ type: 'loading', message: 'Regenerating schedules...' });
+      await regenerateSchedulesService(selectedDepartmentId);
+      await fetchRoomScheduleData(selectedDepartmentId);
+      setActionStatus({ type: 'success', message: 'Schedules regenerated successfully' });
+      setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
+    } catch (err) {
+      console.error('Error regenerating schedules:', err);
+      setActionStatus({ type: 'error', message: 'Failed to regenerate schedules. Please try again.' });
+      setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
+    }
+  };
+
   // Filter departments based on search
   const filteredDepartments = departments.filter(dept =>
     dept.departmentName.toLowerCase().includes(searchDepartment.toLowerCase())
@@ -230,9 +251,18 @@ const RoomSchedule = () => {
                 {/* Available Room Schedules */}
                 <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow">
                   <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-white">
-                    <h4 className="text-lg font-semibold text-blue-800 mb-1">Available Room Schedules</h4>
-                    <p className="text-sm text-gray-500 mb-4">Click to add a schedule to your department</p>
-                    
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h4 className="text-lg font-semibold text-blue-800 mb-1">Available Room Schedules</h4>
+                        <p className="text-sm text-gray-500 mb-4">Click to add a schedule to your department</p>
+                      </div>
+                      <button
+                        onClick={regenerateSchedules}
+                        className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
+                      >
+                        Regenerate Schedules
+                      </button>
+                    </div>
                     <div className="relative">
                       <input
                         type="text"

@@ -9,7 +9,7 @@ export const getScheduleTracker = async () => {
     const response = await axios.get(`${BASE_URL}/timetable/scheduletracker`, {headers});
     return response.data;
   } catch (error) {
-    console.error('Error fetching dchedule trackers:', error);
+    console.error('Error fetching schedule trackers:', error);
     throw error;
   }
 };
