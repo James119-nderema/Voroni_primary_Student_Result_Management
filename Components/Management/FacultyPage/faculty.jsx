@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { fetchFaculties, deleteFaculty } from '../../Services/facultyService';
 import AddFacultyPopup from './AddFacultyPopup';
 import EditFacultyPopup from './EditFacultyPopup';
+import ConfirmationDialog from '../../Common/ConfirmationDialog';
 
 const FacultiesPage = () => {
   const [faculties, setFaculties] = useState([]);
@@ -17,6 +18,8 @@ const FacultiesPage = () => {
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [selectedFaculty, setSelectedFaculty] = useState(null);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [facultyToDelete, setFacultyToDelete] = useState(null);
 
   useEffect(() => {
     const getFaculties = async () => {
@@ -56,12 +59,14 @@ const FacultiesPage = () => {
     }
   };
 
-  const handleDeleteFaculty = async (facultyId) => {
+  const handleDeleteFaculty = async () => {
     try {
-      const result = await deleteFaculty(facultyId);
-      
+      const result = await deleteFaculty(facultyToDelete.facultyId);
+
       if (result.success) {
-        const updatedFaculties = faculties.filter((faculty) => faculty.facultyId !== facultyId);
+        const updatedFaculties = faculties.filter(
+          (faculty) => faculty.facultyId !== facultyToDelete.facultyId
+        );
         setFaculties(updatedFaculties);
         setFilteredFaculties(updatedFaculties);
         setFeedbackMessage(result.message || "Faculty deleted successfully!");
@@ -70,7 +75,7 @@ const FacultiesPage = () => {
         setFeedbackMessage(result.message || "Failed to delete faculty.");
         setFeedbackType("error");
       }
-      
+
       // Clear message after 3 seconds
       setTimeout(() => {
         setFeedbackMessage("");
@@ -80,7 +85,20 @@ const FacultiesPage = () => {
       console.error("Error deleting faculty:", error);
       setFeedbackMessage("An unexpected error occurred while deleting the faculty.");
       setFeedbackType("error");
+    } finally {
+      setIsConfirmDialogOpen(false);
+      setFacultyToDelete(null);
     }
+  };
+
+  const openConfirmDialog = (faculty) => {
+    setFacultyToDelete(faculty);
+    setIsConfirmDialogOpen(true);
+  };
+
+  const closeConfirmDialog = () => {
+    setIsConfirmDialogOpen(false);
+    setFacultyToDelete(null);
   };
 
   const handleEditFaculty = (faculty) => {
@@ -234,7 +252,7 @@ const FacultiesPage = () => {
                           </button>
                           <button
                             className="text-red-600 hover:text-red-900"
-                            onClick={() => handleDeleteFaculty(faculty.facultyId)}
+                            onClick={() => openConfirmDialog(faculty)}
                           >
                             Delete
                           </button>
@@ -260,6 +278,7 @@ const FacultiesPage = () => {
         <AddFacultyPopup
           onClose={handlePopupClose}
           onFacultyAdded={handleFacultyAdded}
+          style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} // Ensure consistent positioning
         />
       )}
 
@@ -269,8 +288,18 @@ const FacultiesPage = () => {
           faculty={selectedFaculty}
           onClose={handlePopupClose}
           onFacultyUpdated={handleFacultyUpdated}
+          style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} // Ensure consistent positioning
         />
       )}
+
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={isConfirmDialogOpen}
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete the faculty "${facultyToDelete?.facultyName}"?`}
+        onConfirm={handleDeleteFaculty}
+        onCancel={closeConfirmDialog}
+      />
     </div>
   );
 };

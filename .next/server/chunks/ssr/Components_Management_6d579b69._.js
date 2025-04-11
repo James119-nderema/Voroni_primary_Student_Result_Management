@@ -5047,7 +5047,7 @@ const AddFacultyPopup = ({ onClose, onFacultyAdded })=>{
     });
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
-    const [success, setSuccess] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(""); // Keep for inline message if desired
+    const [success, setSuccess] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const handleChange = (e)=>{
         const { name, value } = e.target;
         setFacultyData((prev)=>({
@@ -5059,7 +5059,7 @@ const AddFacultyPopup = ({ onClose, onFacultyAdded })=>{
         e.preventDefault();
         setLoading(true);
         setError("");
-        setSuccess(""); // Reset success message
+        setSuccess("");
         try {
             // Basic validation
             if (!facultyData.facultyName.trim()) {
@@ -5070,18 +5070,13 @@ const AddFacultyPopup = ({ onClose, onFacultyAdded })=>{
             }
             const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$facultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["addFaculty"])(facultyData);
             if (result.success) {
-                // Show success toast notification
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success("Faculty added successfully!");
-                // Optional: keep inline success message as well
                 setSuccess("Faculty added successfully!");
-                // Clear form and notify parent
                 onFacultyAdded(result.data);
-                // Optionally close the popup after a short delay
                 setTimeout(()=>{
                     onClose();
                 }, 2000);
             } else {
-                // Show error toast notification
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error(result.message || "Failed to add faculty");
                 setError(result.message || "Failed to add faculty");
             }
@@ -5096,63 +5091,63 @@ const AddFacultyPopup = ({ onClose, onFacultyAdded })=>{
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start z-50",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "bg-white rounded-lg p-6 w-full max-w-md mt-10 max-h-[90vh] overflow-y-auto",
+            className: "bg-white rounded-lg p-8 w-full max-w-lg mt-10 max-h-[90vh] overflow-y-auto",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex justify-between items-center mb-4",
+                    className: "flex justify-between items-center mb-6",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                            className: "text-xl font-semibold text-gray-800",
+                            className: "text-2xl font-semibold text-gray-800",
                             children: "Add New Faculty"
                         }, void 0, false, {
                             fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                            lineNumber: 72,
+                            lineNumber: 67,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             onClick: onClose,
-                            className: "text-gray-500 hover:text-gray-700",
+                            className: "text-gray-500 hover:text-gray-700 text-lg",
                             children: "✕"
                         }, void 0, false, {
                             fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                            lineNumber: 73,
+                            lineNumber: 68,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                    lineNumber: 71,
+                    lineNumber: 66,
                     columnNumber: 9
                 }, this),
                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "mb-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded-md text-sm",
+                    className: "mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-md text-sm",
                     children: error
                 }, void 0, false, {
                     fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                    lineNumber: 82,
+                    lineNumber: 77,
                     columnNumber: 11
                 }, this),
                 success && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "mb-4 p-3 bg-green-50 border border-green-200 text-green-800 rounded-md text-sm",
+                    className: "mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-md text-sm",
                     children: success
                 }, void 0, false, {
                     fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                    lineNumber: 88,
+                    lineNumber: 83,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                     onSubmit: handleSubmit,
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "mb-4",
+                            className: "mb-6",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                     htmlFor: "facultyName",
-                                    className: "block text-sm font-medium text-gray-700 mb-1",
+                                    className: "block text-sm font-medium text-gray-700 mb-2",
                                     children: "Faculty Name"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                                    lineNumber: 95,
+                                    lineNumber: 90,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -5161,64 +5156,64 @@ const AddFacultyPopup = ({ onClose, onFacultyAdded })=>{
                                     name: "facultyName",
                                     value: facultyData.facultyName,
                                     onChange: handleChange,
-                                    className: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500",
+                                    className: "w-full px-4 py-3 border border-gray-300 rounded-md text-black shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500",
                                     placeholder: "Enter faculty name"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                                    lineNumber: 101,
+                                    lineNumber: 96,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                            lineNumber: 94,
+                            lineNumber: 89,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex justify-end gap-3 mt-6",
+                            className: "flex justify-end gap-4 mt-8",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
                                     onClick: onClose,
-                                    className: "px-4 py-2 bg-gray-200 text-gray-800 rounded-md text-sm font-medium hover:bg-gray-300",
+                                    className: "px-5 py-3 bg-gray-200 text-gray-800 rounded-md text-sm font-medium hover:bg-gray-300",
                                     disabled: loading,
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                                    lineNumber: 113,
+                                    lineNumber: 108,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "submit",
-                                    className: "px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 disabled:bg-indigo-300",
+                                    className: "px-5 py-3 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 disabled:bg-indigo-300",
                                     disabled: loading,
                                     children: loading ? "Adding..." : "Add Faculty"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                                    lineNumber: 121,
+                                    lineNumber: 116,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                            lineNumber: 112,
+                            lineNumber: 107,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-                    lineNumber: 93,
+                    lineNumber: 88,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-            lineNumber: 70,
+            lineNumber: 65,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx",
-        lineNumber: 69,
+        lineNumber: 64,
         columnNumber: 5
     }, this);
 };
@@ -5347,7 +5342,7 @@ const EditFacultyPopup = ({ faculty, onClose, onFacultyUpdated })=>{
                                     name: "facultyId",
                                     value: facultyData.facultyId,
                                     disabled: true,
-                                    className: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-500"
+                                    className: "w-full px-3 py-2 border border-gray-300 rounded-md text-black text-sm shadow-sm bg-gray-50 text-gray-500"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Management/FacultyPage/EditFacultyPopup.jsx",
                                     lineNumber: 85,
@@ -5377,7 +5372,7 @@ const EditFacultyPopup = ({ faculty, onClose, onFacultyUpdated })=>{
                                     name: "facultyName",
                                     value: facultyData.facultyName,
                                     onChange: handleChange,
-                                    className: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500",
+                                    className: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500",
                                     placeholder: "Enter faculty name"
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Management/FacultyPage/EditFacultyPopup.jsx",
@@ -5453,7 +5448,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$facultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/facultyService.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Management$2f$FacultyPage$2f$AddFacultyPopup$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Management/FacultyPage/AddFacultyPopup.jsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Management$2f$FacultyPage$2f$EditFacultyPopup$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Management/FacultyPage/EditFacultyPopup.jsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Common$2f$ConfirmationDialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Common/ConfirmationDialog.jsx [app-ssr] (ecmascript)"); // Import ConfirmationDialog
 'use client';
+;
 ;
 ;
 ;
@@ -5471,6 +5468,8 @@ const FacultiesPage = ()=>{
     const [isAddPopupOpen, setIsAddPopupOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [isEditPopupOpen, setIsEditPopupOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [selectedFaculty, setSelectedFaculty] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [isConfirmDialogOpen, setIsConfirmDialogOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [facultyToDelete, setFacultyToDelete] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const getFaculties = async ()=>{
             try {
@@ -5504,11 +5503,11 @@ const FacultiesPage = ()=>{
             setFilteredFaculties(filtered);
         }
     };
-    const handleDeleteFaculty = async (facultyId)=>{
+    const handleDeleteFaculty = async ()=>{
         try {
-            const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$facultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["deleteFaculty"])(facultyId);
+            const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$facultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["deleteFaculty"])(facultyToDelete.facultyId);
             if (result.success) {
-                const updatedFaculties = faculties.filter((faculty)=>faculty.facultyId !== facultyId);
+                const updatedFaculties = faculties.filter((faculty)=>faculty.facultyId !== facultyToDelete.facultyId);
                 setFaculties(updatedFaculties);
                 setFilteredFaculties(updatedFaculties);
                 setFeedbackMessage(result.message || "Faculty deleted successfully!");
@@ -5526,7 +5525,18 @@ const FacultiesPage = ()=>{
             console.error("Error deleting faculty:", error);
             setFeedbackMessage("An unexpected error occurred while deleting the faculty.");
             setFeedbackType("error");
+        } finally{
+            setIsConfirmDialogOpen(false);
+            setFacultyToDelete(null);
         }
+    };
+    const openConfirmDialog = (faculty)=>{
+        setFacultyToDelete(faculty);
+        setIsConfirmDialogOpen(true);
+    };
+    const closeConfirmDialog = ()=>{
+        setIsConfirmDialogOpen(false);
+        setFacultyToDelete(null);
     };
     const handleEditFaculty = (faculty)=>{
         setSelectedFaculty(faculty);
@@ -5587,7 +5597,7 @@ const FacultiesPage = ()=>{
                                 children: "Faculties Management"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                lineNumber: 149,
+                                lineNumber: 167,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5595,13 +5605,13 @@ const FacultiesPage = ()=>{
                                 children: "Manage and monitor all available faculties"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                lineNumber: 150,
+                                lineNumber: 168,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                        lineNumber: 148,
+                        lineNumber: 166,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5615,7 +5625,7 @@ const FacultiesPage = ()=>{
                                 className: "px-4 py-2 border rounded-md text-sm text-gray-900 bg-white"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                lineNumber: 153,
+                                lineNumber: 171,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5624,19 +5634,19 @@ const FacultiesPage = ()=>{
                                 children: "Add New Faculty"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                lineNumber: 160,
+                                lineNumber: 178,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                        lineNumber: 152,
+                        lineNumber: 170,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                lineNumber: 147,
+                lineNumber: 165,
                 columnNumber: 7
             }, this),
             feedbackMessage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5644,7 +5654,7 @@ const FacultiesPage = ()=>{
                 children: feedbackMessage
             }, void 0, false, {
                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                lineNumber: 171,
+                lineNumber: 189,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5660,12 +5670,12 @@ const FacultiesPage = ()=>{
                                 children: category
                             }, category, false, {
                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                lineNumber: 185,
+                                lineNumber: 203,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                        lineNumber: 183,
+                        lineNumber: 201,
                         columnNumber: 9
                     }, this),
                     loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5673,7 +5683,7 @@ const FacultiesPage = ()=>{
                         children: "Loading faculties..."
                     }, void 0, false, {
                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                        lineNumber: 200,
+                        lineNumber: 218,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "overflow-x-auto",
@@ -5689,7 +5699,7 @@ const FacultiesPage = ()=>{
                                                 children: "Faculty ID"
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                lineNumber: 206,
+                                                lineNumber: 224,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5697,7 +5707,7 @@ const FacultiesPage = ()=>{
                                                 children: "Faculty Name"
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                lineNumber: 209,
+                                                lineNumber: 227,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -5705,18 +5715,18 @@ const FacultiesPage = ()=>{
                                                 children: "Actions"
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                lineNumber: 212,
+                                                lineNumber: 230,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                        lineNumber: 205,
+                                        lineNumber: 223,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                    lineNumber: 204,
+                                    lineNumber: 222,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -5729,7 +5739,7 @@ const FacultiesPage = ()=>{
                                                     children: faculty.facultyId
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                    lineNumber: 221,
+                                                    lineNumber: 239,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5737,7 +5747,7 @@ const FacultiesPage = ()=>{
                                                     children: faculty.facultyName
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                    lineNumber: 224,
+                                                    lineNumber: 242,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5751,33 +5761,33 @@ const FacultiesPage = ()=>{
                                                                 children: "Edit"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                                lineNumber: 229,
+                                                                lineNumber: 247,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                                 className: "text-red-600 hover:text-red-900",
-                                                                onClick: ()=>handleDeleteFaculty(faculty.facultyId),
+                                                                onClick: ()=>openConfirmDialog(faculty),
                                                                 children: "Delete"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                                lineNumber: 235,
+                                                                lineNumber: 253,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                        lineNumber: 228,
+                                                        lineNumber: 246,
                                                         columnNumber: 25
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                                    lineNumber: 227,
+                                                    lineNumber: 245,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, faculty.facultyId, true, {
                                             fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                            lineNumber: 220,
+                                            lineNumber: 238,
                                             columnNumber: 21
                                         }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -5786,57 +5796,80 @@ const FacultiesPage = ()=>{
                                             children: "No faculties found."
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                            lineNumber: 247,
+                                            lineNumber: 265,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                        lineNumber: 246,
+                                        lineNumber: 264,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                                    lineNumber: 217,
+                                    lineNumber: 235,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                            lineNumber: 203,
+                            lineNumber: 221,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                        lineNumber: 202,
+                        lineNumber: 220,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                lineNumber: 182,
+                lineNumber: 200,
                 columnNumber: 7
             }, this),
             isAddPopupOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Management$2f$FacultyPage$2f$AddFacultyPopup$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                 onClose: handlePopupClose,
-                onFacultyAdded: handleFacultyAdded
+                onFacultyAdded: handleFacultyAdded,
+                style: {
+                    position: "fixed",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)"
+                }
             }, void 0, false, {
                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                lineNumber: 260,
+                lineNumber: 278,
                 columnNumber: 9
             }, this),
             isEditPopupOpen && selectedFaculty && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Management$2f$FacultyPage$2f$EditFacultyPopup$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                 faculty: selectedFaculty,
                 onClose: handlePopupClose,
-                onFacultyUpdated: handleFacultyUpdated
+                onFacultyUpdated: handleFacultyUpdated,
+                style: {
+                    position: "fixed",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)"
+                }
             }, void 0, false, {
                 fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-                lineNumber: 268,
+                lineNumber: 287,
                 columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Common$2f$ConfirmationDialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                isOpen: isConfirmDialogOpen,
+                title: "Confirm Deletion",
+                message: `Are you sure you want to delete the faculty "${facultyToDelete?.facultyName}"?`,
+                onConfirm: handleDeleteFaculty,
+                onCancel: closeConfirmDialog
+            }, void 0, false, {
+                fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
+                lineNumber: 296,
+                columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Components/Management/FacultyPage/faculty.jsx",
-        lineNumber: 146,
+        lineNumber: 164,
         columnNumber: 5
     }, this);
 };
@@ -6765,6 +6798,8 @@ __turbopack_context__.s({
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$departmentService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/departmentService.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$facultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/facultyService.js [app-ssr] (ecmascript)");
+;
 ;
 ;
 ;
@@ -6773,6 +6808,21 @@ const AddEditDepartmentPopup = ({ data, onClose, onSave })=>{
         departmentName: "",
         facultyId: ""
     });
+    const [faculties, setFaculties] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]); // State to store faculty list
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const loadFaculties = async ()=>{
+            try {
+                console.log("Fetching faculties..."); // Debugging log
+                const facultyList = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$facultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchFaculties"])();
+                console.log("Faculties fetched:", facultyList); // Debugging log
+                setFaculties(facultyList); // Populate faculty list
+            } catch (error) {
+                console.error("Error fetching faculties:", error);
+                setFaculties([]); // Ensure faculties state is set to an empty array on error
+            }
+        };
+        loadFaculties();
+    }, []);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         if (data && data.departmentId) {
             setFormData(data); // Populate form with existing data for editing
@@ -6813,19 +6863,20 @@ const AddEditDepartmentPopup = ({ data, onClose, onSave })=>{
                 className: "absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm"
             }, void 0, false, {
                 fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                lineNumber: 43,
+                lineNumber: 61,
                 columnNumber: 7
             }, this),
             " ",
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "relative bg-white rounded-lg p-6 w-full max-w-md z-10",
+                className: "relative bg-white rounded-lg p-8 w-full max-w-2xl z-10",
                 children: [
+                    " ",
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                        className: "text-lg font-semibold mb-4",
+                        className: "text-lg text-black font-semibold mb-4",
                         children: data.departmentId ? "Edit Department" : "Add New Department"
                     }, void 0, false, {
                         fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                        lineNumber: 45,
+                        lineNumber: 63,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -6839,7 +6890,7 @@ const AddEditDepartmentPopup = ({ data, onClose, onSave })=>{
                                         children: "Department Name"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                                        lineNumber: 50,
+                                        lineNumber: 68,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -6847,46 +6898,72 @@ const AddEditDepartmentPopup = ({ data, onClose, onSave })=>{
                                         name: "departmentName",
                                         value: formData.departmentName,
                                         onChange: handleChange,
-                                        className: "mt-1 px-4 py-2 border rounded-md w-full",
+                                        className: "mt-1 px-4 py-2 text-black border rounded-md w-full",
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                                        lineNumber: 51,
+                                        lineNumber: 69,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                                lineNumber: 49,
+                                lineNumber: 67,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "mb-4",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                        className: "block text-sm font-medium text-gray-700",
-                                        children: "Faculty ID"
+                                        className: "block text-sm text-black font-medium text-gray-700",
+                                        children: "Faculty"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                                        lineNumber: 61,
+                                        lineNumber: 79,
                                         columnNumber: 13
                                     }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "number",
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
                                         name: "facultyId",
                                         value: formData.facultyId,
                                         onChange: handleChange,
-                                        className: "mt-1 px-4 py-2 border rounded-md w-full",
-                                        required: true
-                                    }, void 0, false, {
+                                        className: "mt-1 px-4 py-2 text-black border rounded-md w-full",
+                                        style: {
+                                            minWidth: "100%"
+                                        },
+                                        required: true,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                value: "",
+                                                disabled: true,
+                                                className: "text-black",
+                                                children: faculties.length === 0 ? "No faculties available" : "Select a faculty"
+                                            }, void 0, false, {
+                                                fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
+                                                lineNumber: 88,
+                                                columnNumber: 15
+                                            }, this),
+                                            faculties.map((faculty)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: faculty.id,
+                                                    className: "text-black",
+                                                    children: [
+                                                        " ",
+                                                        faculty.facultyName
+                                                    ]
+                                                }, faculty.id, true, {
+                                                    fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
+                                                    lineNumber: 92,
+                                                    columnNumber: 17
+                                                }, this))
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                                        lineNumber: 62,
+                                        lineNumber: 80,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                                lineNumber: 60,
+                                lineNumber: 78,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6895,395 +6972,58 @@ const AddEditDepartmentPopup = ({ data, onClose, onSave })=>{
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
                                         onClick: onClose,
-                                        className: "px-4 py-2 bg-gray-300 rounded-md text-sm font-medium",
+                                        className: "px-4 py-2 bg-gray-300 rounded-md text-sm text-gray-900 font-medium",
                                         children: "Cancel"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                                        lineNumber: 72,
+                                        lineNumber: 99,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "submit",
-                                        className: "px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700",
+                                        className: "px-4 py-2 bg-indigo-600 text-white-800 rounded-md text-sm font-medium hover:bg-indigo-700",
                                         children: "Save"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                                        lineNumber: 79,
+                                        lineNumber: 106,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                                lineNumber: 71,
+                                lineNumber: 98,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                        lineNumber: 48,
+                        lineNumber: 66,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-                lineNumber: 44,
+                lineNumber: 62,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx",
-        lineNumber: 42,
+        lineNumber: 60,
         columnNumber: 5
     }, this);
 };
 const __TURBOPACK__default__export__ = AddEditDepartmentPopup;
 }}),
-"[project]/Components/Management/DepartmentPage/departments.jsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
-"use strict";
+"[project]/Components/Management/DepartmentPage/departments.jsx [app-ssr] (ecmascript)": (function(__turbopack_context__) {
 
-var { g: global, __dirname } = __turbopack_context__;
+var { g: global, __dirname, m: module, e: exports } = __turbopack_context__;
 {
-__turbopack_context__.s({
-    "default": (()=>__TURBOPACK__default__export__)
-});
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$departmentService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/departmentService.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Management$2f$DepartmentPage$2f$AddEditDepartmentPopup$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Management/DepartmentPage/AddEditDepartmentPopup.jsx [app-ssr] (ecmascript)");
-'use client';
-;
-;
-;
-;
-;
-const DepartmentsPage = ()=>{
-    const [departments, setDepartments] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [filteredDepartments, setFilteredDepartments] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
-    const [popupData, setPopupData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null); // State to control popup data
-    const [feedbackMessage, setFeedbackMessage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(""); // Feedback message state
-    const [feedbackError, setFeedbackError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(""); // Feedback error state
-    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        const getDepartments = async ()=>{
-            try {
-                const data = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$departmentService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchDepartments"])();
-                console.log("Fetched departments data:", data); // Debugging log
-                const departmentsArray = Array.isArray(data) ? data : data?.departments || []; // Ensure data is an array
-                if (Array.isArray(departmentsArray)) {
-                    setDepartments(departmentsArray);
-                    setFilteredDepartments(departmentsArray);
-                } else {
-                    console.error("Invalid data format received:", data); // Log invalid data
-                    setDepartments([]); // Fallback to an empty array
-                    setFilteredDepartments([]);
-                    throw new Error("Invalid data format: Expected an array.");
-                }
-            } catch (error) {
-                if (error.response && error.response.status === 404) {
-                    setFeedbackError("Departments not found.");
-                } else {
-                    setFeedbackError(error.message);
-                }
-            } finally{
-                setLoading(false);
-            }
-        };
-        getDepartments();
-    }, []);
-    const handleAddDepartment = ()=>{
-        setPopupData({}); // Open popup with empty data for adding a new department
-    };
-    const handleEditDepartment = (department)=>{
-        setPopupData(department); // Open popup with existing data for editing
-    };
-    const handleDeleteDepartment = async (departmentId)=>{
-        try {
-            const response = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$departmentService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["deleteDepartment"])(departmentId);
-            const updatedDepartments = departments.filter((dept)=>dept.departmentId !== departmentId);
-            setDepartments(updatedDepartments);
-            setFilteredDepartments(updatedDepartments);
-            setFeedbackMessage(response.message || "Department deleted successfully!");
-        } catch (error) {
-            setFeedbackError(error);
-        } finally{
-            setTimeout(()=>{
-                setFeedbackMessage("");
-                setFeedbackError("");
-            }, 3000); // Clear message after 3 seconds
-        }
-    };
-    const handleClosePopup = ()=>{
-        setPopupData(null); // Close the popup
-    };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "min-h-screen p-6",
-        children: [
-            " ",
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "mb-6 flex justify-between items-center",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                className: "text-lg text-green-900 font-semibold",
-                                children: "Departments Management"
-                            }, void 0, false, {
-                                fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                lineNumber: 77,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                className: "text-sm text-gray-500",
-                                children: "Manage and monitor all available Departments"
-                            }, void 0, false, {
-                                fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                lineNumber: 78,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                        lineNumber: 76,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: handleAddDepartment,
-                        className: "px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700",
-                        children: "Add New Department"
-                    }, void 0, false, {
-                        fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                        lineNumber: 80,
-                        columnNumber: 9
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                lineNumber: 75,
-                columnNumber: 7
-            }, this),
-            feedbackMessage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-md text-sm",
-                children: feedbackMessage
-            }, void 0, false, {
-                fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                lineNumber: 89,
-                columnNumber: 9
-            }, this),
-            feedbackError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-md text-sm",
-                children: feedbackError
-            }, void 0, false, {
-                fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                lineNumber: 94,
-                columnNumber: 9
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "bg-white rounded-lg overflow-hidden",
-                children: loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "p-4 text-center text-gray-500",
-                    children: "Loading Departments..."
-                }, void 0, false, {
-                    fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                    lineNumber: 101,
-                    columnNumber: 11
-                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
-                    className: "min-w-full divide-y divide-gray-200",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("thead", {
-                            className: "bg-gray-50",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Department ID"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                        lineNumber: 106,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Department Name"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                        lineNumber: 109,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Faculty ID"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                        lineNumber: 112,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Actions"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                        lineNumber: 115,
-                                        columnNumber: 17
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                lineNumber: 105,
-                                columnNumber: 15
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                            lineNumber: 104,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
-                            className: "bg-white divide-y divide-gray-200",
-                            children: filteredDepartments.length > 0 ? filteredDepartments.map((department)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900",
-                                            children: department.departmentId
-                                        }, void 0, false, {
-                                            fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                            lineNumber: 124,
-                                            columnNumber: 21
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-                                            children: department.departmentName
-                                        }, void 0, false, {
-                                            fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                            lineNumber: 127,
-                                            columnNumber: 21
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-                                            children: department.facultyName
-                                        }, void 0, false, {
-                                            fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                            lineNumber: 130,
-                                            columnNumber: 21
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "flex gap-2",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                        className: "text-indigo-600 hover:text-indigo-900",
-                                                        onClick: ()=>handleEditDepartment(department),
-                                                        children: "Edit"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                                        lineNumber: 135,
-                                                        columnNumber: 25
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                        className: "text-red-600 hover:text-red-900",
-                                                        onClick: ()=>handleDeleteDepartment(department.departmentId),
-                                                        children: "Delete"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                                        lineNumber: 141,
-                                                        columnNumber: 25
-                                                    }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                                lineNumber: 134,
-                                                columnNumber: 23
-                                            }, this)
-                                        }, void 0, false, {
-                                            fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                            lineNumber: 133,
-                                            columnNumber: 21
-                                        }, this)
-                                    ]
-                                }, department.departmentId, true, {
-                                    fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                    lineNumber: 123,
-                                    columnNumber: 19
-                                }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                    colSpan: "4",
-                                    className: "px-6 py-4 text-center text-gray-500",
-                                    children: "No Departments found."
-                                }, void 0, false, {
-                                    fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                    lineNumber: 153,
-                                    columnNumber: 19
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                                lineNumber: 152,
-                                columnNumber: 17
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                            lineNumber: 120,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                    lineNumber: 103,
-                    columnNumber: 11
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                lineNumber: 99,
-                columnNumber: 7
-            }, this),
-            popupData && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "absolute inset-0 z-50 bg-black bg-opacity-50",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "relative w-full p-4",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Management$2f$DepartmentPage$2f$AddEditDepartmentPopup$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                        data: popupData,
-                        onClose: handleClosePopup,
-                        onSave: (updatedDepartment)=>{
-                            if (updatedDepartment.departmentId) {
-                                // Update existing department
-                                setDepartments((prev)=>prev.map((dept)=>dept.departmentId === updatedDepartment.departmentId ? updatedDepartment : dept));
-                                setFeedbackMessage("Department updated successfully!");
-                            } else {
-                                // Add new department
-                                setDepartments((prev)=>[
-                                        ...prev,
-                                        updatedDepartment
-                                    ]);
-                                setFeedbackMessage("Department added successfully!");
-                            }
-                            setFilteredDepartments((prev)=>prev.map((dept)=>dept.departmentId === updatedDepartment.departmentId ? updatedDepartment : dept));
-                            setTimeout(()=>setFeedbackMessage(""), 3000); // Clear message after 3 seconds
-                            handleClosePopup();
-                        }
-                    }, void 0, false, {
-                        fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                        lineNumber: 166,
-                        columnNumber: 13
-                    }, this)
-                }, void 0, false, {
-                    fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                    lineNumber: 165,
-                    columnNumber: 11
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-                lineNumber: 164,
-                columnNumber: 9
-            }, this)
-        ]
-    }, void 0, true, {
-        fileName: "[project]/Components/Management/DepartmentPage/departments.jsx",
-        lineNumber: 74,
-        columnNumber: 5
-    }, this);
-};
-const __TURBOPACK__default__export__ = DepartmentsPage;
-}}),
+const e = new Error(`Could not parse module '[project]/Components/Management/DepartmentPage/departments.jsx'
+
+Expected ',', got 'const'`);
+e.code = 'MODULE_UNPARSEABLE';
+throw e;}}),
 
 };
 

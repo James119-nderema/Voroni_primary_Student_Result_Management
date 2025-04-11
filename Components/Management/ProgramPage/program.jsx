@@ -1,40 +1,37 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';
 import { ProgramService } from '../../Services/ProgramService';
 import { fetchDepartments } from "../../Services/departmentService";
-import AddProgramPopup from "./AddProgramPopup";
-import EditProgramPopup from "./EditProgramPopup";
+import ProgramPopup from "./ProgramPopup";
+import ConfirmationDialog from '../../Common/ConfirmationDialog';
 
 const ProgramsPage = () => {
   const [programs, setPrograms] = useState([]);
   const [filteredPrograms, setFilteredPrograms] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState("All Programs");
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
   const [programToEdit, setProgramToEdit] = useState(null);
   const [feedbackMessage, setFeedbackMessage] = useState("");
-  const router = useRouter();
+  const [feedbackType, setFeedbackType] = useState(""); // "success" or "error"
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [programToDelete, setProgramToDelete] = useState(null);
 
   useEffect(() => {
     const getProgramsAndDepartments = async () => {
       try {
-        // Fetch both programs and departments
         const [programsData, departmentsData] = await Promise.all([
           ProgramService.getPrograms(),
           fetchDepartments()
         ]);
-
-        console.log("Departments data:", departmentsData);
-        console.log("Programs data:", programsData);
-
         setPrograms(programsData);
         setFilteredPrograms(programsData);
         setDepartments(departmentsData);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setFeedbackMessage("Failed to load programs. Please try again later.");
+        setFeedbackType("error");
       } finally {
         setLoading(false);
       }
@@ -43,7 +40,6 @@ const ProgramsPage = () => {
     getProgramsAndDepartments();
   }, []);
 
-  // Filter programs based on search term
   useEffect(() => {
     const filtered = programs.filter((program) =>
       Object.values(program).some((value) =>
@@ -53,26 +49,35 @@ const ProgramsPage = () => {
     setFilteredPrograms(filtered);
   }, [searchTerm, programs]);
 
-  const handleCategoryClick = (category) => {
-    setActiveCategory(category);
-    if (category === "All Programs") {
-      setFilteredPrograms(programs);
-    } else {
-      setFilteredPrograms(programs.filter((program) => program.programType === category));
-    }
-  };
-
-  const handleDeleteProgram = async (programId) => {
+  const handleDeleteProgram = async () => {
     try {
-      await ProgramService.deleteProgram(programId);
-      const updatedPrograms = programs.filter((program) => program.programId !== programId);
+      await ProgramService.deleteProgram(programToDelete.programId);
+      const updatedPrograms = programs.filter(
+        (program) => program.programId !== programToDelete.programId
+      );
       setPrograms(updatedPrograms);
       setFilteredPrograms(updatedPrograms);
       setFeedbackMessage("Program deleted successfully!");
-      setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
+      setFeedbackType("success");
     } catch (error) {
-      console.error("Error deleting Program:", error);
+      console.error("Error deleting program:", error);
+      setFeedbackMessage("Failed to delete program.");
+      setFeedbackType("error");
+    } finally {
+      setIsConfirmationOpen(false);
+      setProgramToDelete(null);
+      setTimeout(() => setFeedbackMessage(""), 3000);
     }
+  };
+
+  const openConfirmDialog = (program) => {
+    setProgramToDelete(program);
+    setIsConfirmationOpen(true);
+  };
+
+  const closeConfirmDialog = () => {
+    setIsConfirmationOpen(false);
+    setProgramToDelete(null);
   };
 
   const handleAddProgram = () => {
@@ -83,50 +88,25 @@ const ProgramsPage = () => {
     setProgramToEdit(program);
   };
 
-  const handleCloseAddPopup = () => {
-    setIsAddPopupOpen(false);
-  };
-
-  const handleCloseEditPopup = () => {
-    setProgramToEdit(null);
-  };
-
-  const handleSaveNewProgram = (newProgram) => {
-    // Add new program to the list
-    setPrograms((prev) => [...prev, newProgram]);
-    
-    // Update filtered programs
-    if (activeCategory === "All Programs") {
-      setFilteredPrograms((prev) => [...prev, newProgram]);
-    } else if (newProgram.programType === activeCategory) {
-      setFilteredPrograms((prev) => [...prev, newProgram]);
+  const handleSaveProgram = (programData) => {
+    if (programToEdit) {
+      const updatedPrograms = programs.map((prog) =>
+        prog.programId === programToEdit.programId ? { ...prog, ...programData } : prog
+      );
+      setPrograms(updatedPrograms);
+      setFilteredPrograms(updatedPrograms);
+      setFeedbackMessage("Program updated successfully!");
+      setFeedbackType("success");
+    } else {
+      const newProgram = { ...programData, programId: Date.now() }; // Mock ID for new program
+      setPrograms([...programs, newProgram]);
+      setFilteredPrograms([...filteredPrograms, newProgram]);
+      setFeedbackMessage("Program added successfully!");
+      setFeedbackType("success");
     }
-    
-    // Show feedback message
-    setFeedbackMessage("Program added successfully!");
     setTimeout(() => setFeedbackMessage(""), 3000);
-    
-    // Close popup
-    handleCloseAddPopup();
-  };
-
-  const handleUpdateProgram = (updatedProgram) => {
-    // Update existing program in the list
-    setPrograms((prev) =>
-      prev.map((prog) => (prog.programId === updatedProgram.programId ? updatedProgram : prog))
-    );
-    
-    // Update filtered programs
-    setFilteredPrograms((prev) =>
-      prev.map((prog) => (prog.programId === updatedProgram.programId ? updatedProgram : prog))
-    );
-    
-    // Show feedback message
-    setFeedbackMessage("Program updated successfully!");
-    setTimeout(() => setFeedbackMessage(""), 3000);
-    
-    // Close popup
-    handleCloseEditPopup();
+    setIsAddPopupOpen(false);
+    setProgramToEdit(null);
   };
 
   return (
@@ -134,7 +114,7 @@ const ProgramsPage = () => {
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-center">
         <div>
           <h3 className="text-lg text-green-900 font-semibold">Programs Management</h3>
-          <p className="text-sm text-gray-500">Manage and monitor all available Programs</p>
+          <p className="text-sm text-gray-500">Manage and monitor all available programs</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 items-center">
           <input
@@ -153,32 +133,33 @@ const ProgramsPage = () => {
         </div>
       </div>
 
-      {/* Feedback Message */}
       {feedbackMessage && (
-        <div className="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-md text-sm">
+        <div
+          className={`mb-4 p-4 ${
+            feedbackType === "success"
+              ? "bg-green-50 border border-green-200 text-green-800"
+              : "bg-red-50 border border-red-200 text-red-800"
+          } rounded-md text-sm`}
+        >
           {feedbackMessage}
         </div>
       )}
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-4 border-b flex flex-wrap gap-2 sm:gap-4">
-          {["All Programs"].map((category) => (
-            <button
-              key={category}
-              className={`px-3 py-1 rounded-md text-sm font-medium ${
-                activeCategory === category
-                  ? "bg-indigo-100 text-indigo-600"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-              onClick={() => handleCategoryClick(category)}
-            >
-              {category}
-            </button>
-          ))}
+          <button
+            className={`px-3 py-1 rounded-md text-sm font-medium ${
+              "All Programs" === "All Programs"
+                ? "bg-indigo-100 text-indigo-600"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            }`}
+          >
+            All Programs
+          </button>
         </div>
 
         {loading ? (
-          <div className="p-4 text-center text-gray-500">Loading Programs...</div>
+          <div className="p-4 text-center text-gray-500">Loading programs...</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -199,75 +180,58 @@ const ProgramsPage = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredPrograms.length > 0 ? (
-                  filteredPrograms.map((program) => (
-                    <tr key={program.programId} className="hover:bg-gray-50">
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {program.programId}
-                      </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {program.programName}
-                      </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {program.departmentName}
-                      </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <div className="flex flex-col sm:flex-row gap-2">
-                          <button
-                            className="text-indigo-600 hover:text-indigo-900"
-                            onClick={() => handleEditProgram(program)}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="text-red-600 hover:text-red-900"
-                            onClick={() => handleDeleteProgram(program.programId)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4" className="px-4 sm:px-6 py-4 text-center text-gray-500">
-                      No Programs found.
+                {filteredPrograms.map((program) => (
+                  <tr key={program.programId} className="hover:bg-gray-50">
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {program.programId}
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {program.programName}
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {program.departmentName}
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <button
+                          className="text-indigo-600 hover:text-indigo-900"
+                          onClick={() => handleEditProgram(program)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="text-red-600 hover:text-red-900"
+                          onClick={() => openConfirmDialog(program)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
-                )}
+                ))}
               </tbody>
             </table>
           </div>
         )}
       </div>
 
-      {/* Add Program Popup */}
       {isAddPopupOpen && (
-        <div className="absolute inset-0 z-50 bg-black bg-opacity-50">
-          <div className="relative w-full p-4">
-            <AddProgramPopup
-              departments={departments}
-              onClose={handleCloseAddPopup}
-              onSave={handleSaveNewProgram}
-            />
-          </div>
-        </div>
+        <ProgramPopup
+          mode={programToEdit ? "edit" : "add"}
+          program={programToEdit}
+          departments={departments}
+          onClose={() => setIsAddPopupOpen(false)}
+          onSave={handleSaveProgram}
+        />
       )}
 
-      {/* Edit Program Popup */}
-      {programToEdit && (
-        <div className="absolute inset-0 z-50 bg-black bg-opacity-50">
-          <div className="relative w-full p-4">
-            <EditProgramPopup
-              program={programToEdit}
-              departments={departments}
-              onClose={handleCloseEditPopup}
-              onSave={handleUpdateProgram}
-            />
-          </div>
-        </div>
-      )}
+      <ConfirmationDialog
+        isOpen={isConfirmationOpen}
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete the program "${programToDelete?.programName}"?`}
+        onConfirm={handleDeleteProgram}
+        onCancel={closeConfirmDialog}
+      />
     </div>
   );
 };

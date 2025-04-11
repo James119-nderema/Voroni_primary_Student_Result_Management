@@ -351,7 +351,7 @@ const TimetableService = {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `${entityName}-Timetable.pdf`;
+            a.download = `${entityName}-Timetable.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();

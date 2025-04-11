@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { fetchDepartments, deleteDepartment } from "../../Services/departmentService";
 import AddEditDepartmentPopup from "./AddEditDepartmentPopup";
+import ConfirmationDialog from "../ClassesPage/ConfirmationDialog";
 
 const DepartmentsPage = () => {
   const [departments, setDepartments] = useState([]);
@@ -11,6 +12,8 @@ const DepartmentsPage = () => {
   const [popupData, setPopupData] = useState(null); // State to control popup data
   const [feedbackMessage, setFeedbackMessage] = useState(""); // Feedback message state
   const [feedbackError, setFeedbackError] = useState(""); // Feedback error state
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const [departmentToDelete, setDepartmentToDelete] = useState(null); // State to store department to delete
   const router = useRouter();
 
   useEffect(() => {
@@ -49,10 +52,16 @@ const DepartmentsPage = () => {
     setPopupData(department); // Open popup with existing data for editing
   };
 
-  const handleDeleteDepartment = async (departmentId) => {
+  const handleDeleteClick = (department) => {
+    setDepartmentToDelete(department); // Set the department to delete
+    setIsDialogOpen(true); // Open the confirmation dialog
+  };
+
+  const confirmDeleteDepartment = async () => {
+    if (!departmentToDelete) return;
     try {
-      const response = await deleteDepartment(departmentId);
-      const updatedDepartments = departments.filter((dept) => dept.departmentId !== departmentId);
+      const response = await deleteDepartment(departmentToDelete.departmentId);
+      const updatedDepartments = departments.filter((dept) => dept.departmentId !== departmentToDelete.departmentId);
       setDepartments(updatedDepartments);
       setFilteredDepartments(updatedDepartments);
       setFeedbackMessage(response.message || "Department deleted successfully!");
@@ -63,6 +72,8 @@ const DepartmentsPage = () => {
         setFeedbackMessage("");
         setFeedbackError("");
       }, 3000); // Clear message after 3 seconds
+      setIsDialogOpen(false); // Close the dialog
+      setDepartmentToDelete(null); // Reset the department to delete
     }
   };
 
@@ -140,7 +151,7 @@ const DepartmentsPage = () => {
                         </button>
                         <button
                           className="text-red-600 hover:text-red-900"
-                          onClick={() => handleDeleteDepartment(department.departmentId)}
+                          onClick={() => handleDeleteClick(department)}
                         >
                           Delete
                         </button>
@@ -167,31 +178,66 @@ const DepartmentsPage = () => {
               data={popupData}
               onClose={handleClosePopup}
               onSave={(updatedDepartment) => {
-                if (updatedDepartment.departmentId) {
+                const { departmentId, departmentName, facultyId } = updatedDepartment;
+
+                const departmentDetails = {
+                  departmentId: departmentId || 0, // Default to 0 for new departments
+                  departmentName,
+                  facultyId: parseInt(facultyId, 10), // Ensure facultyId is an integer
+                };
+
+                if (departmentId) {
                   // Update existing department
                   setDepartments((prev) =>
                     prev.map((dept) =>
-                      dept.departmentId === updatedDepartment.departmentId ? updatedDepartment : dept
+                      dept.departmentId === departmentId ? departmentDetails : dept
                     )
                   );
                   setFeedbackMessage("Department updated successfully!");
                 } else {
                   // Add new department
-                  setDepartments((prev) => [...prev, updatedDepartment]);
+                  setDepartments((prev) => [...prev, departmentDetails]);
                   setFeedbackMessage("Department added successfully!");
                 }
+
                 setFilteredDepartments((prev) =>
                   prev.map((dept) =>
-                    dept.departmentId === updatedDepartment.departmentId ? updatedDepartment : dept
+                    dept.departmentId === departmentId ? departmentDetails : dept
                   )
                 );
+
                 setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
                 handleClosePopup();
               }}
             />
+            <select
+              defaultValue={popupData?.facultyId || ""}
+              onChange={(e) => {
+                const updatedFacultyId = e.target.value;
+                setPopupData((prev) => ({ ...prev, facultyId: updatedFacultyId }));
+              }}
+            >
+              <option value="" disabled>
+                Select Faculty
+              </option>
+              {departments.map((dept) => (
+                <option key={`${dept.facultyId}-${dept.departmentId}`} value={dept.facultyId}>
+                  {dept.facultyName}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       )}
+
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={isDialogOpen}
+        title="Confirm Delete"
+        message={`Are you sure you want to delete ${departmentToDelete?.departmentName}? This action cannot be undone`}
+        onConfirm={confirmDeleteDepartment}
+        onCancel={() => setIsDialogOpen(false)}
+      />
     </div>
   );
 };

@@ -633,12 +633,12 @@ img, video {
   margin-top: 1.5rem;
 }
 
-.block {
-  display: block;
+.mt-8 {
+  margin-top: 2rem;
 }
 
-.inline {
-  display: inline;
+.block {
+  display: block;
 }
 
 .flex {
@@ -1060,11 +1060,6 @@ img, video {
 
 .rounded-xl {
   border-radius: .75rem;
-}
-
-.rounded-b-lg {
-  border-bottom-right-radius: .5rem;
-  border-bottom-left-radius: .5rem;
 }
 
 .rounded-t-md {

@@ -88,7 +88,7 @@ const EditFacultyPopup = ({ faculty, onClose, onFacultyUpdated }) => {
               name="facultyId"
               value={facultyData.facultyId}
               disabled
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-black text-sm shadow-sm bg-gray-50 text-gray-500"
             />
           </div>
 
@@ -105,7 +105,7 @@ const EditFacultyPopup = ({ faculty, onClose, onFacultyUpdated }) => {
               name="facultyName"
               value={facultyData.facultyName}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Enter faculty name"
             />
           </div>
