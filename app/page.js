@@ -70,11 +70,11 @@ const TimetableManagementDashboard = () => {
     {
       title: 'Management',
       items: [
+        { page: 'faculty', title: 'Faculty', icon: School },
         { page: 'departments', title: 'Departments', icon: BookOpen },
         { page: 'program', title: 'Programs', icon: DoorOpen },
-        { page: 'faculty', title: 'Faculty', icon: School },
-        { page: 'courses', title: 'Courses', icon: Clock },
         { page: 'classes', title: 'Classes', icon: Users },
+        { page: 'courses', title: 'Courses', icon: Clock },
         { page: 'lecturers', title: 'Lecturers', icon: Users },
         { page: 'rooms', title: 'Rooms', icon: DoorClosed },
       ],

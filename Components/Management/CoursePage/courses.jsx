@@ -99,9 +99,9 @@ const CoursesPage = () => {
   };
 
   return (
-    <div className="p-4 md:p-6 w-full max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 w-full">
       {/* Header Section */}
-      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center w-full">
         <div>
           <h3 className="text-xl sm:text-2xl text-green-900 font-semibold">Courses Management</h3>
           <p className="text-sm text-gray-500">Manage and monitor all available courses</p>
@@ -159,7 +159,7 @@ const CoursesPage = () => {
         </div>
       )}
 
-      {/* Category Filters */}
+      {/* Category Filt/e/rs */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-4 border-b flex flex-wrap gap-2 sm:gap-4">
           {["All Courses"].map((category) => (

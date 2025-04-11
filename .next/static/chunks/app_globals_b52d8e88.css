@@ -733,10 +733,6 @@ img, video {
   max-width: 42rem;
 }
 
-.max-w-7xl {
-  max-width: 80rem;
-}
-
 .max-w-\[50\%\] {
   max-width: 50%;
 }
