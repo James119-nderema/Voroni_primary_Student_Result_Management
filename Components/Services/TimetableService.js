@@ -73,15 +73,26 @@ const TimetableService = {
   downloadEntityTimetable: async (entityType, entityId, dayIndex, entityName) => {
     try {
       let endpoint;
+      let isZip = false;
+
       switch (entityType) {
         case 'lecturer':
-          endpoint = `${timetableServiceUrl}/timetable/pdf/lecturers/${entityId}`;
+          endpoint = entityId === 'all' 
+            ? `${timetableServiceUrl}/timetable/pdf/lecturers/all` 
+            : `${timetableServiceUrl}/timetable/pdf/lecturers/${entityId}`;
+          isZip = entityId === 'all';
           break;
         case 'class':
-          endpoint = `${timetableServiceUrl}/timetable/pdf/classes/${entityId}`;
+          endpoint = entityId === 'all' 
+            ? `${timetableServiceUrl}/timetable/pdf/classes/all` 
+            : `${timetableServiceUrl}/timetable/pdf/classes/${entityId}`;
+          isZip = entityId === 'all';
           break;
         case 'room':
-          endpoint = `${timetableServiceUrl}/timetable/pdf/rooms/${entityId}`;
+          endpoint = entityId === 'all' 
+            ? `${timetableServiceUrl}/timetable/pdf/rooms/all` 
+            : `${timetableServiceUrl}/timetable/pdf/rooms/${entityId}`;
+          isZip = entityId === 'all';
           break;
         case 'day':
           endpoint = `${timetableServiceUrl}/timetable/pdf/days/${dayIndex}`;
@@ -97,7 +108,7 @@ const TimetableService = {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${entityName}-Timetable.zip`;
+      a.download = isZip ? `${entityName}-Timetable.zip` : `${entityName}-Timetable.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();

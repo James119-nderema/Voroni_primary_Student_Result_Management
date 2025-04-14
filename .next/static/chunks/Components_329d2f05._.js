@@ -124,7 +124,7 @@ __turbopack_context__.s({
     "default": (()=>__TURBOPACK__default__export__)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
-const API_BASE_URL = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.REACT_APP_API_URL || 'http://10.21.1.149:9921';
+const API_BASE_URL = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.REACT_APP_API_URL || 'http://localhost:9921';
 const __TURBOPACK__default__export__ = API_BASE_URL;
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
@@ -346,15 +346,19 @@ const TimetableService = {
     downloadEntityTimetable: async (entityType, entityId, dayIndex, entityName)=>{
         try {
             let endpoint;
+            let isZip = false;
             switch(entityType){
                 case 'lecturer':
-                    endpoint = `${timetableServiceUrl}/timetable/pdf/lecturers/${entityId}`;
+                    endpoint = entityId === 'all' ? `${timetableServiceUrl}/timetable/pdf/lecturers/all` : `${timetableServiceUrl}/timetable/pdf/lecturers/${entityId}`;
+                    isZip = entityId === 'all';
                     break;
                 case 'class':
-                    endpoint = `${timetableServiceUrl}/timetable/pdf/classes/${entityId}`;
+                    endpoint = entityId === 'all' ? `${timetableServiceUrl}/timetable/pdf/classes/all` : `${timetableServiceUrl}/timetable/pdf/classes/${entityId}`;
+                    isZip = entityId === 'all';
                     break;
                 case 'room':
-                    endpoint = `${timetableServiceUrl}/timetable/pdf/rooms/${entityId}`;
+                    endpoint = entityId === 'all' ? `${timetableServiceUrl}/timetable/pdf/rooms/all` : `${timetableServiceUrl}/timetable/pdf/rooms/${entityId}`;
+                    isZip = entityId === 'all';
                     break;
                 case 'day':
                     endpoint = `${timetableServiceUrl}/timetable/pdf/days/${dayIndex}`;
@@ -368,7 +372,7 @@ const TimetableService = {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `${entityName}-Timetable.zip`;
+            a.download = isZip ? `${entityName}-Timetable.zip` : `${entityName}-Timetable.pdf`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -625,6 +629,22 @@ const LecturerScheduleService = {
             return response.data;
         } catch (error) {
             console.error('Error fetching all lecturers:', error);
+            throw error;
+        }
+    },
+    // Regenerate all lecturer schedules
+    regenerateAllLecturerSchedules: async ()=>{
+        try {
+            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`${lecturerScheduleUrl}/availabilities/generate`, {
+                headers
+            });
+            if (!response.ok) {
+                console.error('Failed to regenerate all lecturer schedules:', response.statusText);
+                throw new Error('Failed to regenerate all lecturer schedules');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error in regenerateAllLecturerSchedules:', error);
             throw error;
         }
     }

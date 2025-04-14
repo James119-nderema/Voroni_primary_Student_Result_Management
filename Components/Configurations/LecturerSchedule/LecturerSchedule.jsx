@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { 
   Box, Typography, Paper, Button, CircularProgress, Divider, Snackbar, Alert,
   TextField, InputAdornment, Chip, Avatar, Autocomplete, Tabs, Tab, 
-  Fade, Grow, useMediaQuery, useTheme as useMuiTheme
+  Fade, Grow, useMediaQuery, useTheme as useMuiTheme, Card, CardContent,
+  ButtonGroup, Tooltip
 } from '@mui/material';
 import { 
   CalendarMonth as CalendarIcon, School as SchoolIcon, 
   AccessTime as TimeIcon, Person as PersonIcon, Refresh as RefreshIcon, 
-  Search as SearchIcon, Schedule as ScheduleIcon
+  Search as SearchIcon, Schedule as ScheduleIcon, AutorenewTwoTone, Info as InfoIcon,
+  Groups as GroupsIcon, PersonAdd as PersonAddIcon, Autorenew as AutorenewIcon
 } from '@mui/icons-material';
 import LecturerScheduleService from '../../Services/LecturerScheduleService';
 import LecturerCoursesSection from './LecturerCoursesSection';
@@ -43,6 +45,7 @@ const LecturerSchedulePage = () => {
   const [schedules, setSchedules] = useState([]);
   const [availability, setAvailability] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingType, setLoadingType] = useState('data'); // 'data', 'single', 'all'
   const [activeTab, setActiveTab] = useState(0);
   const [notification, setNotification] = useState({
     open: false,
@@ -61,6 +64,7 @@ const LecturerSchedulePage = () => {
     const fetchAllLecturers = async () => {
       try {
         setIsLoading(true);
+        setLoadingType('data');
         const allLecturers = await LecturerScheduleService.getAllLecturers();
         setLecturers(allLecturers);
       } catch (error) {
@@ -77,6 +81,7 @@ const LecturerSchedulePage = () => {
   const fetchLecturerData = async (lecturerId) => {
     try {
       setIsLoading(true);
+      setLoadingType('data');
       const id = parseInt(lecturerId);
 
       // Fetch all lecturer data in parallel
@@ -110,9 +115,10 @@ const LecturerSchedulePage = () => {
     }
   };
 
-  const handleRegenerateSchedule = async () => {
+  const handleRegenerateSingleSchedule = async () => {
     try {
       setIsLoading(true);
+      setLoadingType('single');
       await LecturerScheduleService.regenerateLecturerSchedule(parseInt(selectedLecturerId));
       const updatedSchedules = await LecturerScheduleService.getLecturerSchedules(parseInt(selectedLecturerId));
       const updatedAvailability = await LecturerScheduleService.getLecturerAvailability(parseInt(selectedLecturerId));
@@ -125,6 +131,29 @@ const LecturerSchedulePage = () => {
     } catch (error) {
       console.error('Error regenerating schedule:', error);
       showNotification('Failed to regenerate schedule', 'error');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegenerateAllSchedules = async () => {
+    try {
+      setIsLoading(true);
+      setLoadingType('all');
+      await LecturerScheduleService.regenerateAllLecturerSchedules();
+      
+      if (selectedLecturerId) {
+        // Refresh current lecturer's schedule if one is selected
+        const updatedSchedules = await LecturerScheduleService.getLecturerSchedules(parseInt(selectedLecturerId));
+        const updatedAvailability = await LecturerScheduleService.getLecturerAvailability(parseInt(selectedLecturerId));
+        setSchedules(updatedSchedules);
+        setAvailability(updatedAvailability);
+      }
+      
+      showNotification('All lecturer schedules regenerated successfully', 'success');
+    } catch (error) {
+      console.error('Error regenerating all schedules:', error);
+      showNotification('Failed to regenerate all schedules', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -175,6 +204,18 @@ const LecturerSchedulePage = () => {
     },
   ];
 
+  // Loading message based on the type of operation
+  const getLoadingMessage = () => {
+    switch (loadingType) {
+      case 'single':
+        return "Regenerating lecturer's schedule...";
+      case 'all':
+        return "Regenerating all lecturer schedules...";
+      default:
+        return "Loading data...";
+    }
+  };
+
   return (
     <Box sx={{ 
       backgroundColor: theme.background, 
@@ -203,7 +244,7 @@ const LecturerSchedulePage = () => {
         >
           <CircularProgress size={60} sx={{ color: theme.primary, mb: 2 }} />
           <Typography variant="body2" sx={{ color: theme.textSecondary }}>
-            Regenerating schedule...
+            {getLoadingMessage()}
           </Typography>
         </Box>
       )}
@@ -226,203 +267,271 @@ const LecturerSchedulePage = () => {
         </Alert>
       </Snackbar>
 
+      {/* Redesigned Header Section */}
       <Box 
         sx={{ 
-          py: 3,
+          pt: 3,
+          pb: 2,
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: 'space-between',
+          alignItems: { xs: 'stretch', md: 'center' },
           gap: 2,
           mb: 3
         }}
       >
-        {/* Lecturer Info Section */}
-        {lecturer && (
-          <Box 
-            sx={{ 
-              p: { xs: 2.5, sm: 3 }, 
-              backgroundColor: theme.paper,
-              borderRadius: 2,
-              border: `1px solid ${theme.border}`
-            }}
-          >
-            <Box sx={{ 
-              display: 'flex', 
-              flexDirection: { xs: 'column', md: 'row' },
-              justifyContent: 'space-between',
-              alignItems: { xs: 'flex-start', md: 'center' },
-              gap: { xs: 2, md: 0 }
-            }}>
-              <Box sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                width: { xs: '100%', md: 'auto' }
-              }}>
-                <Avatar sx={{ 
-                  bgcolor: theme.primary, 
-                  width: 65, 
-                  height: 65,
-                  mr: 2.5
-                }}>
-                  <Typography variant="h5" sx={{ fontWeight: 'bold', textTransform: 'uppercase' }}>
-                    {`${lecturer.firstName.charAt(0)}${lecturer.lastName.charAt(0)}`}
-                  </Typography>
-                </Avatar>
-                <Box>
-                  <Typography variant="h5" sx={{ fontWeight: 'bold', color: theme.text, mb: 0.5 }}>
-                    {`${lecturer.firstName} ${lecturer.lastName}`}
-                  </Typography>
-                  <Box display="flex" alignItems="center" flexWrap="wrap" gap={1}>
-                    <Typography variant="body2" sx={{ color: theme.textSecondary }}>
-                      ID: {lecturer.lecturerId}
-                    </Typography>
-                    <Divider orientation="vertical" flexItem sx={{ mx: 1, height: 16 }} />
-                    <Chip 
-                      icon={<SchoolIcon fontSize="small" />}
-                      label={`${courses.length} Courses`} 
-                      size="small"
-                      sx={{ 
-                        backgroundColor: 'rgba(79,70,229,0.1)',
-                        color: theme.secondary,
-                        height: 26
-                      }}
-                    />
-                    <Chip 
-                      icon={<TimeIcon fontSize="small" />}
-                      label={`${lecturer.sessionsAssigned} Session(s) assigned`} 
-                      size="small"
-                      sx={{ 
-                        backgroundColor: 'rgba(16,185,129,0.1)',
-                        color: theme.success,
-                        height: 26
-                      }}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-              <Button 
-                variant="contained" 
-                onClick={handleRegenerateSchedule}
-                startIcon={<RefreshIcon />}
-                disabled={!hasSelectedData}
-                sx={{ 
-                  borderRadius: 2,
-                  backgroundColor: hasSelectedData ? theme.primary : theme.disabledButton,
-                  px: 2.5,
-                  py: 1,
-                  textTransform: 'none',
-                  alignSelf: { xs: 'flex-end', md: 'center' },
-                  boxShadow: hasSelectedData ? '0 4px 6px rgba(37, 99, 235, 0.2)' : 'none',
-                  transition: 'all 0.2s',
-                  '&:hover': {
-                    backgroundColor: hasSelectedData ? theme.primaryHover : theme.disabledButton,
-                    transform: hasSelectedData ? 'translateY(-2px)' : 'none',
-                    boxShadow: hasSelectedData ? '0 6px 8px rgba(37, 99, 235, 0.25)' : 'none'
-                  }
-                }}
-              >
-                Regenerate Schedule
-              </Button>
-            </Box>
-          </Box>
-        )}
-
-        {/* Search Lecturer Button */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-          <Autocomplete
-            options={lecturers}
-            getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder="Search lecturer by name..."
-                variant="outlined"
-                size="small"
-                fullWidth
-                InputProps={{
-                  ...params.InputProps,
-                  startAdornment: (
-                    <>
-                      <InputAdornment position="start">
-                        <SearchIcon sx={{ color: theme.textSecondary }} />
-                      </InputAdornment>
-                      {params.InputProps.startAdornment}
-                    </>
-                  ),
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 2,
-                    backgroundColor: 'white',
-                    width: { xs: '100%', sm: '320px' },
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-                  }
-                }}
-              />
-            )}
-            onChange={handleLecturerChange}
-            sx={{ width: { xs: '100%', sm: '320px' } }}
-          />
+        <Box>
+          <Typography variant="h5" sx={{ 
+            fontWeight: 700, 
+            color: theme.text, 
+            mb: 0.5,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1
+          }}>
+            <ScheduleIcon sx={{ color: theme.primary }} />
+            Lecturer Schedule Management
+          </Typography>
+          <Typography variant="body2" sx={{ color: theme.textSecondary }}>
+            View and manage lecturer schedules, courses, and availability
+          </Typography>
+        </Box>
+        
+        <Box sx={{ 
+          display: 'flex', 
+          gap: 2,
+          flexDirection: { xs: 'column', sm: 'row' },
+          justifyContent: 'flex-end',
+          width: { xs: '100%', md: 'auto' }
+        }}>
+          <Tooltip title="Regenerate schedules for all lecturers">
+            <Button
+              variant="outlined"
+              startIcon={<GroupsIcon />}
+              onClick={handleRegenerateAllSchedules}
+              sx={{
+                borderRadius: 1.5,
+                borderColor: theme.info,
+                color: theme.info,
+                px: 2,
+                '&:hover': {
+                  borderColor: theme.info,
+                  backgroundColor: `${theme.info}10`,
+                }
+              }}
+            >
+              All Schedules
+            </Button>
+          </Tooltip>
+          
+          <Tooltip title="Regenerate schedule for selected lecturer">
+            <Button
+              variant="contained"
+              startIcon={<AutorenewIcon />}
+              onClick={handleRegenerateSingleSchedule}
+              disabled={!selectedLecturerId}
+              sx={{
+                borderRadius: 1.5,
+                backgroundColor: selectedLecturerId ? theme.primary : theme.disabledButton,
+                px: 2,
+                '&:hover': {
+                  backgroundColor: selectedLecturerId ? theme.primaryHover : theme.disabledButton,
+                }
+              }}
+            >
+              This Lecturer
+            </Button>
+          </Tooltip>
         </Box>
       </Box>
 
-      {/* Collapsible Informational Section */}
-      <Box 
+      {/* Improved Info Card */}
+      <Card 
         sx={{ 
           mb: 3, 
-          border: `1px solid ${theme.border}`,
           borderRadius: 2,
+          boxShadow: theme.cardShadow,
+          border: `1px solid ${theme.border}`,
           overflow: 'hidden',
-          backgroundColor: theme.cardHighlight
         }}
       >
-        <Box 
-          sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between', 
-            p: 2.5, 
-            cursor: 'pointer',
-            backgroundColor: theme.cardHighlight,
-            borderBottom: isInfoExpanded ? `1px solid ${theme.border}` : 'none'
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            px: 2.5,
+            py: 2,
+            backgroundColor: `${theme.info}10`,
+            borderBottom: isInfoExpanded ? `1px solid ${theme.border}` : 'none',
+            cursor: 'pointer'
           }}
           onClick={toggleInfoSection}
         >
-          <Typography variant="subtitle1" sx={{ fontWeight: 600, color: theme.text }}>
-            Schedule Management System
-          </Typography>
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: theme.primary, 
-              fontWeight: 500, 
-              textTransform: 'uppercase' 
-            }}
-          >
-            {isInfoExpanded ? 'Collapse' : 'Expand'}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <InfoIcon sx={{ color: theme.info }} />
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, color: theme.text }}>
+              Scheduling System Information
+            </Typography>
+          </Box>
+          <Typography variant="body2" sx={{ color: theme.primary, fontWeight: 500 }}>
+            {isInfoExpanded ? 'Hide' : 'Show'}
           </Typography>
         </Box>
+        
         {isInfoExpanded && (
           <Fade in={isInfoExpanded}>
-            <Box sx={{ p: 2.5 }}>
-              <Typography variant="body2" sx={{ color: theme.textSecondary, mb: 1 }}>
-                This system helps you manage lecturer schedules efficiently:
-              </Typography>
-              <ul style={{ 
-                paddingLeft: '1.5rem', 
-                margin: 0, 
-                color: theme.textSecondary, 
-                fontSize: '0.875rem', 
-                listStyleType: 'disc' 
-              }}>
-                <li>View the courses, schedules, and availability of lecturers.</li>
-                <li>Generate a combination of courses and availability to create a schedule.</li>
-                <li>Schedules are limited to 15, and the algorithm will try to create the best schedule possible.</li>
-                <li>You can regenerate schedules until you find the best one.</li>
-              </ul>
-            </Box>
+            <CardContent sx={{ py: 2 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                <Typography variant="body2" sx={{ color: theme.text }}>
+                  The scheduler helps you manage lecturer assignments efficiently:
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start', mb: 0.5 }}>
+                  <Chip 
+                    size="small" 
+                    label="Individual" 
+                    sx={{ 
+                      bgcolor: `${theme.primary}15`, 
+                      color: theme.primary,
+                      fontSize: '0.75rem'
+                    }}
+                  />
+                  <Typography variant="body2" sx={{ color: theme.textSecondary }}>
+                    Use "This Lecturer" to regenerate a schedule for the selected lecturer only
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
+                  <Chip 
+                    size="small" 
+                    label="Bulk" 
+                    sx={{ 
+                      bgcolor: `${theme.info}15`, 
+                      color: theme.info,
+                      fontSize: '0.75rem'
+                    }}
+                  />
+                  <Typography variant="body2" sx={{ color: theme.textSecondary }}>
+                    Use "All Schedules" to regenerate schedules for all lecturers at once
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
           </Fade>
         )}
+      </Card>
+
+      {/* Redesigned Search Lecturer Section */}
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'center',
+        width: '100%',
+        mb: 4
+      }}>
+        <Autocomplete
+          options={lecturers}
+          getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Search for a lecturer..."
+              variant="outlined"
+              InputProps={{
+                ...params.InputProps,
+                startAdornment: (
+                  <>
+                    <InputAdornment position="start">
+                      <SearchIcon sx={{ color: theme.textSecondary }} />
+                    </InputAdornment>
+                    {params.InputProps.startAdornment}
+                  </>
+                ),
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 1.5,
+                  backgroundColor: 'white',
+                  boxShadow: theme.cardShadow,
+                }
+              }}
+            />
+          )}
+          onChange={handleLecturerChange}
+          sx={{ 
+            width: { xs: '100%', sm: '80%', md: '60%', lg: '50%' },
+            maxWidth: '600px'
+          }}
+        />
       </Box>
+
+      {/* Lecturer Info Card */}
+      {lecturer && (
+        <Box 
+          sx={{ 
+            p: { xs: 2.5, sm: 3 }, 
+            backgroundColor: theme.paper,
+            borderRadius: 2,
+            border: `1px solid ${theme.border}`,
+            boxShadow: theme.cardShadow,
+            mb: 3
+          }}
+        >
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: { xs: 'column', md: 'row' },
+            justifyContent: 'space-between',
+            alignItems: { xs: 'flex-start', md: 'center' },
+            gap: { xs: 2, md: 0 }
+          }}>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              width: { xs: '100%', md: 'auto' }
+            }}>
+              <Avatar sx={{ 
+                bgcolor: theme.primary, 
+                width: 65, 
+                height: 65,
+                mr: 2.5
+              }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold', textTransform: 'uppercase' }}>
+                  {`${lecturer.firstName.charAt(0)}${lecturer.lastName.charAt(0)}`}
+                </Typography>
+              </Avatar>
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 'bold', color: theme.text, mb: 0.5 }}>
+                  {`${lecturer.firstName} ${lecturer.lastName}`}
+                </Typography>
+                <Box display="flex" alignItems="center" flexWrap="wrap" gap={1}>
+                  <Typography variant="body2" sx={{ color: theme.textSecondary }}>
+                    ID: {lecturer.lecturerId}
+                  </Typography>
+                  <Divider orientation="vertical" flexItem sx={{ mx: 1, height: 16 }} />
+                  <Chip 
+                    icon={<SchoolIcon fontSize="small" />}
+                    label={`${courses.length} Courses`} 
+                    size="small"
+                    sx={{ 
+                      backgroundColor: 'rgba(79,70,229,0.1)',
+                      color: theme.secondary,
+                      height: 26
+                    }}
+                  />
+                  <Chip 
+                    icon={<TimeIcon fontSize="small" />}
+                    label={`${lecturer.sessionsAssigned} Session(s) assigned`} 
+                    size="small"
+                    sx={{ 
+                      backgroundColor: 'rgba(16,185,129,0.1)',
+                      color: theme.success,
+                      height: 26
+                    }}
+                  />
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      )}
 
       {/* Tabbed Interface */}
       {lecturer && (
@@ -430,7 +539,8 @@ const LecturerSchedulePage = () => {
           sx={{ 
             borderRadius: 2,
             border: `1px solid ${theme.border}`,
-            overflow: 'hidden'
+            overflow: 'hidden',
+            boxShadow: theme.cardShadow
           }}
         >
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -507,7 +617,8 @@ const LecturerSchedulePage = () => {
             textAlign: 'center',
             backgroundColor: theme.paper,
             borderRadius: 2,
-            border: `1px solid ${theme.border}`
+            border: `1px solid ${theme.border}`,
+            boxShadow: theme.cardShadow
           }}
         >
           <Avatar sx={{ 
@@ -523,19 +634,12 @@ const LecturerSchedulePage = () => {
             No Lecturer Selected
           </Typography>
           <Typography variant="body2" sx={{ color: theme.textSecondary, maxWidth: 450, mx: 'auto' }}>
-            Search and select a lecturer from the dropdown above to view and manage their schedule information
+            Search and select a lecturer from the search box above to view and manage their schedule information
           </Typography>
         </Box>
       )}
     </Box>
   );
 };
-
-// Missing import for InfoIcon
-const InfoIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" style={{width: 20, height: 20}}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-  </svg>
-);
 
 export default LecturerSchedulePage;

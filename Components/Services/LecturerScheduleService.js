@@ -50,10 +50,21 @@ export const LecturerScheduleService = {
   // Regenerate schedules for a lecturer
   regenerateLecturerSchedule: async (lecturerId) => {
     try {
-      const response = await axios.post(`${lecturerScheduleUrl}/availabilities/generate${lecturerId}`);
+      const response = await axios.post(`${lecturerScheduleUrl}/availabilities/generate/${lecturerId}`);
       return response.data;
     } catch (error) {
       console.error('Error regenerating lecturer schedule:', error);
+      throw error;
+    }
+  },
+
+  // Regenerate schedules for all lecturers
+  regenerateAllLecturerSchedules: async () => {
+    try {
+      const response = await axios.post(`${lecturerScheduleUrl}/availabilities/generate`);
+      return response.data;
+    } catch (error) {
+      console.error('Error regenerating all lecturer schedules:', error);
       throw error;
     }
   },
