@@ -3938,19 +3938,19 @@ __turbopack_context__.s({
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$departmentService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/departmentService.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$RoomDepartmentService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/RoomDepartmentService.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$facultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/facultyService.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$RoomFacultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/RoomFacultyService.js [app-ssr] (ecmascript)");
 'use client';
 ;
 ;
 ;
 ;
 ;
-const RoomsDepartment = ()=>{
-    const [departments, setDepartments] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [selectedDepartmentId, setSelectedDepartmentId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
-    const [roomDepartments, setRoomDepartments] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [availableRoomDepartments, setAvailableRoomDepartments] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+const RoomsFaculty = ()=>{
+    const [faculties, setFaculties] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [selectedFacultyId, setSelectedFacultyId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
+    const [roomFaculties, setRoomFaculties] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [availableRoomFaculties, setAvailableRoomFaculties] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [selectedRoomId, setSelectedRoomId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -3962,50 +3962,50 @@ const RoomsDepartment = ()=>{
     const [roomSearchTerm, setRoomSearchTerm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        const loadDepartments = async ()=>{
+        const loadFaculties = async ()=>{
             try {
                 setLoading(true);
-                const allDepartments = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$departmentService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchDepartments"])();
-                setDepartments(allDepartments || []);
+                const allFaculties = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$facultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchFaculties"])();
+                setFaculties(allFaculties || []);
             } catch (err) {
-                console.error("Error fetching departments:", err);
-                setError("Failed to load departments. Please try again.");
+                console.error("Error fetching faculties:", err);
+                setError("Failed to load faculties. Please try again.");
             } finally{
                 setLoading(false);
             }
         };
-        loadDepartments();
+        loadFaculties();
     }, []);
-    const fetchRoomDepartmentData = async (departmentId)=>{
-        if (!departmentId) {
-            console.error("Invalid departmentId:", departmentId);
-            return; // Prevent API calls with undefined departmentId
+    const fetchRoomFacultyData = async (facultyId)=>{
+        if (!facultyId) {
+            console.error("Invalid facultyId:", facultyId);
+            return; // Prevent API calls with undefined facultyId
         }
         try {
             setLoading(true);
             setError(null);
-            const [departmentRooms, allAvailableRooms] = await Promise.all([
-                (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$RoomDepartmentService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchSelectedRoomDepartments"])(departmentId),
-                (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$RoomDepartmentService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchAvailableRoomDepartments"])(departmentId)
+            const [facultyRooms, allAvailableRooms] = await Promise.all([
+                (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$RoomFacultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchSelectedRoomFaculties"])(facultyId),
+                (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$RoomFacultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchAvailableRoomFaculties"])(facultyId)
             ]);
-            setRoomDepartments(departmentRooms || []);
-            setAvailableRoomDepartments(allAvailableRooms || []);
+            setRoomFaculties(facultyRooms || []);
+            setAvailableRoomFaculties(allAvailableRooms || []);
         } catch (err) {
-            console.error("Error fetching room departments:", err);
-            setError("Failed to load room departments. Please try again.");
+            console.error("Error fetching room faculties:", err);
+            setError("Failed to load room faculties. Please try again.");
         } finally{
             setLoading(false);
         }
     };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (selectedDepartmentId) {
-            fetchRoomDepartmentData(selectedDepartmentId);
+        if (selectedFacultyId) {
+            fetchRoomFacultyData(selectedFacultyId);
         }
     }, [
-        selectedDepartmentId
+        selectedFacultyId
     ]);
-    const handleDepartmentChange = (e)=>{
-        setSelectedDepartmentId(e.target.value);
+    const handleFacultyChange = (e)=>{
+        setSelectedFacultyId(e.target.value);
         setSelectedRoomId("");
     };
     const handleAddRoom = async ()=>{
@@ -4025,8 +4025,8 @@ const RoomsDepartment = ()=>{
                 type: 'loading',
                 message: 'Adding room...'
             });
-            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$RoomDepartmentService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["addRoomToDepartment"])(selectedDepartmentId, selectedRoomId);
-            await fetchRoomDepartmentData(selectedDepartmentId);
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$RoomFacultyService$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["addRoomToFaculty"])(selectedFacultyId, selectedRoomId);
+            await fetchRoomFacultyData(selectedFacultyId);
             setSelectedRoomId("");
             setActionStatus({
                 type: 'success',
@@ -4044,10 +4044,10 @@ const RoomsDepartment = ()=>{
             });
         }
     };
-    // Filter departments based on search term
-    const filteredDepartments = departments.filter((dept)=>dept.departmentName?.toLowerCase().includes(searchTerm.toLowerCase()));
+    // Filter faculties based on search term
+    const filteredFaculties = faculties.filter((dept)=>dept.facultyName?.toLowerCase().includes(searchTerm.toLowerCase()));
     // Filter rooms based on search term
-    const filteredRooms = roomDepartments.filter((room)=>room.roomName?.toLowerCase().includes(roomSearchTerm.toLowerCase()) || room.roomCapacity?.toString().includes(roomSearchTerm));
+    const filteredRooms = roomFaculties.filter((room)=>room.roomName?.toLowerCase().includes(roomSearchTerm.toLowerCase()) || room.roomCapacity?.toString().includes(roomSearchTerm));
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "p-4 sm:p-6 mx-auto bg-white min-h-screen w-full",
         children: [
@@ -4056,7 +4056,7 @@ const RoomsDepartment = ()=>{
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                         className: "text-xl text-gray-900 font-bold",
-                        children: "Room Department Management"
+                        children: "Room Faculty Management"
                     }, void 0, false, {
                         fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                         lineNumber: 108,
@@ -4064,7 +4064,7 @@ const RoomsDepartment = ()=>{
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-sm text-gray-600",
-                        children: "Manage room assignments for departments"
+                        children: "Manage room assignments for faculties"
                     }, void 0, false, {
                         fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                         lineNumber: 109,
@@ -4083,7 +4083,7 @@ const RoomsDepartment = ()=>{
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
                             className: "text-lg font-semibold text-gray-900 mb-4",
-                            children: "Select a Department"
+                            children: "Select a Faculty"
                         }, void 0, false, {
                             fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                             lineNumber: 114,
@@ -4123,7 +4123,7 @@ const RoomsDepartment = ()=>{
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                             type: "text",
-                                            placeholder: "Search departments...",
+                                            placeholder: "Search faculties...",
                                             value: searchTerm,
                                             onChange: (e)=>setSearchTerm(e.target.value),
                                             className: "pl-10 w-full px-4 py-2 border rounded-md text-gray-900 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -4138,7 +4138,7 @@ const RoomsDepartment = ()=>{
                                     lineNumber: 116,
                                     columnNumber: 13
                                 }, this),
-                                loading && !selectedDepartmentId ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                loading && !selectedFacultyId ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "flex items-center justify-center py-2",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -4176,7 +4176,7 @@ const RoomsDepartment = ()=>{
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "text-gray-600",
-                                            children: "Loading departments..."
+                                            children: "Loading faculties..."
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                                             lineNumber: 137,
@@ -4188,22 +4188,22 @@ const RoomsDepartment = ()=>{
                                     lineNumber: 132,
                                     columnNumber: 15
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                    value: selectedDepartmentId,
-                                    onChange: handleDepartmentChange,
+                                    value: selectedFacultyId,
+                                    onChange: handleFacultyChange,
                                     className: "w-full md:w-1/2 px-4 py-2 border rounded-md text-gray-900 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                             value: "",
-                                            children: "-- Select a Department --"
+                                            children: "-- Select a Faculty --"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                                             lineNumber: 145,
                                             columnNumber: 17
                                         }, this),
-                                        filteredDepartments.map((dept)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                value: dept.departmentId,
-                                                children: dept.departmentName
-                                            }, dept.departmentId, false, {
+                                        filteredFaculties.map((dept)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                value: dept.facultyId,
+                                                children: dept.facultyName
+                                            }, dept.facultyId, false, {
                                                 fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                                                 lineNumber: 147,
                                                 columnNumber: 19
@@ -4341,7 +4341,7 @@ const RoomsDepartment = ()=>{
                 lineNumber: 167,
                 columnNumber: 9
             }, this),
-            selectedDepartmentId ? loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            selectedFacultyId ? loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "bg-gray-50 border rounded-md p-8 flex items-center justify-center",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "flex flex-col items-center",
@@ -4404,7 +4404,7 @@ const RoomsDepartment = ()=>{
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
                                 className: "text-lg font-semibold text-gray-900 mb-4",
-                                children: "Add Room to Department"
+                                children: "Add Room to Faculty"
                             }, void 0, false, {
                                 fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                                 lineNumber: 206,
@@ -4417,7 +4417,7 @@ const RoomsDepartment = ()=>{
                                         value: selectedRoomId,
                                         onChange: (e)=>setSelectedRoomId(e.target.value),
                                         className: "flex-1 px-4 py-2 border rounded-md text-gray-900 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500",
-                                        disabled: availableRoomDepartments.length === 0,
+                                        disabled: availableRoomFaculties.length === 0,
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                 value: "",
@@ -4427,7 +4427,7 @@ const RoomsDepartment = ()=>{
                                                 lineNumber: 214,
                                                 columnNumber: 19
                                             }, this),
-                                            availableRoomDepartments.map((room)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                            availableRoomFaculties.map((room)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: room.roomId,
                                                     children: [
                                                         room.roomName,
@@ -4462,7 +4462,7 @@ const RoomsDepartment = ()=>{
                                 lineNumber: 207,
                                 columnNumber: 15
                             }, this),
-                            availableRoomDepartments.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            availableRoomFaculties.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "mt-3 text-sm text-gray-600",
                                 children: "No available rooms to add."
                             }, void 0, false, {
@@ -4484,7 +4484,7 @@ const RoomsDepartment = ()=>{
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
                                         className: "text-lg font-semibold text-gray-900 mb-2 md:mb-0",
-                                        children: "Rooms in Selected Department"
+                                        children: "Rooms in Selected Faculty"
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                                         lineNumber: 236,
@@ -4542,7 +4542,7 @@ const RoomsDepartment = ()=>{
                                 lineNumber: 235,
                                 columnNumber: 15
                             }, this),
-                            roomDepartments.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                            roomFaculties.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "overflow-x-auto border border-gray-200 rounded-md",
@@ -4642,7 +4642,7 @@ const RoomsDepartment = ()=>{
                                             "Showing ",
                                             filteredRooms.length,
                                             " of ",
-                                            roomDepartments.length,
+                                            roomFaculties.length,
                                             " rooms"
                                         ]
                                     }, void 0, true, {
@@ -4684,7 +4684,7 @@ const RoomsDepartment = ()=>{
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: "mt-1 text-sm text-gray-700",
-                                        children: "No rooms assigned to this department yet."
+                                        children: "No rooms assigned to this faculty yet."
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                                         lineNumber: 296,
@@ -4730,7 +4730,7 @@ const RoomsDepartment = ()=>{
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                             className: "mt-4 text-lg font-medium text-gray-900",
-                            children: "Select a department to manage rooms"
+                            children: "Select a faculty to manage rooms"
                         }, void 0, false, {
                             fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                             lineNumber: 308,
@@ -4738,7 +4738,7 @@ const RoomsDepartment = ()=>{
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             className: "mt-2 text-base text-gray-700",
-                            children: "Please select a department from the dropdown above to view and manage its rooms."
+                            children: "Please select a faculty from the dropdown above to view and manage its rooms."
                         }, void 0, false, {
                             fileName: "[project]/Components/Configurations/RoomsDepartment/roomsDepartment.jsx",
                             lineNumber: 309,
@@ -4762,7 +4762,7 @@ const RoomsDepartment = ()=>{
         columnNumber: 5
     }, this);
 };
-const __TURBOPACK__default__export__ = RoomsDepartment;
+const __TURBOPACK__default__export__ = RoomsFaculty;
 }}),
 "[project]/Components/Configurations/RoomSchedule/roomSchedule.jsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
 "use strict";

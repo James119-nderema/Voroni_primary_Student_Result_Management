@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import { fetchDepartments } from "../../Services/departmentService";
+import { fetchFaculties } from "../../Services/facultyService";
 import { fetchDays, fetchTimeslots } from "../../Services/timeslotService";
 
 import {
@@ -13,10 +13,10 @@ import {
 } from "../../Services/roomScheduleService";
 
 const RoomSchedule = () => {
-  const [departments, setDepartments] = useState([]);
+  const [faculties, setFaculties] = useState([]);
   const [days, setDays] = useState([]);
   const [timeslots, setTimeslots] = useState([]);
-  const [selectedDepartmentId, setSelectedDepartmentId] = useState("");
+  const [selectedFacultyId, setSelectedFacultyId] = useState("");
   const [availableRoomSchedules, setAvailableRoomSchedules] = useState([]);
   const [selectedRoomSchedules, setSelectedRoomSchedules] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -24,19 +24,19 @@ const RoomSchedule = () => {
   const [actionStatus, setActionStatus] = useState({ type: null, message: null });
   const [searchAvailable, setSearchAvailable] = useState("");
   const [searchSelected, setSearchSelected] = useState("");
-  const [searchDepartment, setSearchDepartment] = useState("");
+  const [searchFaculty, setSearchFaculty] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     const loadInitialData = async () => {
       try {
         setLoading(true);
-        const [allDepartments, allDays, allTimeslots] = await Promise.all([
-          fetchDepartments(),
+        const [allFaculties, allDays, allTimeslots] = await Promise.all([
+          fetchFaculties(),
           fetchDays(),
           fetchTimeslots(),
         ]);
-        setDepartments(allDepartments || []);
+        setFaculties(allFaculties || []);
         setDays(allDays || []);
         setTimeslots(allTimeslots || []);
       } catch (err) {
@@ -50,9 +50,9 @@ const RoomSchedule = () => {
     loadInitialData();
   }, []);
 
-  const fetchRoomScheduleData = async (departmentId) => {
-    if (!departmentId) {
-      console.error("Invalid departmentId:", departmentId);
+  const fetchRoomScheduleData = async (facultyId) => {
+    if (!facultyId) {
+      console.error("Invalid facultyId:", facultyId);
       return;
     }
 
@@ -61,8 +61,8 @@ const RoomSchedule = () => {
       setError(null);
 
       const [availableSchedules, selectedSchedules] = await Promise.all([
-        fetchAvailableRoomSchedules(departmentId),
-        fetchSelectedRoomSchedules(departmentId),
+        fetchAvailableRoomSchedules(facultyId),
+        fetchSelectedRoomSchedules(facultyId),
       ]);
 
       console.log("Available Room Schedules:", availableSchedules); // Debugging log
@@ -79,13 +79,13 @@ const RoomSchedule = () => {
   };
 
   useEffect(() => {
-    if (selectedDepartmentId) {
-      fetchRoomScheduleData(selectedDepartmentId);
+    if (selectedFacultyId) {
+      fetchRoomScheduleData(selectedFacultyId);
     }
-  }, [selectedDepartmentId]);
+  }, [selectedFacultyId]);
 
-  const handleDepartmentChange = (e) => {
-    setSelectedDepartmentId(e.target.value);
+  const handleFacultyChange = (e) => {
+    setSelectedFacultyId(e.target.value);
   };
 
   const handleAddSchedule = async (schedule) => {
@@ -96,14 +96,14 @@ const RoomSchedule = () => {
         dayId: schedule.dayId,
         timeslotId: schedule.timeslotId,
         isOccupied: schedule.isOccupied || false,
-        departmentId: selectedDepartmentId,
+        facultyId: selectedFacultyId,
         isChosen: true,
       };
 
       console.log("Adding schedule with payload:", payload);
       setActionStatus({ type: 'loading', message: 'Adding schedule...' });
       await addRoomSchedule(payload);
-      await fetchRoomScheduleData(selectedDepartmentId);
+      await fetchRoomScheduleData(selectedFacultyId);
       setActionStatus({ type: 'success', message: 'Schedule added successfully' });
       setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
     } catch (err) {
@@ -117,7 +117,7 @@ const RoomSchedule = () => {
     try {
       setActionStatus({ type: 'loading', message: 'Removing schedule...' });
       await removeRoomSchedule(schedule); // Pass the full schedule object
-      await fetchRoomScheduleData(selectedDepartmentId);
+      await fetchRoomScheduleData(selectedFacultyId);
       setActionStatus({ type: 'success', message: 'Schedule removed successfully' });
       setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
     } catch (err) {
@@ -128,16 +128,16 @@ const RoomSchedule = () => {
   };
 
   const regenerateSchedules = async () => {
-    if (!selectedDepartmentId) {
-      setActionStatus({ type: 'error', message: 'Please select a department first.' });
+    if (!selectedFacultyId) {
+      setActionStatus({ type: 'error', message: 'Please select a faculty first.' });
       setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
       return;
     }
 
     try {
       setActionStatus({ type: 'loading', message: 'Regenerating schedules...' });
-      await regenerateSchedulesService(selectedDepartmentId);
-      await fetchRoomScheduleData(selectedDepartmentId);
+      await regenerateSchedulesService(selectedFacultyId);
+      await fetchRoomScheduleData(selectedFacultyId);
       setActionStatus({ type: 'success', message: 'Schedules regenerated successfully' });
       setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
     } catch (err) {
@@ -147,9 +147,49 @@ const RoomSchedule = () => {
     }
   };
 
-  // Filter departments based on search
-  const filteredDepartments = departments.filter(dept =>
-    dept.departmentName.toLowerCase().includes(searchDepartment.toLowerCase())
+  const handleAddAllSchedules = async () => {
+    try {
+      setActionStatus({ type: 'loading', message: 'Adding all schedules...' });
+      for (const schedule of availableRoomSchedules) {
+        const payload = {
+          roomId: schedule.roomId,
+          dayId: schedule.dayId,
+          timeslotId: schedule.timeslotId,
+          isOccupied: schedule.isOccupied || false,
+          facultyId: selectedFacultyId,
+          isChosen: true,
+        };
+        await addRoomSchedule(payload);
+      }
+      await fetchRoomScheduleData(selectedFacultyId);
+      setActionStatus({ type: 'success', message: 'All schedules added successfully' });
+      setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
+    } catch (err) {
+      console.error("Error adding all schedules:", err);
+      setActionStatus({ type: 'error', message: 'Failed to add all schedules. Please try again.' });
+      setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
+    }
+  };
+
+  const handleRemoveAllSchedules = async () => {
+    try {
+      setActionStatus({ type: 'loading', message: 'Removing all schedules...' });
+      for (const schedule of selectedRoomSchedules) {
+        await removeRoomSchedule(schedule);
+      }
+      await fetchRoomScheduleData(selectedFacultyId);
+      setActionStatus({ type: 'success', message: 'All schedules removed successfully' });
+      setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
+    } catch (err) {
+      console.error("Error removing all schedules:", err);
+      setActionStatus({ type: 'error', message: 'Failed to remove all schedules. Please try again.' });
+      setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
+    }
+  };
+
+  // Filter faculties based on search
+  const filteredFaculties = faculties.filter(dept =>
+    dept.facultyName.toLowerCase().includes(searchFaculty.toLowerCase())
   );
 
   // Filter available schedules based on search
@@ -174,32 +214,32 @@ const RoomSchedule = () => {
       {/* Informational Card */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
         <p className="text-sm text-blue-800">
-          It lets you view the available rooms and their schedules, and you can select the one that fits a department.
+          It lets you view the available rooms and their schedules, and you can select the one that fits a faculty.
         </p>
       </div>
       {/* Removed the container with the title and back button */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
         <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-white">
-          <h4 className="text-lg font-semibold text-gray-800 mb-4">Department Selection</h4>
-          {/* Removed the search department field */}
-          {loading && !selectedDepartmentId ? (
+          <h4 className="text-lg font-semibold text-gray-800 mb-4">Faculty Selection</h4>
+          {/* Removed the search faculty field */}
+          {loading && !selectedFacultyId ? (
             <div className="flex items-center justify-center py-4">
               <svg className="animate-spin h-5 w-5 text-blue-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <span className="text-gray-600">Loading departments...</span>
+              <span className="text-gray-600">Loading faculties...</span>
             </div>
           ) : (
             <select
-              value={selectedDepartmentId}
-              onChange={handleDepartmentChange}
+              value={selectedFacultyId}
+              onChange={handleFacultyChange}
               className="w-full px-4 py-2 border rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">-- Select a Department --</option>
-              {departments.map((dept) => (
-                <option key={dept.departmentId} value={dept.departmentId}>
-                  {dept.departmentName}
+              <option value="">-- Select a Faculty --</option>
+              {faculties.map((dept) => (
+                <option key={dept.facultyId} value={dept.facultyId}>
+                  {dept.facultyName}
                 </option>
               ))}
             </select>
@@ -207,7 +247,7 @@ const RoomSchedule = () => {
         </div>
       </div>
 
-      {selectedDepartmentId && (
+      {selectedFacultyId && (
         <>
           {loading ? (
             <div className="bg-white rounded-lg shadow-md p-8 flex items-center justify-center">
@@ -254,13 +294,13 @@ const RoomSchedule = () => {
                     <div className="flex justify-between items-center">
                       <div>
                         <h4 className="text-lg font-semibold text-blue-800 mb-1">Available Room Schedules</h4>
-                        <p className="text-sm text-gray-500 mb-4">Click to add a schedule to your department</p>
+                        <p className="text-sm text-gray-500 mb-4">Click to add a schedule to your faculty</p>
                       </div>
                       <button
-                        onClick={regenerateSchedules}
+                        onClick={handleAddAllSchedules}
                         className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
                       >
-                        Regenerate Schedules
+                        Add All
                       </button>
                     </div>
                     <div className="relative">
@@ -331,7 +371,7 @@ const RoomSchedule = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                           <h3 className="mt-2 text-sm font-medium text-gray-900">No available schedules</h3>
-                          <p className="mt-1 text-sm text-gray-500">There are no available room schedules for this department.</p>
+                          <p className="mt-1 text-sm text-gray-500">There are no available room schedules for this faculty.</p>
                         </div>
                       )}
                     </div>
@@ -346,9 +386,18 @@ const RoomSchedule = () => {
                 {/* Selected Room Schedules */}
                 <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow">
                   <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-white">
-                    <h4 className="text-lg font-semibold text-green-800 mb-1">Department Room Schedules</h4>
-                    <p className="text-sm text-gray-500 mb-4">Currently assigned room schedules for this department</p>
-                    
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h4 className="text-lg font-semibold text-green-800 mb-1">Faculty Room Schedules</h4>
+                        <p className="text-sm text-gray-500 mb-4">Currently assigned room schedules for this faculty</p>
+                      </div>
+                      <button
+                        onClick={handleRemoveAllSchedules}
+                        className="px-4 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 transition-colors"
+                      >
+                        Remove All
+                      </button>
+                    </div>
                     <div className="relative">
                       <input
                         type="text"
@@ -415,7 +464,7 @@ const RoomSchedule = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
                           <h3 className="mt-2 text-sm font-medium text-gray-900">No schedules</h3>
-                          <p className="mt-1 text-sm text-gray-500">No room schedules assigned to this department yet.</p>
+                          <p className="mt-1 text-sm text-gray-500">No room schedules assigned to this faculty yet.</p>
                         </div>
                       )}
                     </div>

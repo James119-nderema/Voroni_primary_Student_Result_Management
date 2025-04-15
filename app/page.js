@@ -20,7 +20,7 @@ import FacultyPage from '@/Components/Management/FacultyPage/faculty';
 import ProgramPage from '@/Components/Management/ProgramPage/program';  
 import DepartmentPage from '@/Components/Management/DepartmentPage/departments';  
 import TimetableResourceAnalysis from '@/Components/InsightPage/insight';
-import RoomsDepartment from '@/Components/Configurations/RoomsDepartment/roomsDepartment';
+import RoomsFaculty from '@/Components/Configurations/RoomsFaculty/roomsfaculty';
 import RoomSchedule from '@/Components/Configurations/RoomSchedule/roomSchedule';
 import FailedSchedule from '@/Components/Configurations/ScheduleTracker/scheduletracker';
 
@@ -85,7 +85,7 @@ const TimetableManagementDashboard = () => {
         { page: 'schedules', title: 'Lecturer Schedules', icon: Users },
         { page: 'class-schedules', title: 'Class Schedules', icon: Users },
         { page: 'program-courses', title: 'Program Courses', icon: BookOpen },
-        { page: 'rooms-department', title: 'Rooms & Departments', icon: DoorOpen },
+        { page: 'rooms-faculty', title: 'Rooms & Faculties', icon: DoorOpen },
         { page: 'room-schedules', title: 'Room Schedules', icon: DoorClosed },
         { page: 'schedule-tracker', title: 'Schedule Tracker', icon: DoorClosed },
       
@@ -115,7 +115,7 @@ const TimetableManagementDashboard = () => {
       case 'Insights': return <TimetableResourceAnalysis />;
       case 'class-schedules': return <ClassSchedulePage />;
       case 'program-courses': return <ProgramCourse />;
-      case 'rooms-department': return <RoomsDepartment />;
+      case 'rooms-faculty': return <RoomsFaculty />;
       case 'room-schedules': return <RoomSchedule />;
       case 'schedule-tracker': return <FailedSchedule />;
       default: return <DashboardPage />;  

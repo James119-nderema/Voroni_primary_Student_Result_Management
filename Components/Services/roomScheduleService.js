@@ -2,21 +2,11 @@ import API_BASE_URL from "./HostConfig";
 
 const roomScheduleUrl = `${API_BASE_URL}/rooms`;
 import { addAuthHeaders } from '../LoginService';
+import roomsService from "./rooms";
 const headers = addAuthHeaders();
 
 // Fetch rooms data from API
-const fetchRooms = async () => {
-  try {
-    const response = await fetch(`${roomScheduleUrl}/`, {headers});
-    if (!response.ok) {
-      throw new Error(`Error fetching rooms: ${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-};
+
 
 // Fetch days data from API
 const fetchDays = async () => {
@@ -46,8 +36,8 @@ const fetchTimeslots = async () => {
   }
 };
 
-export const fetchAvailableRoomSchedules = async (departmentId) => {
-  const response = await fetch(`${roomScheduleUrl}/schedule/available/${departmentId}`, {headers});
+export const fetchAvailableRoomSchedules = async (facultyId) => {
+  const response = await fetch(`${roomScheduleUrl}/schedule/available/${facultyId}`, {headers});
   if (!response.ok) {
     throw new Error("Failed to fetch available room schedules");
   }
@@ -56,7 +46,7 @@ export const fetchAvailableRoomSchedules = async (departmentId) => {
 
   // Fetch rooms, days, and timeslots for mapping
   const [rooms, days, timeslots] = await Promise.all([
-    fetchRooms(),
+    roomsService.getAllRooms(),
     fetchDays(),
     fetchTimeslots(),
   ]);
@@ -84,15 +74,15 @@ export const fetchAvailableRoomSchedules = async (departmentId) => {
       roomId: schedule.roomId,
       dayId: schedule.dayId,
       timeslotId: schedule.timeslotId,
-      departmentId: schedule.departmentId,
+      facultyId: schedule.facultyId,
       isOccupied: schedule.isOccupied,
       isChosen: schedule.isChosen
     };
   });
 };
 
-export const fetchSelectedRoomSchedules = async (departmentId) => {
-  const response = await fetch(`${roomScheduleUrl}/schedule/selected/${departmentId}`, {headers});
+export const fetchSelectedRoomSchedules = async (facultyId) => {
+  const response = await fetch(`${roomScheduleUrl}/schedule/selected/${facultyId}`, {headers});
   if (!response.ok) {
     throw new Error("Failed to fetch selected room schedules");
   }
@@ -101,7 +91,7 @@ export const fetchSelectedRoomSchedules = async (departmentId) => {
 
   // Fetch rooms, days, and timeslots for mapping
   const [rooms, days, timeslots] = await Promise.all([
-    fetchRooms(),
+    roomsService.getAllRooms(),
     fetchDays(),
     fetchTimeslots(),
   ]);
@@ -129,7 +119,7 @@ export const fetchSelectedRoomSchedules = async (departmentId) => {
       roomId: schedule.roomId,
       dayId: schedule.dayId,
       timeslotId: schedule.timeslotId,
-      departmentId: schedule.departmentId,
+      facultyId: schedule.facultyId,
       isOccupied: schedule.isOccupied,
       isChosen: schedule.isChosen
     };
@@ -164,12 +154,12 @@ export const removeRoomSchedule = async (schedule) => {
   }
 };
 
-export const regenerateSchedules = async (departmentId) => {
-  if (!departmentId) {
-    throw new Error('Department ID is required to regenerate schedules.');
+export const regenerateSchedules = async (facultyId) => {
+  if (!facultyId) {
+    throw new Error('faculty ID is required to regenerate schedules.');
   }
 
-  const response = await fetch(`${roomScheduleUrl}/schedule/create/${departmentId}`, {
+  const response = await fetch(`${roomScheduleUrl}/schedule/create/${facultyId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

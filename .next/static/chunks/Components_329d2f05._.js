@@ -635,14 +635,15 @@ const LecturerScheduleService = {
     // Regenerate all lecturer schedules
     regenerateAllLecturerSchedules: async ()=>{
         try {
-            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`${lecturerScheduleUrl}/availabilities/generate`, {
+            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post(`${lecturerScheduleUrl}/availabilities/generate`, {}, {
                 headers
             });
-            if (!response.ok) {
+            if (response.status !== 200) {
                 console.error('Failed to regenerate all lecturer schedules:', response.statusText);
                 throw new Error('Failed to regenerate all lecturer schedules');
             }
-            return await response.json();
+            console.log(response.data);
+            return response.data;
         } catch (error) {
             console.error('Error in regenerateAllLecturerSchedules:', error);
             throw error;
@@ -1461,10 +1462,10 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
 {
 __turbopack_context__.s({
-    "addRoomToDepartment": (()=>addRoomToDepartment),
-    "fetchAvailableRoomDepartments": (()=>fetchAvailableRoomDepartments),
-    "fetchSelectedRoomDepartments": (()=>fetchSelectedRoomDepartments),
-    "removeRoomFromDepartment": (()=>removeRoomFromDepartment)
+    "addRoomToFaculty": (()=>addRoomToFaculty),
+    "fetchAvailableRoomFaculties": (()=>fetchAvailableRoomFaculties),
+    "fetchSelectedRoomFaculties": (()=>fetchSelectedRoomFaculties),
+    "removeRoomFromFaculty": (()=>removeRoomFromFaculty)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/axios/lib/axios.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$HostConfig$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Components/Services/HostConfig.js [app-client] (ecmascript)");
@@ -1473,52 +1474,52 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2
 ;
 ;
 const headers = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$LoginService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addAuthHeaders"])();
-const roomDepartmentUrl = `${__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$HostConfig$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]}/rooms`;
-const fetchSelectedRoomDepartments = async (departmentId)=>{
+const roomFacultyUrl = `${__TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$HostConfig$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]}/rooms`;
+const fetchSelectedRoomFaculties = async (facultyId)=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`${roomDepartmentUrl}/department/selected/${departmentId}`, {
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`${roomFacultyUrl}/faculty/selected/${facultyId}`, {
             headers
         });
         return response.data;
     } catch (error) {
-        console.error('Error fetching selected room departments:', error);
+        console.error('Error fetching selected room faculties:', error);
         throw error;
     }
 };
-const fetchAvailableRoomDepartments = async (departmentId)=>{
+const fetchAvailableRoomFaculties = async (facultyId)=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`${roomDepartmentUrl}/department/available/${departmentId}`, {
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`${roomFacultyUrl}/faculty/available/${facultyId}`, {
             headers
         });
         return response.data;
     } catch (error) {
-        console.error('Error fetching available room departments:', error);
+        console.error('Error fetching available room facultys:', error);
         throw error;
     }
 };
-const addRoomToDepartment = async (departmentId, roomId)=>{
+const addRoomToFaculty = async (facultyId, roomId)=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post(`${roomDepartmentUrl}/department/create`, {
-            departmentId,
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post(`${roomFacultyUrl}/faculty/create`, {
+            facultyId,
             roomId
         }, {
             headers
         });
         return response.data;
     } catch (error) {
-        console.error('Error adding room to department:', error);
+        console.error('Error adding room to faculty:', error);
         throw error;
     }
 };
-const removeRoomFromDepartment = async (schedule)=>{
+const removeRoomFromFaculty = async (schedule)=>{
     try {
         console.log("Sending schedule data to API for deletion:", schedule);
         // Ensure the schedule object contains all required fields
-        if (!schedule.roomId || !schedule.departmentName) {
+        if (!schedule.roomId || !schedule.facultyName) {
             console.error("Missing required schedule data for deletion:", schedule);
             throw new Error("Missing required schedule data for deletion");
         }
-        const response = await fetch(`${roomDepartmentUrl}/department/delete`, {
+        const response = await fetch(`${roomFacultyUrl}/faculty/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

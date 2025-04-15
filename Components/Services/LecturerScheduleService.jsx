@@ -80,14 +80,15 @@ export const LecturerScheduleService = {
   // Regenerate all lecturer schedules
   regenerateAllLecturerSchedules: async () => {
     try {
-      const response = await axios.get(`${lecturerScheduleUrl}/availabilities/generate`, { headers });
+      const response = await axios.post(`${lecturerScheduleUrl}/availabilities/generate`, {}, { headers });
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         console.error('Failed to regenerate all lecturer schedules:', response.statusText);
         throw new Error('Failed to regenerate all lecturer schedules');
       }
 
-      return await response.json();
+      console.log(response.data);
+      return response.data; 
     } catch (error) {
       console.error('Error in regenerateAllLecturerSchedules:', error);
       throw error;
