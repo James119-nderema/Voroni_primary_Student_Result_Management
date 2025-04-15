@@ -61,3 +61,13 @@ export const removeRoomFromFaculty = async (facultyId, roomId) => {
     throw error;
   }
 };
+
+export const createAllCombinations = async () => {
+  try {
+    const response = await axios.post(`${roomFacultyUrl}/faculty/create/all`, {}, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('Error creating all combinations:', error);
+    throw error;
+  }
+};

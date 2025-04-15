@@ -6,7 +6,8 @@ import {
   fetchSelectedRoomFaculties, 
   addRoomToFaculty, 
   fetchAvailableRoomFaculties,
-  removeRoomFromFaculty
+  removeRoomFromFaculty,
+  createAllCombinations // Import the new function
 } from "../../Services/RoomFacultyService";
 
 const RoomsFaculty = () => {
@@ -211,6 +212,22 @@ const RoomsFaculty = () => {
     }
   };
 
+  const handleCreateCombinations = async () => {
+    try {
+      setActionStatus({ type: 'loading', message: 'Creating combinations...' });
+      await createAllCombinations();
+      if (selectedFacultyId) {
+        await fetchRoomFacultyData(selectedFacultyId); // Refresh the tables
+      }
+      setActionStatus({ type: 'success', message: 'Combinations created successfully' });
+      setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
+    } catch (err) {
+      console.error("Error creating combinations:", err);
+      setActionStatus({ type: 'error', message: 'Failed to create combinations. Please try again.' });
+      setTimeout(() => setActionStatus({ type: null, message: null }), 3000);
+    }
+  };
+
   const filteredRooms = roomFaculties.filter(room => 
     room.roomName?.toLowerCase().includes(roomSearchTerm.toLowerCase()) ||
     room.roomCapacity?.toString().includes(roomSearchTerm)
@@ -218,13 +235,21 @@ const RoomsFaculty = () => {
 
   return (
     <div className="p-4 sm:p-6 mx-auto bg-white min-h-screen w-full">
-      <div className="mb-6 border-b pb-4">
-        <h3 className="text-xl text-gray-900 font-bold">Room Faculty Management</h3>
-        <p className="text-sm text-gray-600">Manage room assignments for faculties</p>
+      <div className="mb-6 border-b pb-4 flex justify-between items-center">
+        <div>
+          <h3 className="text-xl text-gray-900 font-bold">Room Faculty Management</h3>
+          <p className="text-sm text-gray-600">Manage room assignments for faculties</p>
+        </div>
+        <button
+          onClick={handleCreateCombinations}
+          className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 transition-colors"
+        >
+          Create Combinations
+        </button>
       </div>
 
       <div className="bg-white shadow-sm border rounded-lg p-6 mb-6">
-        <h4 className="text-lg font-semibold text-gray-900 mb-4">Select a Faculty</h4>
+        <h4 className="text-sm font-semibold text-gray-900 mb-4">Select a Faculty</h4>
         <div className="flex items-center gap-4">
           {loading && !selectedFacultyId ? (
             <div className="flex items-center py-2">
@@ -238,7 +263,7 @@ const RoomsFaculty = () => {
             <select
               value={selectedFacultyId}
               onChange={handleFacultyChange}
-              className="flex-1 max-w-md px-4 py-2.5 border rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+              className="flex-1 max-w-md px-4 py-2.5 border rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
             >
               <option value="">-- Select a Faculty --</option>
               {faculties.map((faculty) => (
@@ -500,20 +525,20 @@ const RoomsFaculty = () => {
       {isDeleteDialogOpen && roomToDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Confirm Deletion</h3>
-            <p className="text-gray-600 mb-6">
+            <h3 className="text-md font-medium text-gray-900 mb-4">Confirm Deletion</h3>
+            <p className=" text-sm text-gray-600 mb-6">
               Are you sure you want to remove <span className="font-medium">{roomToDelete.roomName}</span> from {selectedFacultyName}?
             </p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setIsDeleteDialogOpen(false)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleDeleteRoom(roomToDelete)}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                className="px-4 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700"
               >
                 Delete
               </button>

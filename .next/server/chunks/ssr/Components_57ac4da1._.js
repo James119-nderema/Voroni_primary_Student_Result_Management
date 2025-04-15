@@ -1407,6 +1407,7 @@ var { g: global, __dirname } = __turbopack_context__;
 {
 __turbopack_context__.s({
     "addRoomToFaculty": (()=>addRoomToFaculty),
+    "createAllCombinations": (()=>createAllCombinations),
     "fetchAvailableRoomFaculties": (()=>fetchAvailableRoomFaculties),
     "fetchSelectedRoomFaculties": (()=>fetchSelectedRoomFaculties),
     "removeRoomFromFaculty": (()=>removeRoomFromFaculty)
@@ -1480,6 +1481,17 @@ const removeRoomFromFaculty = async (facultyId, roomId)=>{
         return response.data;
     } catch (error) {
         console.error("Error deleting schedule:", error);
+        throw error;
+    }
+};
+const createAllCombinations = async ()=>{
+    try {
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post(`${roomFacultyUrl}/faculty/create/all`, {}, {
+            headers
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error creating all combinations:', error);
         throw error;
     }
 };
@@ -1690,10 +1702,13 @@ const regenerateSchedules = async (facultyId)=>{
     if (!facultyId) {
         throw new Error('faculty ID is required to regenerate schedules.');
     }
-    const response = await fetch(`${roomScheduleUrl}/schedule/create/${facultyId}`, {
+    // Handle the special case for 'all' to regenerate all schedules
+    const endpoint = facultyId === 'all' ? `${roomScheduleUrl}/schedule/create/all` : `${roomScheduleUrl}/schedule/create/${facultyId}`;
+    const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            ...headers
         }
     });
     if (!response.ok) {

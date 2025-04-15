@@ -159,10 +159,16 @@ export const regenerateSchedules = async (facultyId) => {
     throw new Error('faculty ID is required to regenerate schedules.');
   }
 
-  const response = await fetch(`${roomScheduleUrl}/schedule/create/${facultyId}`, {
+  // Handle the special case for 'all' to regenerate all schedules
+  const endpoint = facultyId === 'all' 
+    ? `${roomScheduleUrl}/schedule/create/all` 
+    : `${roomScheduleUrl}/schedule/create/${facultyId}`;
+
+  const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      ...headers
     },
   });
 
