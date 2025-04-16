@@ -23,6 +23,7 @@ import TimetableResourceAnalysis from '@/Components/InsightPage/insight';
 import RoomsFaculty from '@/Components/Configurations/RoomsFaculty/roomsfaculty';
 import RoomSchedule from '@/Components/Configurations/RoomSchedule/roomSchedule';
 import FailedSchedule from '@/Components/Configurations/ScheduleTracker/scheduletracker';
+import LecturerCoursesPage from '@/Components/Configurations/LecturerCourses/lecturerCourses';
 
 const TimetableManagementDashboard = () => {  
   const [activePage, setActivePage] = useState('dashboard');  
@@ -82,6 +83,7 @@ const TimetableManagementDashboard = () => {
     {
       title: 'Configuration',
       items: [
+        { page: 'lecturer-courses', title: 'Lecturer Courses', icon: Users },
         { page: 'schedules', title: 'Lecturer Schedules', icon: Users },
         { page: 'class-schedules', title: 'Class Schedules', icon: Users },
         { page: 'program-courses', title: 'Program Courses', icon: BookOpen },
@@ -118,6 +120,7 @@ const TimetableManagementDashboard = () => {
       case 'rooms-faculty': return <RoomsFaculty />;
       case 'room-schedules': return <RoomSchedule />;
       case 'schedule-tracker': return <FailedSchedule />;
+      case 'lecturer-courses': return <LecturerCoursesPage />;
       default: return <DashboardPage />;  
     }  
   };  
