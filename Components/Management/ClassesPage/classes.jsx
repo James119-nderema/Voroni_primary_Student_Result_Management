@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { fetchClasses, deleteClass } from "../../Services/classService";
-import AddEditClassPopup from "./AddEditClassPopup"; // Import the refactored popup component
+import AddEditClassPopup from "./AddEditClassPopup";
+import ConfirmationDialog from "@/Components/Common/ConfirmationDialog";
 
 const AddClasses = () => {
   const [classes, setClasses] = useState([]);
@@ -10,22 +11,24 @@ const AddClasses = () => {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All Classes");
   const [searchTerm, setSearchTerm] = useState("");
-  const [popupData, setPopupData] = useState(null); // State to control popup data
-  const [feedbackMessage, setFeedbackMessage] = useState(""); // Feedback message state
+  const [popupData, setPopupData] = useState(null);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false); // Confirmation dialog state
+  const [classToDelete, setClassToDelete] = useState(null); // Track class to delete
   const router = useRouter();
 
+  const getClasses = async () => {
+    try {
+      const data = await fetchClasses();
+      setClasses(data);
+      setFilteredClasses(data);
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const getClasses = async () => {
-      try {
-        const data = await fetchClasses();
-        setClasses(data);
-        setFilteredClasses(data);
-      } catch (error) {
-        console.error(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
     getClasses();
   }, []);
 
@@ -48,29 +51,42 @@ const AddClasses = () => {
     }
   };
 
-  const handleDeleteClass = async (classId) => {
+  const openConfirmDialog = (classDetail) => {
+    setClassToDelete(classDetail);
+    setIsConfirmDialogOpen(true);
+  };
+
+  const closeConfirmDialog = () => {
+    setIsConfirmDialogOpen(false);
+    setClassToDelete(null);
+  };
+
+  const handleDeleteClass = async () => {
     try {
-      await deleteClass(classId);
-      const updatedClasses = classes.filter((classDetail) => classDetail.classId !== classId);
-      setClasses(updatedClasses);
-      setFilteredClasses(updatedClasses);
-      setFeedbackMessage("Class deleted successfully!");
-      setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
+      await deleteClass(classToDelete.classId);
+      await getClasses(); // Refresh data after deletion
     } catch (error) {
       console.error(error.message);
+    } finally {
+      closeConfirmDialog();
     }
   };
 
   const handleAddClass = () => {
-    setPopupData({}); // Open popup with empty data for adding a new class
+    setPopupData({});
   };
 
   const handleEditClass = (classDetail) => {
-    setPopupData(classDetail); // Open popup with existing data for editing
+    setPopupData(classDetail);
   };
 
   const handleClosePopup = () => {
-    setPopupData(null); // Close the popup
+    setPopupData(null);
+  };
+
+  const handleSaveClass = async (updatedClass) => {
+    await getClasses(); // Refresh data after saving
+    handleClosePopup();
   };
 
   return (
@@ -97,13 +113,6 @@ const AddClasses = () => {
         </div>
       </div>
 
-      {/* Feedback Message */}
-      {feedbackMessage && (
-        <div className="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-md text-sm">
-          {feedbackMessage}
-        </div>
-      )}
-
       <div className="bg-white rounded-lg overflow-hidden">
         <div className="p-4 border-b flex flex-wrap gap-2 sm:gap-4">
           {["All Classes"].map((category) => (
@@ -128,7 +137,7 @@ const AddClasses = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  {['ID', 'Code', 'Size', 'Period', 'Program',  'Actions'].map((heading) => (
+                  {['ID', 'Code', 'Size', 'Period', 'Program', 'Actions'].map((heading) => (
                     <th key={heading} className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       {heading}
                     </th>
@@ -137,8 +146,8 @@ const AddClasses = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredClasses.length > 0 ? (
-                  filteredClasses.map((classDetail) => (
-                    <tr key={classDetail.classId}>
+                  filteredClasses.map((classDetail, index) => (
+                    <tr key={`${classDetail.classId}-${index}`}>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {classDetail.classId}
                       </td>
@@ -154,9 +163,8 @@ const AddClasses = () => {
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {classDetail.programName}
                       </td>
-                      
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <div className="flex flex-col sm:flex-row gap-2">
+                        <div className="flex gap-2">
                           <button
                             className="text-indigo-600 hover:text-indigo-900"
                             onClick={() => handleEditClass(classDetail)}
@@ -165,7 +173,7 @@ const AddClasses = () => {
                           </button>
                           <button
                             className="text-red-600 hover:text-red-900"
-                            onClick={() => handleDeleteClass(classDetail.classId)}
+                            onClick={() => openConfirmDialog(classDetail)}
                           >
                             Delete
                           </button>
@@ -186,30 +194,22 @@ const AddClasses = () => {
         )}
       </div>
 
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={isConfirmDialogOpen}
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete the class "${classToDelete?.classCode}"?`}
+        onConfirm={handleDeleteClass}
+        onCancel={closeConfirmDialog}
+      />
+
       {popupData && (
         <div className="absolute inset-0 z-50 bg-black bg-opacity-50">
           <div className="relative w-full p-4">
             <AddEditClassPopup
               data={popupData}
               onClose={handleClosePopup}
-              onSave={(updatedClass) => {
-                if (updatedClass.classId) {
-                  // Update existing class
-                  setClasses((prev) =>
-                    prev.map((cls) => (cls.classId === updatedClass.classId ? updatedClass : cls))
-                  );
-                  setFeedbackMessage("Class updated successfully!");
-                } else {
-                  // Add new class
-                  setClasses((prev) => [...prev, updatedClass]);
-                  setFeedbackMessage("Class added successfully!");
-                }
-                setFilteredClasses((prev) =>
-                  prev.map((cls) => (cls.classId === updatedClass.classId ? updatedClass : cls))
-                );
-                setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
-                handleClosePopup();
-              }}
+              onSave={handleSaveClass}
             />
           </div>
         </div>

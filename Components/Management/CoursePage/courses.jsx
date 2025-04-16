@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { fetchCourses, deleteCourse } from "../../Services/courses";
-import AddCoursePage from "./AddCourse"; // Import the AddCoursePage component
-import { motion } from "framer-motion"; // Import motion for animations
+import AddEditCourse from "./AddEditCourse"; // Import the combined component
+import ConfirmationDialog from '../../Common/ConfirmationDialog'; // Custom confirmation dialog
 
 const CoursesPage = () => {
   const [courses, setCourses] = useState([]);
@@ -14,17 +14,19 @@ const CoursesPage = () => {
   const [modalMode, setModalMode] = useState("add"); // Track whether the modal is for adding or editing
   const [selectedCourse, setSelectedCourse] = useState(null); // Track the course being edited
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false); // State for confirmation dialog
+  const [courseToDelete, setCourseToDelete] = useState(null); // Track course to delete
   const router = useRouter();
 
   useEffect(() => {
     const getCourses = async () => {
       try {
         const data = await fetchCourses();
-        setCourses(data);
-        setFilteredCourses(data);
+        const sortedData = data.sort((a, b) => a.courseId - b.courseId); // Sort courses by ID
+        setCourses(sortedData);
+        setFilteredCourses(sortedData);
       } catch (error) {
         console.error("Failed to load courses:", error);
-        // Optionally add error state handling here
       } finally {
         setLoading(false);
       }
@@ -46,9 +48,9 @@ const CoursesPage = () => {
       const query = searchQuery.toLowerCase();
       result = result.filter(
         (course) =>
-          course.courseName.toLowerCase().includes(query) ||
-          course.courseCode.toLowerCase().includes(query) ||
-          course.courseId.toString().includes(query)
+          (course.courseName?.toLowerCase().includes(query) || // Ensure courseName is defined
+          course.courseCode?.toLowerCase().includes(query) || // Ensure courseCode is defined
+          course.courseId?.toString().includes(query)) // Ensure courseId is defined
       );
     }
 
@@ -65,24 +67,31 @@ const CoursesPage = () => {
     }
   };
 
-  const handleDeleteCourse = async (courseId) => {
-    if (confirm("Are you sure you want to delete this course?")) {
-      try {
-        const result = await deleteCourse(courseId);
-        if (result.success) {
-          // Update UI after successful deletion
-          const updatedCourses = courses.filter((course) => course.courseId !== courseId);
-          setCourses(updatedCourses);
-          setFilteredCourses(updatedCourses);
-          // Optionally add success notification
-        } else {
-          // Handle error case
-          console.error("Failed to delete:", result.message);
-          // Optionally display error notification
-        }
-      } catch (error) {
-        console.error("Error deleting course:", error);
+  const openConfirmDialog = (course) => {
+    setCourseToDelete(course);
+    setIsConfirmDialogOpen(true);
+  };
+
+  const closeConfirmDialog = () => {
+    setIsConfirmDialogOpen(false);
+    setCourseToDelete(null);
+  };
+
+  const handleDeleteCourse = async () => {
+    try {
+      const result = await deleteCourse(courseToDelete.courseId);
+      if (result.success) {
+        // Reload data after successful deletion
+        const updatedCourses = await fetchCourses();
+        setCourses(updatedCourses);
+        setFilteredCourses(updatedCourses);
+      } else {
+        console.error("Failed to delete:", result.message);
       }
+    } catch (error) {
+      console.error("Error deleting course:", error);
+    } finally {
+      closeConfirmDialog();
     }
   };
 
@@ -107,7 +116,7 @@ const CoursesPage = () => {
           <p className="text-sm text-gray-500">Manage and monitor all available courses</p>
         </div>
         <button
-          onClick={handleAddCourse} // Open Add Course modal
+          onClick={handleAddCourse}
           className="mt-4 sm:mt-0 px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 transition"
         >
           Add New Course
@@ -119,7 +128,7 @@ const CoursesPage = () => {
         <input
           type="text"
           placeholder="Search courses..."
-          className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+          className="w-full px-4 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -127,39 +136,30 @@ const CoursesPage = () => {
 
       {/* Add/Edit Course Modal */}
       {showAddModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-black bg-opacity-50"
-          style={{ top: `${window.scrollY}px` }} // Adjust position based on scroll
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-lg p-6 max-w-lg w-full shadow-2xl"
-          >
-            <AddCoursePage
-              mode={modalMode} // Pass mode ("add" or "edit")
-              initialData={selectedCourse} // Pass selected course for editing
-              onSuccess={(updatedCourse) => {
-                if (modalMode === "add") {
-                  setCourses([...courses, updatedCourse]);
-                  setFilteredCourses([...filteredCourses, updatedCourse]);
-                } else {
-                  const updatedList = courses.map((course) =>
-                    course.courseId === updatedCourse.courseId ? updatedCourse : course
-                  );
-                  setCourses(updatedList);
-                  setFilteredCourses(updatedList);
-                }
-                setShowAddModal(false);
-              }}
-              onCancel={() => setShowAddModal(false)}
-            />
-          </motion.div>
-        </div>
+        <AddEditCourse
+          mode={modalMode}
+          initialData={selectedCourse}
+          onSuccess={async () => {
+            // Reload data after successful add/edit
+            const updatedCourses = await fetchCourses();
+            setCourses(updatedCourses);
+            setFilteredCourses(updatedCourses);
+            setShowAddModal(false);
+          }}
+          onCancel={() => setShowAddModal(false)}
+        />
       )}
 
-      {/* Category Filt/e/rs */}
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={isConfirmDialogOpen}
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete the course "${courseToDelete?.courseName}"?`}
+        onConfirm={handleDeleteCourse}
+        onCancel={closeConfirmDialog}
+      />
+
+      {/* Category Filters */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-4 border-b flex flex-wrap gap-2 sm:gap-4">
           {["All Courses"].map((category) => (
@@ -177,7 +177,7 @@ const CoursesPage = () => {
           ))}
         </div>
 
-        {/* Table Section (with scroll on small screens) */}
+        {/* Table Section */}
         <div className="overflow-x-auto">
           {loading ? (
             <div className="p-4 text-center text-gray-500">Loading courses...</div>
@@ -201,8 +201,8 @@ const CoursesPage = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredCourses.length > 0 ? (
-                  filteredCourses.map((course) => (
-                    <tr key={course.courseId} className="hover:bg-gray-50 transition">
+                  filteredCourses.map((course, index) => (
+                    <tr key={`${course.courseId}-${index}`} className="hover:bg-gray-50 transition">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {course.courseId}
                       </td>
@@ -222,7 +222,7 @@ const CoursesPage = () => {
                           </button>
                           <button
                             className="text-red-600 hover:text-red-900 transition"
-                            onClick={() => handleDeleteCourse(course.courseId)}
+                            onClick={() => openConfirmDialog(course)}
                           >
                             Delete
                           </button>

@@ -13,7 +13,7 @@ import RoomsPage from '@/Components/Management/RoomsPage/rooms';
 import LecturersPage from '@/Components/Management/LecturersPage/lecturers';
 import LecturerSchedulePage from './lecturers/schedules/page';  
 import ClassesPage from '@/Components/Management/ClassesPage/classes';
-import ClassSchedulePage from '@/Components/Management/ClassesPage/ClassSchedule';
+import ClassSchedulePage from '@/Components/Configurations/ClassSchedule/ClassSchedule';
 import ProgramCourse from '@/Components/Configurations/ProgramCourses/programCourse';
 import CoursePage from '@/Components/Management/CoursePage/courses';  
 import FacultyPage from '@/Components/Management/FacultyPage/faculty';  

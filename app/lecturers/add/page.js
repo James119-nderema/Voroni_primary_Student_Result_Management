@@ -1,5 +1,5 @@
 'use client';
-import AddLecturer from '@/Components/Management/LecturersPage/AddLecturer';
+import AddLecturer from '@/Components/Management/LecturersPage/AddEditLecturer';
 
 export default function AddLecturerPage() {
   return <AddLecturer />;

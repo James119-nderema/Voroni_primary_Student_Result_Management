@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { fetchDepartments, deleteDepartment } from "../../Services/departmentService";
 import AddEditDepartmentPopup from "./AddEditDepartmentPopup";
-import ConfirmationDialog from "../ClassesPage/ConfirmationDialog";
+import ConfirmationDialog from "@/Components/Common/ConfirmationDialog";
 
 const DepartmentsPage = () => {
   const [departments, setDepartments] = useState([]);
@@ -177,55 +177,20 @@ const DepartmentsPage = () => {
             <AddEditDepartmentPopup
               data={popupData}
               onClose={handleClosePopup}
-              onSave={(updatedDepartment) => {
-                const { departmentId, departmentName, facultyId } = updatedDepartment;
-
-                const departmentDetails = {
-                  departmentId: departmentId || 0, // Default to 0 for new departments
-                  departmentName,
-                  facultyId: parseInt(facultyId, 10), // Ensure facultyId is an integer
-                };
-
-                if (departmentId) {
-                  // Update existing department
-                  setDepartments((prev) =>
-                    prev.map((dept) =>
-                      dept.departmentId === departmentId ? departmentDetails : dept
-                    )
-                  );
-                  setFeedbackMessage("Department updated successfully!");
-                } else {
-                  // Add new department
-                  setDepartments((prev) => [...prev, departmentDetails]);
-                  setFeedbackMessage("Department added successfully!");
+              onSave={async () => {
+                try {
+                  const data = await fetchDepartments(); // Reload the department data
+                  setDepartments(data);
+                  setFilteredDepartments(data);
+                  setFeedbackMessage("Changes saved successfully!");
+                } catch (error) {
+                  setFeedbackError("Failed to reload departments. Please try again.");
+                } finally {
+                  setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
+                  handleClosePopup();
                 }
-
-                setFilteredDepartments((prev) =>
-                  prev.map((dept) =>
-                    dept.departmentId === departmentId ? departmentDetails : dept
-                  )
-                );
-
-                setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
-                handleClosePopup();
               }}
             />
-            <select
-              defaultValue={popupData?.facultyId || ""}
-              onChange={(e) => {
-                const updatedFacultyId = e.target.value;
-                setPopupData((prev) => ({ ...prev, facultyId: updatedFacultyId }));
-              }}
-            >
-              <option value="" disabled>
-                Select Faculty
-              </option>
-              {departments.map((dept) => (
-                <option key={`${dept.facultyId}-${dept.departmentId}`} value={dept.facultyId}>
-                  {dept.facultyName}
-                </option>
-              ))}
-            </select>
           </div>
         </div>
       )}

@@ -6,8 +6,8 @@
   "path": "static/chunks/app_dashboard_page_4dd1e642.js",
   "chunks": [
     "static/chunks/Components_Core_b69066d1._.js",
-    "static/chunks/Components_Management_0d82a34c._.js",
-    "static/chunks/Components_Configurations_240b0b43._.js",
+    "static/chunks/Components_Management_d2407777._.js",
+    "static/chunks/Components_Configurations_1fd93cd4._.js",
     "static/chunks/Components_InsightPage_insight_jsx_aca512e6._.js",
     "static/chunks/Components_c56073cf._.js",
     "static/chunks/app_19d853dd._.js",

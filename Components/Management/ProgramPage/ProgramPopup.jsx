@@ -62,8 +62,8 @@ const ProgramPopup = ({ mode, program, departments, onClose, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-2xl border border-gray-300 mt-10">
         <h2 className="text-xl font-semibold mb-4 text-black">
           {mode === "edit" ? "Edit Program" : "Add New Program"}
         </h2>

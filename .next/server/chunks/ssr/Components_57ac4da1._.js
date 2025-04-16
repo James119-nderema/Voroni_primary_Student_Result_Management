@@ -929,20 +929,15 @@ const ProgramService = {
     // Update a program
     updateProgram: async (programData)=>{
         try {
-            const response = await fetch(`/api/programs/${programData.programId}`, {
-                method: 'PUT',
+            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].put(`${programServiceUrl}/update/${programData.programId}`, programData, {
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(programData)
+                }
             });
-            if (!response.ok) {
-                throw new Error('Failed to update program');
-            }
-            return await response.json();
+            return response.data;
         } catch (error) {
-            console.error('Error in updateProgram:', error);
-            throw error;
+            console.error('Error in updateProgram:', error?.response?.data || error.message);
+            throw new Error(`Failed to update program: ${error.message}`);
         }
     }
 };

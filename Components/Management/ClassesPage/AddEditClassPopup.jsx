@@ -138,17 +138,14 @@ const AddEditClassPopup = ({ data, onClose, onSave }) => {
     }
   };
 
-
-
-
   return (
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm">
         <div
           className="absolute bg-white rounded-lg p-6 w-full max-w-md z-10"
           style={{
-            top: `${window.scrollY + 50}px`, // Adjust position based on scroll
-            left: `${window.scrollX + (window.innerWidth - 400) / 2}px`, // Center horizontally
+            top: `${window.scrollY + 50}px`,
+            left: `${window.scrollX + (window.innerWidth - 400) / 2}px`,
           }}
         >
           <h3 className="text-lg font-semibold mb-4">
@@ -166,7 +163,7 @@ const AddEditClassPopup = ({ data, onClose, onSave }) => {
                   name="classCode"
                   value={formData.classCode}
                   onChange={handleChange}
-                  className={`mt-1 px-4 py-2 border rounded-md w-full ${
+                  className={`mt-1 px-4 py-2 border rounded-md w-full text-black ${
                     errors.classCode ? "border-red-500" : "border-gray-300"
                   }`}
                   required
@@ -183,7 +180,7 @@ const AddEditClassPopup = ({ data, onClose, onSave }) => {
                   name="size"
                   value={formData.size}
                   onChange={handleChange}
-                  className={`mt-1 px-4 py-2 border rounded-md w-full ${
+                  className={`mt-1 px-4 py-2 border rounded-md w-full text-black ${
                     errors.size ? "border-red-500" : "border-gray-300"
                   }`}
                   required
@@ -199,7 +196,7 @@ const AddEditClassPopup = ({ data, onClose, onSave }) => {
                   name="periodId"
                   value={formData.periodId}
                   onChange={handleChange}
-                  className={`mt-1 px-4 py-2 border rounded-md w-full bg-white ${
+                  className={`mt-1 px-4 py-2 border rounded-md w-full bg-white text-black ${
                     errors.periodId ? "border-red-500" : "border-gray-300"
                   }`}
                   required
@@ -226,7 +223,7 @@ const AddEditClassPopup = ({ data, onClose, onSave }) => {
                   name="programId"
                   value={formData.programId}
                   onChange={handleChange}
-                  className={`mt-1 px-4 py-2 border rounded-md w-full bg-white ${
+                  className={`mt-1 px-4 py-2 border rounded-md w-full bg-white text-black ${
                     errors.programId ? "border-red-500" : "border-gray-300"
                   }`}
                   required

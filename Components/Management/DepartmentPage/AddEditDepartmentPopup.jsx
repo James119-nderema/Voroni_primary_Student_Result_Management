@@ -110,13 +110,19 @@ const AddEditDepartmentPopup = ({ data, onClose, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div> {/* Blur background */}
-      <div className="relative bg-white rounded-lg p-8 w-full max-w-2xl z-10"> {/* Increased max width and padding */}
-        <h3 className="text-lg text-black font-semibold mb-4">
-          {departmentId ? "Edit Department" : "Add New Department"}
-        </h3>
-        
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start z-50">
+      <div className="bg-white rounded-lg p-8 w-full max-w-lg mt-10 max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            {departmentId ? "Edit Department" : "Add New Department"}
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 text-lg"
+          >
+            ✕
+          </button>
+        </div>
         {/* Error message */}
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded-md text-sm">

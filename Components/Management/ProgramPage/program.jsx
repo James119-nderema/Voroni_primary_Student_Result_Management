@@ -81,32 +81,44 @@ const ProgramsPage = () => {
   };
 
   const handleAddProgram = () => {
+    setProgramToEdit(null); // Reset programToEdit to ensure "Add New Program" is displayed
     setIsAddPopupOpen(true);
   };
 
   const handleEditProgram = (program) => {
     setProgramToEdit(program);
+    setIsAddPopupOpen(true); // Ensure the popup opens
   };
 
-  const handleSaveProgram = (programData) => {
-    if (programToEdit) {
-      const updatedPrograms = programs.map((prog) =>
-        prog.programId === programToEdit.programId ? { ...prog, ...programData } : prog
-      );
-      setPrograms(updatedPrograms);
-      setFilteredPrograms(updatedPrograms);
-      setFeedbackMessage("Program updated successfully!");
-      setFeedbackType("success");
-    } else {
-      const newProgram = { ...programData, programId: Date.now() }; // Mock ID for new program
-      setPrograms([...programs, newProgram]);
-      setFilteredPrograms([...filteredPrograms, newProgram]);
-      setFeedbackMessage("Program added successfully!");
-      setFeedbackType("success");
+  const handleSaveProgram = async (programData) => {
+    try {
+      if (programToEdit) {
+        // Update program
+        await ProgramService.updateProgram({ ...programToEdit, ...programData });
+        const updatedPrograms = programs.map((prog) =>
+          prog.programId === programToEdit.programId ? { ...prog, ...programData } : prog
+        );
+        setPrograms(updatedPrograms);
+        setFilteredPrograms(updatedPrograms);
+        setFeedbackMessage("Program updated successfully!");
+        setFeedbackType("success");
+      } else {
+        // Create new program
+        const newProgram = await ProgramService.createProgram(programData);
+        setPrograms([...programs, newProgram]);
+        setFilteredPrograms([...filteredPrograms, newProgram]);
+        setFeedbackMessage("Program added successfully!");
+        setFeedbackType("success");
+      }
+    } catch (error) {
+      console.error("Error saving program:", error);
+      setFeedbackMessage("Failed to save program. Please try again.");
+      setFeedbackType("error");
+    } finally {
+      setTimeout(() => setFeedbackMessage(""), 3000);
+      setIsAddPopupOpen(false);
+      setProgramToEdit(null);
     }
-    setTimeout(() => setFeedbackMessage(""), 3000);
-    setIsAddPopupOpen(false);
-    setProgramToEdit(null);
   };
 
   return (

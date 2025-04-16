@@ -1,8 +1,7 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import { fetchFaculties, deleteFaculty } from '../../Services/facultyService';
-import AddFacultyPopup from './AddFacultyPopup';
-import EditFacultyPopup from './EditFacultyPopup';
+import AddEditFacultyPopup from './AddEditFacultyPopup';
 import ConfirmationDialog from '../../Common/ConfirmationDialog';
 
 const FacultiesPage = () => {
@@ -16,8 +15,8 @@ const FacultiesPage = () => {
   
   // Popup state
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
-  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [selectedFaculty, setSelectedFaculty] = useState(null);
+  const [popupMode, setPopupMode] = useState("add"); // "add" or "edit"
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [facultyToDelete, setFacultyToDelete] = useState(null);
 
@@ -103,16 +102,17 @@ const FacultiesPage = () => {
 
   const handleEditFaculty = (faculty) => {
     setSelectedFaculty(faculty);
-    setIsEditPopupOpen(true);
+    setPopupMode("edit");
+    setIsAddPopupOpen(true);
   };
 
   const handleAddNew = () => {
+    setPopupMode("add");
     setIsAddPopupOpen(true);
   };
 
   const handlePopupClose = () => {
     setIsAddPopupOpen(false);
-    setIsEditPopupOpen(false);
     setSelectedFaculty(null);
   };
 
@@ -221,13 +221,13 @@ const FacultiesPage = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                     Faculty ID
                   </th>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                     Faculty Name
                   </th>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -273,22 +273,13 @@ const FacultiesPage = () => {
         )}
       </div>
 
-      {/* Add Faculty Popup */}
+      {/* Add/Edit Faculty Popup */}
       {isAddPopupOpen && (
-        <AddFacultyPopup
+        <AddEditFacultyPopup
+          mode={popupMode}
+          faculty={popupMode === "edit" ? selectedFaculty : null}
           onClose={handlePopupClose}
-          onFacultyAdded={handleFacultyAdded}
-          style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} // Ensure consistent positioning
-        />
-      )}
-
-      {/* Edit Faculty Popup */}
-      {isEditPopupOpen && selectedFaculty && (
-        <EditFacultyPopup
-          faculty={selectedFaculty}
-          onClose={handlePopupClose}
-          onFacultyUpdated={handleFacultyUpdated}
-          style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} // Ensure consistent positioning
+          onFacultyUpdated={popupMode === "add" ? handleFacultyAdded : handleFacultyUpdated}
         />
       )}
 

@@ -165,22 +165,16 @@ export const ProgramService = {
   // Update a program
   updateProgram: async (programData) => {
     try {
-      const response = await fetch(`/api/programs/${programData.programId}`, {
-        method: 'PUT',
+      const response = await axios.put(`${programServiceUrl}/update/${programData.programId}`, programData, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(programData),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to update program');
-      }
-
-      return await response.json();
+      return response.data;
     } catch (error) {
-      console.error('Error in updateProgram:', error);
-      throw error;
+      console.error('Error in updateProgram:', error?.response?.data || error.message);
+      throw new Error(`Failed to update program: ${error.message}`);
     }
   },
 };
