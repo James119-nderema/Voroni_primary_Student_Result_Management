@@ -10002,7 +10002,26 @@ const LecturerCoursesPage = ()=>{
     const [selectedCourses, setSelectedCourses] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [generatingCombinations, setGeneratingCombinations] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    // Load all lecturers and courses on component mount
+    const [searchTerm, setSearchTerm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const [isDropdownOpen, setIsDropdownOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const dropdownRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const [selectedAvailableCourses, setSelectedAvailableCourses] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [selectedRemoveCourses, setSelectedRemoveCourses] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "LecturerCoursesPage.useEffect": ()=>{
+            const handleClickOutside = {
+                "LecturerCoursesPage.useEffect.handleClickOutside": (event)=>{
+                    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                        setIsDropdownOpen(false);
+                    }
+                }
+            }["LecturerCoursesPage.useEffect.handleClickOutside"];
+            document.addEventListener('mousedown', handleClickOutside);
+            return ({
+                "LecturerCoursesPage.useEffect": ()=>document.removeEventListener('mousedown', handleClickOutside)
+            })["LecturerCoursesPage.useEffect"];
+        }
+    }["LecturerCoursesPage.useEffect"], []);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "LecturerCoursesPage.useEffect": ()=>{
             const loadInitialData = {
@@ -10015,7 +10034,6 @@ const LecturerCoursesPage = ()=>{
                         ]);
                         setLecturers(lecturersData);
                         setCourses(coursesData);
-                        // Select first lecturer by default if available
                         if (lecturersData.length > 0) {
                             const firstLecturerId = lecturersData[0].lecturerId;
                             setSelectedLecturerId(firstLecturerId);
@@ -10032,7 +10050,6 @@ const LecturerCoursesPage = ()=>{
             loadInitialData();
         }
     }["LecturerCoursesPage.useEffect"], []);
-    // Load lecturer courses when lecturer selection changes
     const loadLecturerCourses = async (lecturerId)=>{
         setLoading(true);
         try {
@@ -10040,15 +10057,16 @@ const LecturerCoursesPage = ()=>{
                 (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$LecturerCoursesService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["fetchAvailableCourses"])(lecturerId),
                 (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$LecturerCoursesService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["fetchSelectedCourses"])(lecturerId)
             ]);
-            // Map course IDs to full course objects for better display
             const mappedAvailableCourses = availableData.map((course)=>({
                     courseId: course.courseId || course,
                     name: course.courseName || `Unknown Course (${course.courseId || course})`,
+                    courseCode: course.courseCode || `Unknown Code (${course.courseId || course})`,
                     listType: 'available'
                 }));
             const mappedSelectedCourses = selectedData.map((course)=>({
                     courseId: course.courseId || course,
                     name: course.courseName || `Unknown Course (${course.courseId || course})`,
+                    courseCode: course.courseCode || `Unknown Code (${course.courseId || course})`,
                     listType: 'selected'
                 }));
             setAvailableCourses(mappedAvailableCourses);
@@ -10060,10 +10078,10 @@ const LecturerCoursesPage = ()=>{
             setLoading(false);
         }
     };
-    // Handle lecturer selection change
     const handleLecturerChange = (e)=>{
         const lecturerId = e.target.value;
         setSelectedLecturerId(lecturerId);
+        setIsDropdownOpen(false);
         if (lecturerId) {
             loadLecturerCourses(lecturerId);
         } else {
@@ -10071,46 +10089,192 @@ const LecturerCoursesPage = ()=>{
             setSelectedCourses([]);
         }
     };
-    // Handle adding a course to a lecturer
+    const handleSearchChange = (e)=>{
+        setSearchTerm(e.target.value);
+        setIsDropdownOpen(true);
+    };
     const handleAddCourse = async (courseId)=>{
         try {
+            setLoading(true);
             const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$LecturerCoursesService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addLecturerCourse"])(selectedLecturerId, courseId);
             if (result.success) {
-                // Refresh the course lists
                 await loadLecturerCourses(selectedLecturerId);
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success(result.message);
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success(result.message || "Course added successfully");
             } else {
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error(result.message);
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error(result.message || "Failed to add course");
             }
         } catch (error) {
             console.error("Error adding course:", error);
             __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Failed to add course. Please try again.");
+        } finally{
+            setLoading(false);
         }
     };
-    // Handle removing a course from a lecturer
     const handleRemoveCourse = async (courseId)=>{
         try {
+            setLoading(true);
             const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$LecturerCoursesService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["removeLecturerCourse"])(selectedLecturerId, courseId);
             if (result.success) {
-                // Refresh the course lists
                 await loadLecturerCourses(selectedLecturerId);
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success(result.message);
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success(result.message || "Course removed successfully");
             } else {
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error(result.message);
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error(result.message || "Failed to remove course");
             }
         } catch (error) {
             console.error("Error removing course:", error);
             __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Failed to remove course. Please try again.");
+        } finally{
+            setLoading(false);
         }
     };
-    // Handle generating lecturer course combinations
+    const handleAddSelectedCourses = async ()=>{
+        if (selectedAvailableCourses.length === 0) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].warning("No courses selected to add");
+            return;
+        }
+        setLoading(true);
+        try {
+            let successCount = 0;
+            for (const courseId of selectedAvailableCourses){
+                try {
+                    const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$LecturerCoursesService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addLecturerCourse"])(selectedLecturerId, courseId);
+                    if (result.success) successCount++;
+                } catch (error) {
+                    console.error(`Error adding course ${courseId}:`, error);
+                }
+            }
+            await loadLecturerCourses(selectedLecturerId);
+            setSelectedAvailableCourses([]);
+            if (successCount > 0) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success(`Successfully added ${successCount} course(s)`);
+            } else {
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Failed to add selected courses");
+            }
+        } catch (error) {
+            console.error("Error in bulk add operation:", error);
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("An error occurred during the operation");
+        } finally{
+            setLoading(false);
+        }
+    };
+    const handleRemoveSelectedCourses = async ()=>{
+        if (selectedRemoveCourses.length === 0) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].warning("No courses selected to remove");
+            return;
+        }
+        setLoading(true);
+        try {
+            let successCount = 0;
+            for (const courseId of selectedRemoveCourses){
+                try {
+                    const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$LecturerCoursesService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["removeLecturerCourse"])(selectedLecturerId, courseId);
+                    if (result.success) successCount++;
+                } catch (error) {
+                    console.error(`Error removing course ${courseId}:`, error);
+                }
+            }
+            await loadLecturerCourses(selectedLecturerId);
+            setSelectedRemoveCourses([]);
+            if (successCount > 0) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success(`Successfully removed ${successCount} course(s)`);
+            } else {
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Failed to remove selected courses");
+            }
+        } catch (error) {
+            console.error("Error in bulk remove operation:", error);
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("An error occurred during the operation");
+        } finally{
+            setLoading(false);
+        }
+    };
+    const handleAddAllCourses = async ()=>{
+        if (availableCourses.length === 0) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].warning("No available courses to add");
+            return;
+        }
+        setLoading(true);
+        try {
+            let successCount = 0;
+            for (const course of availableCourses){
+                try {
+                    const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$LecturerCoursesService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addLecturerCourse"])(selectedLecturerId, course.courseId);
+                    if (result.success) successCount++;
+                } catch (error) {
+                    console.error(`Error adding course ${course.courseId}:`, error);
+                }
+            }
+            await loadLecturerCourses(selectedLecturerId);
+            if (successCount > 0) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success(`Successfully added all ${successCount} course(s)`);
+            } else {
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Failed to add all courses");
+            }
+        } catch (error) {
+            console.error("Error in add all operation:", error);
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("An error occurred during the operation");
+        } finally{
+            setLoading(false);
+        }
+    };
+    const handleRemoveAllCourses = async ()=>{
+        if (selectedCourses.length === 0) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].warning("No assigned courses to remove");
+            return;
+        }
+        setLoading(true);
+        try {
+            let successCount = 0;
+            for (const course of selectedCourses){
+                try {
+                    const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$LecturerCoursesService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["removeLecturerCourse"])(selectedLecturerId, course.courseId);
+                    if (result.success) successCount++;
+                } catch (error) {
+                    console.error(`Error removing course ${course.courseId}:`, error);
+                }
+            }
+            await loadLecturerCourses(selectedLecturerId);
+            if (successCount > 0) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success(`Successfully removed all ${successCount} course(s)`);
+            } else {
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Failed to remove all courses");
+            }
+        } catch (error) {
+            console.error("Error in remove all operation:", error);
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("An error occurred during the operation");
+        } finally{
+            setLoading(false);
+        }
+    };
+    const toggleAvailableCourseSelection = (courseId)=>{
+        setSelectedAvailableCourses((prev)=>{
+            if (prev.includes(courseId)) {
+                return prev.filter((id)=>id !== courseId);
+            } else {
+                return [
+                    ...prev,
+                    courseId
+                ];
+            }
+        });
+    };
+    const toggleRemoveCourseSelection = (courseId)=>{
+        setSelectedRemoveCourses((prev)=>{
+            if (prev.includes(courseId)) {
+                return prev.filter((id)=>id !== courseId);
+            } else {
+                return [
+                    ...prev,
+                    courseId
+                ];
+            }
+        });
+    };
     const handleGenerateCombinations = async ()=>{
         setGeneratingCombinations(true);
         try {
             const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Components$2f$Services$2f$LecturerCoursesService$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["generateLecturerCourses"])();
             if (result.success) {
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success(result.message);
-                // Reload current lecturer's courses to reflect changes
                 await loadLecturerCourses(selectedLecturerId);
             } else {
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$toastify$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error(result.message);
@@ -10122,394 +10286,722 @@ const LecturerCoursesPage = ()=>{
             setGeneratingCombinations(false);
         }
     };
-    // Get lecturer name from ID
     const getLecturerName = (id)=>{
         const lecturer = lecturers.find((l)=>l.lecturerId.toString() === id.toString());
         return lecturer ? `${lecturer.firstName} ${lecturer.lastName}` : "Unknown Lecturer";
     };
+    const filteredLecturers = lecturers.filter((lecturer)=>`${lecturer.firstName} ${lecturer.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()));
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "p-4 md:p-6 w-full mx-auto bg-gray-50 min-h-screen",
+        className: "p-4 md:p-6 w-full mx-auto bg-gray-50",
+        style: {
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column'
+        },
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4",
+                className: "mb-6",
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                className: "text-xl sm:text-2xl text-green-900 font-bold",
-                                children: "Lecturer Courses Management"
-                            }, void 0, false, {
-                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                lineNumber: 161,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                className: "text-sm text-gray-600 mt-1",
-                                children: "Assign and manage courses for lecturers"
-                            }, void 0, false, {
-                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                lineNumber: 162,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                        lineNumber: 160,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: handleGenerateCombinations,
-                        disabled: generatingCombinations,
-                        className: `px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium transition-all duration-200 shadow-md
-            ${generatingCombinations ? 'opacity-70 cursor-not-allowed' : 'hover:bg-indigo-700'}`,
-                        children: generatingCombinations ? 'Generating...' : 'Generate All Combinations'
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                        className: "text-xl sm:text-2xl text-green-900 font-bold",
+                        children: "Lecturer Courses Management"
                     }, void 0, false, {
                         fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                        lineNumber: 164,
+                        lineNumber: 338,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-sm text-gray-600 mt-1",
+                        children: "Assign and manage courses for lecturers"
+                    }, void 0, false, {
+                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                        lineNumber: 339,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                lineNumber: 159,
+                lineNumber: 337,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 mb-6",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "p-5 border-b border-gray-100",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex flex-col md:flex-row md:items-center justify-between gap-4",
+                className: "flex flex-col md:flex-row items-center justify-between gap-4 mb-6",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "w-full md:w-2/5 relative",
+                        ref: dropdownRef,
                         children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                className: "block text-sm font-medium text-gray-700 mb-2",
+                                children: "Search and Select Lecturer"
+                            }, void 0, false, {
+                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                lineNumber: 344,
+                                columnNumber: 11
+                            }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "w-full md:w-1/3",
+                                className: "relative",
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                        className: "block text-sm font-medium text-gray-700 mb-1",
-                                        children: "Select Lecturer"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                        lineNumber: 178,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                        value: selectedLecturerId,
-                                        onChange: handleLecturerChange,
-                                        disabled: loading,
-                                        className: "px-4 py-2 w-full text-sm rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500",
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex items-center relative",
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                value: "",
-                                                children: "-- Select Lecturer --"
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                type: "text",
+                                                value: searchTerm,
+                                                onChange: handleSearchChange,
+                                                onFocus: ()=>setIsDropdownOpen(true),
+                                                placeholder: "Type to search lecturers...",
+                                                className: "w-full px-4 py-2.5 text-sm text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                                             }, void 0, false, {
                                                 fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                                lineNumber: 187,
-                                                columnNumber: 17
+                                                lineNumber: 349,
+                                                columnNumber: 15
                                             }, this),
-                                            lecturers.map((lecturer)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: lecturer.lecturerId,
-                                                    children: [
-                                                        lecturer.firstName,
-                                                        " ",
-                                                        lecturer.lastName
-                                                    ]
-                                                }, lecturer.lecturerId, true, {
-                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                                    lineNumber: 189,
-                                                    columnNumber: 19
-                                                }, this))
+                                            selectedLecturerId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: ()=>{
+                                                    setSelectedLecturerId("");
+                                                    setSearchTerm("");
+                                                    setAvailableCourses([]);
+                                                    setSelectedCourses([]);
+                                                },
+                                                className: "absolute right-3 text-gray-400 hover:text-gray-600",
+                                                "aria-label": "Clear selection",
+                                                children: "×"
+                                            }, void 0, false, {
+                                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                lineNumber: 358,
+                                                columnNumber: 17
+                                            }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                        lineNumber: 181,
+                                        lineNumber: 348,
+                                        columnNumber: 13
+                                    }, this),
+                                    isDropdownOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto",
+                                        children: filteredLecturers.length > 0 ? filteredLecturers.map((lecturer)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: ()=>{
+                                                    handleLecturerChange({
+                                                        target: {
+                                                            value: lecturer.lecturerId
+                                                        }
+                                                    });
+                                                    setSearchTerm(`${lecturer.firstName} ${lecturer.lastName}`);
+                                                },
+                                                className: `w-full text-left px-4 py-3 text-sm text-black  hover:bg-gray-100 focus:bg-gray-100 ${selectedLecturerId === lecturer.lecturerId ? 'bg-green-50 text-black font-medium' : ''}`,
+                                                children: [
+                                                    lecturer.firstName,
+                                                    " ",
+                                                    lecturer.lastName
+                                                ]
+                                            }, lecturer.lecturerId, true, {
+                                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                lineNumber: 377,
+                                                columnNumber: 21
+                                            }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "px-4 py-3 text-sm text-gray-500",
+                                            children: "No lecturers found"
+                                        }, void 0, false, {
+                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                            lineNumber: 391,
+                                            columnNumber: 19
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                        lineNumber: 374,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                lineNumber: 177,
-                                columnNumber: 13
-                            }, this),
+                                lineNumber: 347,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                        lineNumber: 343,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex flex-col md:flex-row items-center gap-4",
+                        children: [
                             selectedLecturerId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "text-sm text-gray-600",
+                                className: "text-sm bg-green-50 text-black px-4 py-2 rounded-md border border-green-100",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                             children: "Selected Lecturer:"
                                         }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                            lineNumber: 197,
-                                            columnNumber: 20
+                                            lineNumber: 401,
+                                            columnNumber: 18
                                         }, this),
                                         " ",
                                         getLecturerName(selectedLecturerId)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                    lineNumber: 197,
-                                    columnNumber: 17
+                                    lineNumber: 401,
+                                    columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                lineNumber: 196,
-                                columnNumber: 15
+                                lineNumber: 400,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: handleGenerateCombinations,
+                                disabled: generatingCombinations || loading,
+                                className: `px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium transition-all duration-200 shadow-md
+              ${generatingCombinations || loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-indigo-700'}`,
+                                children: generatingCombinations ? 'Generating...' : 'Generate All Combinations'
+                            }, void 0, false, {
+                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                lineNumber: 404,
+                                columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                        lineNumber: 176,
-                        columnNumber: 11
+                        lineNumber: 398,
+                        columnNumber: 9
                     }, this)
-                }, void 0, false, {
-                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                    lineNumber: 175,
-                    columnNumber: 9
-                }, this)
-            }, void 0, false, {
+                ]
+            }, void 0, true, {
                 fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                lineNumber: 174,
+                lineNumber: 342,
                 columnNumber: 7
             }, this),
-            loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex justify-center items-center p-12",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                    className: "text-gray-500",
-                    children: "Loading courses..."
-                }, void 0, false, {
-                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                    lineNumber: 206,
-                    columnNumber: 11
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                lineNumber: 205,
-                columnNumber: 9
-            }, this) : selectedLecturerId ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "grid grid-cols-1 md:grid-cols-2 gap-6",
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex-grow overflow-hidden",
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "p-4 bg-gray-50 border-b",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
-                                        className: "text-lg font-medium text-gray-800",
-                                        children: "Available Courses"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                        lineNumber: 213,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-xs text-gray-500",
-                                        children: "Courses that can be assigned to this lecturer"
-                                    }, void 0, false, {
-                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                        lineNumber: 214,
-                                        columnNumber: 15
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                lineNumber: 212,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "p-4 min-h-[300px]",
-                                children: availableCourses.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
-                                    className: "divide-y divide-gray-200",
-                                    children: availableCourses.map((course, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                            className: "py-3 flex justify-between items-center",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex-1",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-sm font-medium text-gray-800",
-                                                            children: course.name
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                                            lineNumber: 222,
-                                                            columnNumber: 25
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-xs text-gray-500",
-                                                            children: [
-                                                                "ID: ",
-                                                                course.courseId
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                                            lineNumber: 223,
-                                                            columnNumber: 25
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                                    lineNumber: 221,
-                                                    columnNumber: 23
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    onClick: ()=>handleAddCourse(course.courseId),
-                                                    className: "ml-4 px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700",
-                                                    children: "Add"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                                    lineNumber: 225,
-                                                    columnNumber: 23
-                                                }, this)
-                                            ]
-                                        }, `available-${course.courseId}-${index}`, true, {
+                    loading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "absolute inset-0 bg-white bg-opacity-70 flex justify-center items-center z-10",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "bg-white p-5 rounded-lg shadow-lg flex items-center",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                    className: "animate-spin h-5 w-5 mr-3 text-green-600",
+                                    xmlns: "http://www.w3.org/2000/svg",
+                                    fill: "none",
+                                    viewBox: "0 0 24 24",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                                            className: "opacity-25",
+                                            cx: "12",
+                                            cy: "12",
+                                            r: "10",
+                                            stroke: "currentColor",
+                                            strokeWidth: "4"
+                                        }, void 0, false, {
                                             fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                            lineNumber: 220,
-                                            columnNumber: 21
-                                        }, this))
+                                            lineNumber: 420,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                            className: "opacity-75",
+                                            fill: "currentColor",
+                                            d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                        }, void 0, false, {
+                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                            lineNumber: 421,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                    lineNumber: 419,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-gray-700",
+                                    children: "Processing..."
                                 }, void 0, false, {
                                     fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                    lineNumber: 218,
-                                    columnNumber: 17
-                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex justify-center items-center h-full text-gray-500",
-                                    children: "No available courses"
-                                }, void 0, false, {
-                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                    lineNumber: 235,
-                                    columnNumber: 17
+                                    lineNumber: 423,
+                                    columnNumber: 15
                                 }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                lineNumber: 216,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                            lineNumber: 418,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
                         fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                        lineNumber: 211,
+                        lineNumber: 417,
                         columnNumber: 11
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100",
+                    !selectedLecturerId ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex-grow bg-white rounded-xl shadow-lg p-8 text-center text-gray-500 flex items-center justify-center",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                    className: "w-16 h-16 mx-auto text-gray-300 mb-4",
+                                    fill: "none",
+                                    stroke: "currentColor",
+                                    viewBox: "0 0 24 24",
+                                    xmlns: "http://www.w3.org/2000/svg",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                        strokeLinecap: "round",
+                                        strokeLinejoin: "round",
+                                        strokeWidth: "2",
+                                        d: "M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                    }, void 0, false, {
+                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                        lineNumber: 432,
+                                        columnNumber: 17
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                    lineNumber: 431,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-lg",
+                                    children: "Please select a lecturer to manage their courses"
+                                }, void 0, false, {
+                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                    lineNumber: 434,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-sm mt-2",
+                                    children: "Use the search box above to find and select a lecturer"
+                                }, void 0, false, {
+                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                    lineNumber: 435,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                            lineNumber: 430,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                        lineNumber: 429,
+                        columnNumber: 11
+                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "grid grid-cols-1 md:grid-cols-2 gap-6 h-full",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "p-4 bg-gray-50 border-b",
+                                className: "bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 flex flex-col",
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
-                                        className: "text-lg font-medium text-gray-800",
-                                        children: "Selected Courses"
-                                    }, void 0, false, {
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "p-4 bg-gray-50 border-b flex justify-between items-center",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                                        className: "text-lg font-medium text-gray-800",
+                                                        children: "Available Courses"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                        lineNumber: 443,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-xs text-gray-500",
+                                                        children: "Courses that can be assigned to this lecturer"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                        lineNumber: 444,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                lineNumber: 442,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex space-x-2",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        onClick: handleAddSelectedCourses,
+                                                        disabled: selectedAvailableCourses.length === 0 || loading,
+                                                        className: `px-3 py-1.5 bg-blue-600 text-white rounded text-xs font-medium
+                      ${selectedAvailableCourses.length === 0 || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`,
+                                                        children: [
+                                                            "Add Selected (",
+                                                            selectedAvailableCourses.length,
+                                                            ")"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                        lineNumber: 447,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        onClick: handleAddAllCourses,
+                                                        disabled: availableCourses.length === 0 || loading,
+                                                        className: `px-3 py-1.5 bg-green-600 text-white rounded text-xs font-medium
+                      ${availableCourses.length === 0 || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'}`,
+                                                        children: [
+                                                            "Add All (",
+                                                            availableCourses.length,
+                                                            ")"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                        lineNumber: 455,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                lineNumber: 446,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                        lineNumber: 245,
+                                        lineNumber: 441,
                                         columnNumber: 15
                                     }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-xs text-gray-500",
-                                        children: "Courses assigned to this lecturer"
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "p-4 overflow-y-auto flex-grow",
+                                        children: availableCourses.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                                            className: "divide-y divide-gray-200",
+                                            children: availableCourses.map((course)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                                    className: "py-3 flex justify-between items-center",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "flex items-center flex-1",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                    type: "checkbox",
+                                                                    id: `select-available-${course.courseId}`,
+                                                                    checked: selectedAvailableCourses.includes(course.courseId),
+                                                                    onChange: ()=>toggleAvailableCourseSelection(course.courseId),
+                                                                    className: "h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500 mr-3"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                                    lineNumber: 471,
+                                                                    columnNumber: 27
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    children: [
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                            className: "text-sm font-medium text-gray-800",
+                                                                            children: course.name
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                                            lineNumber: 479,
+                                                                            columnNumber: 29
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                            className: "text-xs text-gray-500",
+                                                                            children: [
+                                                                                "Course Code: ",
+                                                                                course.courseCode
+                                                                            ]
+                                                                        }, void 0, true, {
+                                                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                                            lineNumber: 480,
+                                                                            columnNumber: 29
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                                    lineNumber: 478,
+                                                                    columnNumber: 27
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                            lineNumber: 470,
+                                                            columnNumber: 25
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            onClick: ()=>handleAddCourse(course.courseId),
+                                                            disabled: loading,
+                                                            className: "ml-4 px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed",
+                                                            children: "Add"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                            lineNumber: 483,
+                                                            columnNumber: 25
+                                                        }, this)
+                                                    ]
+                                                }, `available-${course.courseId}`, true, {
+                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                    lineNumber: 469,
+                                                    columnNumber: 23
+                                                }, this))
+                                        }, void 0, false, {
+                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                            lineNumber: 467,
+                                            columnNumber: 19
+                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "flex flex-col justify-center items-center h-full text-gray-500 py-12",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                    className: "w-12 h-12 text-gray-300 mb-3",
+                                                    fill: "none",
+                                                    stroke: "currentColor",
+                                                    viewBox: "0 0 24 24",
+                                                    xmlns: "http://www.w3.org/2000/svg",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                        strokeLinecap: "round",
+                                                        strokeLinejoin: "round",
+                                                        strokeWidth: "2",
+                                                        d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                        lineNumber: 496,
+                                                        columnNumber: 23
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                    lineNumber: 495,
+                                                    columnNumber: 21
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    children: "No available courses"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                    lineNumber: 498,
+                                                    columnNumber: 21
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                            lineNumber: 494,
+                                            columnNumber: 19
+                                        }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                        lineNumber: 246,
+                                        lineNumber: 465,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                lineNumber: 244,
+                                lineNumber: 440,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "p-4 min-h-[300px]",
-                                children: selectedCourses.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
-                                    className: "divide-y divide-gray-200",
-                                    children: selectedCourses.map((course, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                            className: "py-3 flex justify-between items-center",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex-1",
+                                className: "bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 flex flex-col",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "p-4 bg-gray-50 border-b flex justify-between items-center",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                                        className: "text-lg font-medium text-gray-800",
+                                                        children: "Selected Courses"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                        lineNumber: 507,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-xs text-gray-500",
+                                                        children: "Courses assigned to this lecturer"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                        lineNumber: 508,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                lineNumber: 506,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex space-x-2",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        onClick: handleRemoveSelectedCourses,
+                                                        disabled: selectedRemoveCourses.length === 0 || loading,
+                                                        className: `px-3 py-1.5 bg-orange-600 text-white rounded text-xs font-medium
+                      ${selectedRemoveCourses.length === 0 || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-orange-700'}`,
+                                                        children: [
+                                                            "Remove Selected (",
+                                                            selectedRemoveCourses.length,
+                                                            ")"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                        lineNumber: 511,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        onClick: handleRemoveAllCourses,
+                                                        disabled: selectedCourses.length === 0 || loading,
+                                                        className: `px-3 py-1.5 bg-red-600 text-white rounded text-xs font-medium
+                      ${selectedCourses.length === 0 || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'}`,
+                                                        children: [
+                                                            "Remove All (",
+                                                            selectedCourses.length,
+                                                            ")"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                        lineNumber: 519,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                lineNumber: 510,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                        lineNumber: 505,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "p-4 overflow-y-auto flex-grow",
+                                        children: selectedCourses.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                                            className: "divide-y divide-gray-200",
+                                            children: selectedCourses.map((course)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                                    className: "py-3 flex justify-between items-center",
                                                     children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-sm font-medium text-gray-800",
-                                                            children: course.name
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                                            lineNumber: 254,
-                                                            columnNumber: 25
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-xs text-gray-500",
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "flex items-center flex-1",
                                                             children: [
-                                                                "ID: ",
-                                                                course.courseId
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                    type: "checkbox",
+                                                                    id: `select-remove-${course.courseId}`,
+                                                                    checked: selectedRemoveCourses.includes(course.courseId),
+                                                                    onChange: ()=>toggleRemoveCourseSelection(course.courseId),
+                                                                    className: "h-4 w-4 text-red-600 rounded border-gray-300 focus:ring-red-500 mr-3"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                                    lineNumber: 535,
+                                                                    columnNumber: 27
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    children: [
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                            className: "text-sm font-medium text-gray-800",
+                                                                            children: course.name
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                                            lineNumber: 543,
+                                                                            columnNumber: 29
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                            className: "text-xs text-gray-500",
+                                                                            children: [
+                                                                                "Course Code: ",
+                                                                                course.courseCode
+                                                                            ]
+                                                                        }, void 0, true, {
+                                                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                                            lineNumber: 544,
+                                                                            columnNumber: 29
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                                    lineNumber: 542,
+                                                                    columnNumber: 27
+                                                                }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                                            lineNumber: 255,
+                                                            lineNumber: 534,
+                                                            columnNumber: 25
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            onClick: ()=>handleRemoveCourse(course.courseId),
+                                                            disabled: loading,
+                                                            className: "ml-4 px-3 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed",
+                                                            children: "Remove"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                            lineNumber: 547,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
-                                                }, void 0, true, {
+                                                }, `selected-${course.courseId}`, true, {
                                                     fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                                    lineNumber: 253,
+                                                    lineNumber: 533,
                                                     columnNumber: 23
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    onClick: ()=>handleRemoveCourse(course.courseId),
-                                                    className: "ml-4 px-3 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700",
-                                                    children: "Remove"
+                                                }, this))
+                                        }, void 0, false, {
+                                            fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                            lineNumber: 531,
+                                            columnNumber: 19
+                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "flex flex-col justify-center items-center h-full text-gray-500 py-12",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                    className: "w-12 h-12 text-gray-300 mb-3",
+                                                    fill: "none",
+                                                    stroke: "currentColor",
+                                                    viewBox: "0 0 24 24",
+                                                    xmlns: "http://www.w3.org/2000/svg",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                        strokeLinecap: "round",
+                                                        strokeLinejoin: "round",
+                                                        strokeWidth: "2",
+                                                        d: "M5 13l4 4L19 7"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                        lineNumber: 560,
+                                                        columnNumber: 23
+                                                    }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                                    lineNumber: 257,
-                                                    columnNumber: 23
+                                                    lineNumber: 559,
+                                                    columnNumber: 21
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    children: "No courses assigned"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                                    lineNumber: 562,
+                                                    columnNumber: 21
                                                 }, this)
                                             ]
-                                        }, `selected-${course.courseId}-${index}`, true, {
+                                        }, void 0, true, {
                                             fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                            lineNumber: 252,
-                                            columnNumber: 21
-                                        }, this))
-                                }, void 0, false, {
-                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                    lineNumber: 250,
-                                    columnNumber: 17
-                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex justify-center items-center h-full text-gray-500",
-                                    children: "No courses assigned"
-                                }, void 0, false, {
-                                    fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                    lineNumber: 267,
-                                    columnNumber: 17
-                                }, this)
-                            }, void 0, false, {
+                                            lineNumber: 558,
+                                            columnNumber: 19
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
+                                        lineNumber: 529,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                                lineNumber: 248,
+                                lineNumber: 504,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                        lineNumber: 243,
+                        lineNumber: 439,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                lineNumber: 209,
-                columnNumber: 9
-            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "bg-white rounded-xl shadow-lg p-8 text-center text-gray-500",
-                children: "Please select a lecturer to manage their courses"
-            }, void 0, false, {
-                fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-                lineNumber: 275,
-                columnNumber: 9
+                lineNumber: 415,
+                columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Components/Configurations/LecturerCourses/lecturerCourses.jsx",
-        lineNumber: 158,
+        lineNumber: 336,
         columnNumber: 5
     }, this);
 };
-_s(LecturerCoursesPage, "SNZgSvxc9YaxCli4naLqD+5e/+Y=");
+_s(LecturerCoursesPage, "K4PatNB8OdUP1058PFOIpFXHGIA=");
 _c = LecturerCoursesPage;
 const __TURBOPACK__default__export__ = LecturerCoursesPage;
 var _c;
