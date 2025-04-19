@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import GradingService from '../../Services/GradingService';
 
 export default function StudentGradingSystem() {
   const [students, setStudents] = useState([]);
@@ -8,19 +9,14 @@ export default function StudentGradingSystem() {
   const [selectedClass, setSelectedClass] = useState('Grade 1');
   const [marksData, setMarksData] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   // Fetch students data on component mount
   useEffect(() => {
     const fetchStudents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://127.0.0.1:8000/api/students/');
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch student data');
-        }
-        
-        const data = await response.json();
+        const data = await GradingService.fetchStudents();
         setStudents(data);
         
         // Initialize marks data object
@@ -29,10 +25,9 @@ export default function StudentGradingSystem() {
           initialMarksData[student.id] = '';
         });
         setMarksData(initialMarksData);
-        
-        setLoading(false);
       } catch (err) {
         setError(err.message);
+      } finally {
         setLoading(false);
       }
     };
@@ -43,7 +38,7 @@ export default function StudentGradingSystem() {
   // Filter students by class whenever students list or selected class changes
   useEffect(() => {
     if (students.length > 0) {
-      const filtered = students.filter(student => student.class === selectedClass);
+      const filtered = students.filter(student => student.class_name === selectedClass);
       setFilteredStudents(filtered);
     }
   }, [students, selectedClass]);
@@ -65,31 +60,26 @@ export default function StudentGradingSystem() {
   
   // Handle form submission
   const handleSubmit = async () => {
+    setShowConfirmation(true);
+  };
+
+  const confirmSubmit = async () => {
     try {
-      // Prepare data for submission
       const submissionData = filteredStudents.map(student => ({
         student_id: student.id,
-        marks: marksData[student.id],
-        class: student.class
+        marks: parseFloat(marksData[student.id])
       }));
       
-      // In a real application, you would submit this data to your API endpoint
-      console.log('Submitting data:', submissionData);
-      
-      // Simulate API call success
-      // Replace with actual API call in production
-      // await fetch('your-backend-endpoint', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(submissionData)
-      // });
-      
+      await GradingService.submitGrades(submissionData);
       setIsSubmitted(true);
     } catch (err) {
       setError('Error submitting grades: ' + err.message);
+      console.error(err);
+    } finally {
+      setShowConfirmation(false);
     }
   };
-  
+
   // Generate grade options from 1 to 9
   const gradeOptions = Array.from({ length: 9 }, (_, i) => `Grade ${i + 1}`);
   
@@ -158,7 +148,7 @@ export default function StudentGradingSystem() {
                 <tr key={student.id} className="border-b border-gray-200 hover:bg-gray-100">
                   <td className="py-3 px-6 text-left whitespace-nowrap">{student.first_name}</td>
                   <td className="py-3 px-6 text-left">{student.last_name}</td>
-                  <td className="py-3 px-6 text-left">{student.class}</td>
+                  <td className="py-3 px-6 text-left">{student.class_name}</td>
                   <td className="py-3 px-6 text-left">
                     <input
                       type="number"
@@ -176,6 +166,31 @@ export default function StudentGradingSystem() {
           </tbody>
         </table>
       </div>
+      
+      {/* Confirmation Dialog */}
+      {showConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-xl">
+            <h2 className="text-xl font-bold mb-4">Confirm Submission</h2>
+            <p className="mb-4">Are you sure you want to submit grades for {selectedClass}?</p>
+            <p className="mb-4">Number of students: {filteredStudents.length}</p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setShowConfirmation(false)}
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmSubmit}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Submit Button */}
       <div className="mt-6 flex justify-end">
