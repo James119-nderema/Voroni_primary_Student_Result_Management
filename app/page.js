@@ -11,6 +11,8 @@ import DashboardPage from '@/Components/Core/DashboardPage/dashboard';
 import TimetablePage from '@/Components/Core/TimetablePage/StudentManagementSystem';
 import TeacherManagementSystem from '@/Components/Core/TeacherManagementSystem/TeacherManagementSystem';
 import EnterMarksPage from '@/Components/Management/EnterMarkspage/StudentGradingSystem';
+import HomePage from '@/Components/home';
+import StudentMarksPage from '@/Components/Management/showGrade/StudentMarksPage';
 
 
 
@@ -114,22 +116,11 @@ const VoroniPrimarySchoolDashboard = () => {
     {
       title: 'Management',
       items: [
-        { page: 'faculty', title: 'Faculty', icon: Users },
         { page: 'enterMarks', title: 'Enter Marks', icon: BookOpen },
+        { page: 'studentMarks', title: 'Student Marks', icon: Calendar },
       ]
     },
-    {
-      title: 'Configuration',
-      items: [
-        { page: 'lecturer-courses', title: 'Lecturer Courses', icon: Users },
-      ],
-    },
-    {
-      title: 'Insights',
-      items: [
-        { page: 'Insights', title: 'Analytics', icon: BarChart3 },
-      ],
-    },
+   
   ];
 
   // Get current page title for the header
@@ -152,6 +143,7 @@ const VoroniPrimarySchoolDashboard = () => {
       case 'studentManagement': return <TimetablePage />;
       case 'teacherManagement': return <TeacherManagementSystem />;
       case 'enterMarks': return <EnterMarksPage />;
+      case 'studentMarks': return <StudentMarksPage />;
       default: return <HomePage />;  
     }  
   };  
@@ -159,10 +151,12 @@ const VoroniPrimarySchoolDashboard = () => {
   // Is this a mobile view?
   const isMobile = windowWidth < 768;
 
-  // Navigation Header component
+  // Navigation Header component - Now with sticky positioning
   const NavHeader = () => (
-    <div className="bg-white shadow-sm border-b border-gray-200 mb-6">
-      <div className="max-w-7xl mx-auto px-6 py-4">
+    <div className="bg-white shadow-md border-b border-gray-200 fixed top-0 left-0 right-0 z-40">
+      <div className={`max-w-7xl mx-auto px-6 py-4 transition-all duration-500 ${
+        isMobile ? 'ml-0' : (sidebarCollapsed ? 'ml-16' : 'ml-64')
+      }`}>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             {isMobile && (
@@ -241,7 +235,7 @@ const VoroniPrimarySchoolDashboard = () => {
       {/* Desktop Sidebar */}
       {!isMobile && (
         <aside   
-          className={`bg-gradient-to-b from-blue-800 to-blue-900 text-white fixed left-0 top-0 bottom-0 overflow-y-auto transition-all duration-500 ease-in-out shadow-xl ${
+          className={`bg-gradient-to-b from-blue-800 to-blue-900 text-white fixed left-0 top-0 bottom-0 overflow-y-auto transition-all duration-500 ease-in-out shadow-xl z-50 ${
             sidebarCollapsed ? 'w-16' : 'w-64'
           }`}  
         >  
@@ -321,13 +315,13 @@ const VoroniPrimarySchoolDashboard = () => {
       {/* Fullscreen Mobile Menu */}
       {isMobile && <FullscreenMobileMenu />}
 
-      {/* Main Content Area */}  
+      {/* Main Content Area with padding-top for the fixed navbar */}  
       <main   
-        className={`flex-1 transition-all duration-500 ease-in-out ${  
+        className={`flex-1 transition-all duration-500 ease-in-out pt-24 ${  
           isMobile ? 'ml-0' : (sidebarCollapsed ? 'ml-16' : 'ml-64')
         }`}  
       >  
-        {/* Navigation Header */}
+        {/* Navigation Header - Now rendered outside the main content flow */}
         <NavHeader />
         
         {/* Page Content with padding */}

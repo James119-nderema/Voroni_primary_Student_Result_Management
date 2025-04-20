@@ -2,7 +2,7 @@ import API_BASE_URL from './HostConfig';
 
 const TeacherService = {
   fetchTeachers: async () => {
-    const response = await fetch(`${API_BASE_URL}/api/classes/`);
+    const response = await fetch(`${API_BASE_URL}/classes/`);
     if (!response.ok) {
       throw new Error('Failed to fetch teachers');
     }
@@ -10,7 +10,7 @@ const TeacherService = {
   },
 
   addTeacher: async (teacherData) => {
-    const response = await fetch(`${API_BASE_URL}/api/classes/`, {
+    const response = await fetch(`${API_BASE_URL}/classes/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(teacherData),
@@ -22,7 +22,7 @@ const TeacherService = {
   },
 
   updateTeacher: async (id, teacherData) => {
-    const response = await fetch(`${API_BASE_URL}/api/classes/${id}/`, {
+    const response = await fetch(`${API_BASE_URL}/classes/${id}/`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(teacherData),
@@ -34,7 +34,7 @@ const TeacherService = {
   },
 
   deleteTeacher: async (id) => {
-    const response = await fetch(`${API_BASE_URL}/api/classes/${id}/`, {
+    const response = await fetch(`${API_BASE_URL}/classes/${id}/`, {
       method: 'DELETE',
     });
     if (!response.ok) {

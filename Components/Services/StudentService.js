@@ -1,12 +1,12 @@
 import API_BASE_URL from './HostConfig';
 
 const StudentService = {
-  API_URL: `${API_BASE_URL}/api/students/`,
+  API_URL: `${API_BASE_URL}/students/`,
 
   fetchStudents: async () => {
     try {
-      console.log('Fetching from:', `${API_BASE_URL}/api/students/`); // Debug log
-      const response = await fetch(`${API_BASE_URL}/api/students/`);
+      console.log('Fetching from:', `${API_BASE_URL}/students/`); // Debug log
+      const response = await fetch(`${API_BASE_URL}/students/`);
       if (!response.ok) {
         const errorText = await response.text();
         console.error('API Error:', errorText);
@@ -20,7 +20,7 @@ const StudentService = {
   },
 
   addStudent: async (studentData) => {
-    const response = await fetch(`${API_BASE_URL}/api/students/`, {
+    const response = await fetch(`${API_BASE_URL}/students/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(studentData),
@@ -30,7 +30,7 @@ const StudentService = {
   },
 
   updateStudent: async (id, studentData) => {
-    const response = await fetch(`${API_BASE_URL}/api/students/${id}/`, {
+    const response = await fetch(`${API_BASE_URL}/students/${id}/`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(studentData),
@@ -40,7 +40,7 @@ const StudentService = {
   },
 
   deleteStudent: async (id) => {
-    const response = await fetch(`${API_BASE_URL}/api/students/${id}/`, {
+    const response = await fetch(`${API_BASE_URL}/students/${id}/`, {
       method: 'DELETE',
     });
     if (!response.ok) throw new Error(`Failed to delete student. Status: ${response.status}`);
