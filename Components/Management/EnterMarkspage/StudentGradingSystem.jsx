@@ -59,18 +59,31 @@ export default function StudentGradingSystem() {
   
   // Handle marks input change for a specific subject
   const handleSubjectMarksChange = (studentId, subject, value) => {
-    // Validate input (only allow numbers between 0-100)
-    if (value !== '' && (isNaN(value) || value < 0 || value > 100)) {
-      return; // Don't update state for invalid values
+    // Allow empty value for clearing the field
+    if (value === '') {
+      setSubjectMarks(prev => ({
+        ...prev,
+        [studentId]: {
+          ...prev[studentId],
+          [subject]: value
+        }
+      }));
+      return;
     }
+
+    // Convert to number and validate
+    const numValue = Number(value);
     
-    setSubjectMarks(prev => ({
-      ...prev,
-      [studentId]: {
-        ...prev[studentId],
-        [subject]: value
-      }
-    }));
+    // Only update if it's a valid number between 0 and 100
+    if (!isNaN(numValue) && numValue >= 0 && numValue <= 100) {
+      setSubjectMarks(prev => ({
+        ...prev,
+        [studentId]: {
+          ...prev[studentId],
+          [subject]: Math.floor(numValue).toString()
+        }
+      }));
+    }
   };
   
   // Calculate total marks for a student
@@ -277,6 +290,8 @@ export default function StudentGradingSystem() {
                         type="number"
                         min="0"
                         max="100"
+                        step="1"
+                        onWheel={(e) => e.target.blur()}
                         value={subjectMarks[student.id]?.[subject] || ''}
                         onChange={(e) => handleSubjectMarksChange(student.id, subject, e.target.value)}
                         className={`shadow appearance-none border ${
@@ -321,6 +336,8 @@ export default function StudentGradingSystem() {
                           type="number"
                           min="0"
                           max="100"
+                          step="1"
+                          onWheel={(e) => e.target.blur()}
                           value={subjectMarks[student.id]?.[subject] || ''}
                           onChange={(e) => handleSubjectMarksChange(student.id, subject, e.target.value)}
                           className={`shadow appearance-none border ${

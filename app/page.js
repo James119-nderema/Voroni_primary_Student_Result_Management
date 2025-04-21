@@ -14,8 +14,6 @@ import EnterMarksPage from '@/Components/Management/EnterMarkspage/StudentGradin
 import HomePage from '@/Components/home';
 import StudentMarksPage from '@/Components/Management/showGrade/StudentMarksPage';
 
-
-
 const VoroniPrimarySchoolDashboard = () => {  
   const [activePage, setActivePage] = useState('dashboard');  
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -30,6 +28,8 @@ const VoroniPrimarySchoolDashboard = () => {
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024
   );
+  const [showHeader, setShowHeader] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   // Handle window resize with debounce for smoother transitions
   useEffect(() => {
@@ -59,6 +59,21 @@ const VoroniPrimarySchoolDashboard = () => {
       setSidebarCollapsed(true);
     }
   }, [windowWidth]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setShowHeader(false);
+      } else {
+        setShowHeader(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const toggleSidebar = () => setSidebarCollapsed(!sidebarCollapsed);
   
@@ -151,15 +166,15 @@ const VoroniPrimarySchoolDashboard = () => {
   // Is this a mobile view?
   const isMobile = windowWidth < 768;
 
-  // Navigation Header component - Now with sticky positioning
+  // Navigation Header component - Now mobile only
   const NavHeader = () => (
-    <div className="bg-white shadow-md border-b border-gray-200 fixed top-0 left-0 right-0 z-40">
-      <div className={`max-w-7xl mx-auto px-6 py-4 transition-all duration-500 ${
-        isMobile ? 'ml-0' : (sidebarCollapsed ? 'ml-16' : 'ml-64')
+    isMobile ? (
+      <div className={`bg-white shadow-md border-b border-gray-200 fixed top-0 left-0 right-0 z-40 ${
+        showHeader ? 'translate-y-0' : '-translate-y-full'
       }`}>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            {isMobile && (
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
               <button
                 onClick={toggleMobileMenu}
                 className="p-2 mr-4 text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
@@ -167,20 +182,15 @@ const VoroniPrimarySchoolDashboard = () => {
               >
                 <Menu className="h-5 w-5" />
               </button>
-            )}
-            <div>
-              <h1 className="text-2xl font-bold text-blue-800">{getCurrentPageTitle()}</h1>
-              <p className="text-sm text-gray-500">Voroni Primary School</p>
+              <div>
+                <h1 className="text-2xl font-bold text-blue-800">{getCurrentPageTitle()}</h1>
+                <p className="text-sm text-gray-500">Voroni Primary School</p>
+              </div>
             </div>
-          </div>
-          
-          {/* Optional: User profile, notifications, etc. */}
-          <div className="flex items-center space-x-4">
-            {/* Empty for now */}
           </div>
         </div>
       </div>
-    </div>
+    ) : null
   );
 
   // Fullscreen Mobile Menu
@@ -307,7 +317,7 @@ const VoroniPrimarySchoolDashboard = () => {
                   </ul>
                 </div>
               </div>
-            ))}
+            ))}  
           </nav>  
         </aside>
       )}
@@ -315,13 +325,12 @@ const VoroniPrimarySchoolDashboard = () => {
       {/* Fullscreen Mobile Menu */}
       {isMobile && <FullscreenMobileMenu />}
 
-      {/* Main Content Area with padding-top for the fixed navbar */}  
+      {/* Main Content Area - Modified padding for mobile only */}  
       <main   
-        className={`flex-1 transition-all duration-500 ease-in-out pt-24 ${  
-          isMobile ? 'ml-0' : (sidebarCollapsed ? 'ml-16' : 'ml-64')
+        className={`flex-1 transition-all duration-500 ease-in-out ${
+          isMobile ? 'ml-0 pt-20' : (sidebarCollapsed ? 'ml-16' : 'ml-64')
         }`}  
       >  
-        {/* Navigation Header - Now rendered outside the main content flow */}
         <NavHeader />
         
         {/* Page Content with padding */}
