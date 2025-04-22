@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function VoroniPrimarySchoolWebsite() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -181,7 +182,15 @@ export default function VoroniPrimarySchoolWebsite() {
         
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-md">
-            <img src="/api/placeholder/400/250" alt="Blog post" className="w-full h-48 object-cover" />
+            <div className="relative w-full h-48">
+              <Image 
+                src="/images/Kwale.png"
+                alt="Kwale County Science Fair"
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
+              />
+            </div>
             <div className="p-6">
               <p className="text-blue-600 text-sm mb-2">May 10, 2024</p>
               <h3 className="text-xl font-bold mb-3">Our Students Excel in County Science Fair</h3>
