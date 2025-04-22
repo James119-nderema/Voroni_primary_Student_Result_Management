@@ -13,6 +13,24 @@ const ResultsView = ({ filteredData, currentCards, students, onEditClick }) => {
     );
   };
 
+  // Function to check if marks belong to a valid student
+  const isValidStudentMark = (mark) => {
+    // Check if the student exists in the students object
+    const student = students[mark.student];
+    
+    // If student doesn't exist, mark is invalid
+    if (!student) return false;
+    
+    // If class_name is available in mark and doesn't match student's class, mark is invalid
+    if (mark.class_name && student.class_name !== mark.class_name) return false;
+    
+    return true;
+  };
+
+  // Filter data to include only valid student marks
+  const validFilteredData = filteredData.filter(isValidStudentMark);
+  const validCurrentCards = currentCards.filter(isValidStudentMark);
+
   const EmptyStateMessage = () => (
     <div className="flex flex-col items-center py-8 text-gray-500">
       <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,14 +60,14 @@ const ResultsView = ({ filteredData, currentCards, students, onEditClick }) => {
               </tr>
             </thead>
             <tbody className="text-gray-600 text-sm">
-              {filteredData.length === 0 ? (
+              {validFilteredData.length === 0 ? (
                 <tr>
                   <td colSpan="8" className="border-b">
                     <EmptyStateMessage />
                   </td>
                 </tr>
               ) : (
-                filteredData.map((mark, index) => {
+                validFilteredData.map((mark, index) => {
                   const student = students[mark.student];
                   const name = student ? `${student.first_name} ${student.last_name}` : "Unknown";
                   return (
@@ -82,12 +100,12 @@ const ResultsView = ({ filteredData, currentCards, students, onEditClick }) => {
 
       {/* Mobile Card View */}
       <div className="lg:hidden space-y-4">
-        {currentCards.length === 0 ? (
+        {validCurrentCards.length === 0 ? (
           <div className="bg-white shadow-md rounded p-4 text-center">
             <EmptyStateMessage />
           </div>
         ) : (
-          currentCards.map((mark) => {
+          validCurrentCards.map((mark) => {
             const student = students[mark.student];
             const name = student ? `${student.first_name} ${student.last_name}` : "Unknown";
             return (
