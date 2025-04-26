@@ -5,17 +5,38 @@ const StudentService = {
 
   fetchStudents: async () => {
     try {
-      console.log('Fetching from:', `${API_BASE_URL}/students/`); // Debug log
-      const response = await fetch(`${API_BASE_URL}/students/`);
+      const apiUrl = `${API_BASE_URL}/students/`;
+      console.log('Attempting to fetch from:', apiUrl);
+
+      if (!API_BASE_URL) {
+        throw new Error('API_BASE_URL is not configured');
+      }
+
+      const response = await fetch(apiUrl);
+      
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API Error:', errorText);
         throw new Error(`Failed to fetch students. Status: ${response.status}`);
       }
-      return await response.json();
+
+      const data = await response.json();
+      return data; // Return the array directly
     } catch (error) {
-      console.error('Network or parsing error:', error);
+      console.error('Fetch error:', error);
       throw error;
+    }
+  },
+
+  getStudentCount: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/students/count`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch student count. Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.total || 0;  // Return total from API or 0 if not found
+    } catch (error) {
+      console.error('Error fetching student count:', error);
+      return 0; // Return 0 as fallback
     }
   },
 

@@ -6,12 +6,13 @@ import {
   Users, GraduationCap, BookOpen, Award, TrendingUp, 
   Calendar, School, BarChart2, Target, Percent 
 } from 'lucide-react';
+import StudentService from '../../Services/StudentService';  // Corrected import path
 
 // Mock data - in a real application, this would come from an API
 const generateMockData = () => {
   const subjects = ['Math', 'Science', 'English', 'History', 'Art'];
-  const grades = ['A', 'B', 'C', 'D', 'F'];
-  const classes = ['Class 10A', 'Class 10B', 'Class 10C', 'Class 11A', 'Class 11B'];
+  const grades = ['E.E', 'M.E', 'A.P', 'B.E', 'F'];
+  const classes = ['Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5','Grade 6', 'Grade 7', 'Grade 8','Grade 9'];
   
   // Subject performance data
   const subjectPerformance = subjects.map(subject => ({
@@ -76,22 +77,47 @@ export default function DashboardPage() {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [timeframe, setTimeframe] = useState('term');
+  const [studentCount, setStudentCount] = useState(null);
+  const [error, setError] = useState(null);
   
   useEffect(() => {
-    // Simulate API fetch delay
-    setIsLoading(true);
-    setTimeout(() => {
-      setData(generateMockData());
-      setIsLoading(false);
-    }, 800);
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        // First get mock data
+        const mockData = generateMockData();
+        setData(mockData);
+
+        // Then fetch the student count separately
+        const count = await StudentService.getStudentCount();
+        setStudentCount(count);
+      } catch (error) {
+        console.error('Dashboard data fetch error:', error);
+        setError('Failed to load data');
+        setStudentCount(0); // Fallback to 0 instead of 'N/A'
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchData();
   }, [timeframe]);
-  
+
   const timeframeOptions = ['week', 'month', 'term', 'year'];
   
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
         <div className="text-xl text-gray-600 dark:text-gray-300">Loading dashboard data...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="text-xl text-red-600 dark:text-red-400">{error}</div>
       </div>
     );
   }
@@ -135,7 +161,9 @@ export default function DashboardPage() {
           </div>
           <div>
             <p className="text-xs text-gray-500 dark:text-gray-400">Total Students</p>
-            <p className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-100">1,245</p>
+            <p className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-100">
+              {studentCount === null ? 'Loading...' : studentCount}
+            </p>
           </div>
         </div>
         

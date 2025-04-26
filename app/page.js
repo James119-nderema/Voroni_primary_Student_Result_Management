@@ -11,8 +11,8 @@ import DashboardPage from '@/Components/Core/DashboardPage/dashboard';
 import TimetablePage from '@/Components/Core/TimetablePage/StudentManagementSystem';
 import TeacherManagementSystem from '@/Components/Core/TeacherManagementSystem/TeacherManagementSystem';
 import EnterMarksPage from '@/Components/Management/EnterMarkspage/StudentGradingSystem';
-import HomePage from '@/Components/home';
 import StudentMarksPage from '@/Components/Management/showGrade/StudentMarksPage';
+
 
 const VoroniPrimarySchoolDashboard = () => {  
   const [activePage, setActivePage] = useState('dashboard');  
@@ -122,7 +122,7 @@ const VoroniPrimarySchoolDashboard = () => {
     {
       title: 'Core Features',
       items: [
-        { page: 'home', title: 'Home', icon: Home },
+      
         { page: 'dashboard', title: 'Dashboard', icon: BarChart3 },
         { page: 'studentManagement', title: 'Student Management', icon: Users },
         { page: 'teacherManagement', title: 'Teacher Management', icon: School },
@@ -138,7 +138,6 @@ const VoroniPrimarySchoolDashboard = () => {
    
   ];
 
-  // Get current page title for the header
   const getCurrentPageTitle = () => {
     // Search through all navigation groups to find the matching page
     for (const group of navigationGroups) {
@@ -159,6 +158,7 @@ const VoroniPrimarySchoolDashboard = () => {
       case 'teacherManagement': return <TeacherManagementSystem />;
       case 'enterMarks': return <EnterMarksPage />;
       case 'studentMarks': return <StudentMarksPage />;
+      case 'auth': return <AuthApp />; // Auth page
       default: return <HomePage />;  
     }  
   };  

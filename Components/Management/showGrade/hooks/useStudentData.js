@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { marksService } from '../../../Services/marksService';
+import marksService from '../../../Services/marksService';
 
-export const useStudentData = () => {
+export  const useStudentData = () => {
   const [marksData, setMarksData] = useState([]);
   const [students, setStudents] = useState({});
   const [loading, setLoading] = useState(true);

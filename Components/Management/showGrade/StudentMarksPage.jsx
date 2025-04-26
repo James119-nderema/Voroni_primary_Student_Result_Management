@@ -9,8 +9,8 @@ import EditMarksPopup from './EditMarksPopup';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
 import DownloadSection from './DownloadSection';
-import { filterData, calculateStats } from './utils/dataUtils';
-import { marksService } from '../../Services/marksService';
+import {filterData, calculateStats } from './utils/dataUtils';
+import  marksService from '../../Services/marksService';
 
 const StudentMarksPage = () => {
   const { marksData, students, loading, error, updateMarks } = useStudentData();

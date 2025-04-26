@@ -1,5 +1,5 @@
-'use client';
-import TimetableManagementDashboard from "../page";
-export default function MainPage() {
-  return <TimetableManagementDashboard />;
+import VoroniPrimarySchoolDashboard from "@/app/page";
+
+export default function Dashboard() {
+  return <VoroniPrimarySchoolDashboard />;
 }

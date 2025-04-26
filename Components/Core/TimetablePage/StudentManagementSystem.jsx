@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import StudentPopup from './StudentPopup';
 import StudentService from '../../Services/StudentService';
 
@@ -13,25 +13,13 @@ export default function StudentManagementSystem() {
   const [showScrollButton, setShowScrollButton] = useState(false);
 
   // React Query hooks
-  const { data: allStudents = [], isLoading, error } = useQuery({
+  const { data: rawData, isLoading, error } = useQuery({
     queryKey: ['students'],
     queryFn: StudentService.fetchStudents,
   });
 
-  const addMutation = useMutation({
-    mutationFn: StudentService.addStudent,
-    onSuccess: () => queryClient.invalidateQueries(['students']),
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: ({ id, data }) => StudentService.updateStudent(id, data),
-    onSuccess: () => queryClient.invalidateQueries(['students']),
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: StudentService.deleteStudent,
-    onSuccess: () => queryClient.invalidateQueries(['students']),
-  });
+  // Ensure allStudents is always an array
+  const allStudents = Array.isArray(rawData) ? rawData : [];
 
   // Filter and search logic
   const filteredStudents = allStudents
@@ -178,7 +166,7 @@ export default function StudentManagementSystem() {
         )}
         
         {/* Data Table */}
-        <div className="p-6">
+        <div className="p-2 sm:p-4 md:p-6">
           {isLoading ? (
             <div className="flex justify-center items-center py-12">
               <div className="relative">
@@ -189,72 +177,57 @@ export default function StudentManagementSystem() {
               </div>
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-lg shadow">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-700/60">
-                  <tr>
-                    <th className="py-3.5 px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase">#</th>
-                    <th className="py-3.5 px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase">First Name</th>
-                    <th className="hidden sm:table-cell py-3.5 px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase">Last Name</th>
-                    <th className="py-3.5 px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase">ID</th>
-                    <th className="hidden sm:table-cell py-3.5 px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase">Class</th>
-                    <th className="py-3.5 px-4 text-right text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
-                  {filteredStudents.map((student, index) => (
-                    <tr key={student.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors duration-150">
-                      <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-gray-200">{index + 1}</td>
-                      <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300 font-medium">{student.first_name}</td>
-                      <td className="hidden sm:table-cell py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{student.last_name}</td>
-                      <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300 font-mono">{student.student_id}</td>
-                      <td className="hidden sm:table-cell py-3 px-4">
-                        <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200">
-                          {student.class_name}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        <div className="flex justify-end space-x-2">
-                          <button 
-                            onClick={() => {
-                              setIsEditMode(true);
-                              setCurrentStudent({ ...student });
-                              setIsModalOpen(true);
-                            }} 
-                            className="bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 px-3 py-1.5 rounded-md hover:bg-amber-200 dark:hover:bg-amber-900/60 text-xs font-medium transition-colors duration-150 flex items-center"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                            </svg>
-                            Edit
-                          </button>
-                          <button 
-                            onClick={() => handleDeleteClick(student.id, `${student.first_name} ${student.last_name}`)} 
-                            className="bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200 px-3 py-1.5 rounded-md hover:bg-red-200 dark:hover:bg-red-900/60 text-xs font-medium transition-colors duration-150 flex items-center"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                            </svg>
-                            Delete
-                          </button>
-                        </div>
-                      </td>
+            <div className="-mx-4 sm:-mx-0 overflow-x-auto">
+              <div className="inline-block min-w-full align-middle">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700/60">
+                    <tr>
+                      <th className="py-2 sm:py-3.5 px-3 sm:px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase whitespace-nowrap">#</th>
+                      <th className="py-2 sm:py-3.5 px-3 sm:px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase">Full Name</th>
+                      <th className="py-2 sm:py-3.5 px-3 sm:px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase whitespace-nowrap">ID</th>
+                      <th className="py-2 sm:py-3.5 px-3 sm:px-4 text-right text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase whitespace-nowrap">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              
-              {filteredStudents.length === 0 && !isLoading && (
-                <div className="bg-white dark:bg-gray-800 py-12 text-center">
-                  <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <h3 className="mt-4 text-lg font-medium text-gray-700 dark:text-gray-300">No students found</h3>
-                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Try adjusting your search or filter to find what you're looking for.
-                  </p>
-                </div>
-              )}
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
+                    {filteredStudents.map((student, index) => (
+                      <tr key={student.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors duration-150">
+                        <td className="py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-200">{index + 1}</td>
+                        <td className="py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                          <div className="font-medium">{`${student.first_name} ${student.last_name}`}</div>
+                        </td>
+                        <td className="py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-mono">{student.student_id}</td>
+                        <td className="py-2 sm:py-3 px-3 sm:px-4">
+                          <div className="flex items-center justify-end space-x-2">
+                            <button 
+                              onClick={() => {
+                                setIsEditMode(true);
+                                setCurrentStudent({ ...student });
+                                setIsModalOpen(true);
+                              }} 
+                              className="inline-flex items-center px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/50 text-indigo-700 dark:text-indigo-300 rounded-md transition-all duration-200 group"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 transition-transform group-hover:scale-110" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
+                              </svg>
+                              <span className="text-sm font-medium">Edit</span>
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteClick(student.id, `${student.first_name} ${student.last_name}`)} 
+                              className="inline-flex items-center px-3 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-900/30 dark:hover:bg-rose-800/50 text-rose-700 dark:text-rose-300 rounded-md transition-all duration-200 group"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 transition-transform group-hover:scale-110" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                              </svg>
+                              <span className="text-sm font-medium">Delete</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
