@@ -15,7 +15,11 @@ export default function Register() {
   });
   
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+
+  // Define your API base URL here - adjust this to match your Django backend location 
+  const API_BASE_URL = 'http://localhost:8000'; // Change this to your actual backend URL
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +28,6 @@ export default function Register() {
       [name]: value
     });
     
-    // Clear specific error when user starts typing in that field
     if (errors[name]) {
       setErrors({
         ...errors,
@@ -36,43 +39,36 @@ export default function Register() {
   const validateForm = () => {
     const newErrors = {};
     
-    // Validate first name
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
     }
     
-    // Validate last name
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Last name is required';
     }
     
-    // Validate staff number
     if (!formData.staffNumber.trim()) {
       newErrors.staffNumber = 'Staff number is required';
     }
     
-    // Validate phone number
     if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = 'Phone number is required';
     } else if (!/^\+?[0-9]{10,15}$/.test(formData.phoneNumber.trim())) {
       newErrors.phoneNumber = 'Please enter a valid phone number';
     }
     
-    // Validate email
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
     
-    // Validate password
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters long';
     }
     
-    // Validate confirm password
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
@@ -83,15 +79,68 @@ export default function Register() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Form submitted, validating...');
     
     if (validateForm()) {
-      // Here you would typically handle the registration process
-      console.log('Registration data:', formData);
+      setIsSubmitting(true);
+      console.log('Form validated, sending to API:', formData);
       
-      // Redirect to login page after successful registration
-      router.push('/login');
+      try {
+        // Use the full URL to your API endpoint
+        const apiUrl = `${API_BASE_URL}/api/register/`;
+        console.log('Sending request to:', apiUrl);
+        
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          credentials: 'include', // Include cookies for CSRF if needed
+          body: JSON.stringify(formData),
+        });
+        
+        console.log('Response status:', response.status);
+        
+        // Check response content type
+        const contentType = response.headers.get('content-type');
+        console.log('Response content type:', contentType);
+        
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json();
+          console.log('Response data:', data);
+          
+          if (response.ok) {
+            console.log('Registration successful:', data);
+            alert('Registration successful! Please log in.');
+            router.push('/login');
+          } else {
+            console.error('Registration failed:', data);
+            if (data.errors) {
+              setErrors(prevErrors => ({
+                ...prevErrors,
+                ...data.errors
+              }));
+            } else {
+              alert('Registration failed: ' + (data.message || 'Unknown error'));
+            }
+          }
+        } else {
+          // If response is not JSON, log the text content
+          const textContent = await response.text();
+          console.error('Received non-JSON response:', textContent);
+          alert('Server returned an unexpected response. Please try again later.');
+        }
+      } catch (error) {
+        console.error('Network error:', error);
+        alert('Network error. Please try again later.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    } else {
+      console.log('Form validation failed');
     }
   };
 
@@ -242,6 +291,9 @@ export default function Register() {
               {errors.password && (
                 <p className="mt-1 text-sm text-red-600">{errors.password}</p>
               )}
+              <p className="mt-1 text-xs text-gray-500">
+                Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+              </p>
             </div>
             
             {/* Confirm Password */}
@@ -266,9 +318,10 @@ export default function Register() {
             <div>
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                disabled={isSubmitting}
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${isSubmitting ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
               >
-                Register
+                {isSubmitting ? 'Registering...' : 'Register'}
               </button>
             </div>
           </form>
@@ -282,11 +335,6 @@ export default function Register() {
             </p>
           </div>
           
-          <div className="text-center mt-2">
-            <Link href="/" className="font-medium text-blue-600 hover:text-blue-500">
-              Back to Home
-            </Link>
-          </div>
         </div>
       </div>
     </div>

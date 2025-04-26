@@ -3,7 +3,6 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-
 export default function VoroniPrimarySchoolWebsite() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const router = useRouter();
@@ -56,7 +55,7 @@ export default function VoroniPrimarySchoolWebsite() {
             <a href="#" className="hover:text-blue-200">Gallery</a>
             <a href="#" className="hover:text-blue-200">Contact</a>
             
-            {/* Login and Register Buttons */}
+            {/* Login and Register Buttons - Desktop */}
             <button 
               onClick={() => router.push('/login')}
               className="px-4 py-2 border border-white rounded hover:bg-blue-600 transition"
@@ -71,14 +70,30 @@ export default function VoroniPrimarySchoolWebsite() {
             </button>
           </div>
           
-          {/* Mobile Menu Button */}
-          <button 
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="md:hidden text-2xl focus:outline-none"
-          >
-            <i className={`fas ${showMobileMenu ? 'fa-times' : 'fa-bars'}`}></i>
-          </button>
+          {/* Login and Register Buttons - Mobile view */}
+          <div className="md:hidden flex items-center space-x-2">
+            <button 
+              onClick={() => router.push('/login')}
+              className="px-3 py-1 border border-white rounded hover:bg-blue-600 transition text-sm"
+            >
+              Log In
+            </button>
+            <button 
+              onClick={() => router.push('/register')}
+              className="px-3 py-1 bg-blue-500 rounded hover:bg-blue-400 transition text-sm"
+            >
+              Register
+            </button>
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="ml-2 text-2xl focus:outline-none"
+            >
+              <i className={`fas ${showMobileMenu ? 'fa-times' : 'fa-bars'}`}></i>
+            </button>
+          </div>
         </nav>
+        
         {/* Mobile Menu */}
         {showMobileMenu && (
           <div className="md:hidden mt-4 pb-4">
@@ -91,25 +106,10 @@ export default function VoroniPrimarySchoolWebsite() {
               <li><a href="#" className="block hover:text-blue-200">Blog</a></li>
               <li><a href="#" className="block hover:text-blue-200">Contact</a></li>
             </ul>
-            <div className="mt-4 flex space-x-4">
-              <button 
-                onClick={() => router.push('/login')}
-                className="px-4 py-2 border border-white rounded hover:bg-blue-600 transition"
-              >
-                Log In
-              </button>
-              <button 
-                onClick={() => router.push('/register')}
-                className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-400 transition"
-              >
-                Register
-              </button>
-            </div>
           </div>
         )}
       </header>
       
-      {/* Rest of the content remains the same */}
       {/* Hero Section */}
       <section className="relative bg-blue-800 text-white py-16 w-full px-4">
         <div className="absolute inset-0 bg-black opacity-50"></div>
