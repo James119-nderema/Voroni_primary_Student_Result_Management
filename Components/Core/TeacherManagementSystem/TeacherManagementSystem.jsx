@@ -1,243 +1,229 @@
-// TeacherManagementSystem.js
-import { useState, useEffect } from 'react';
-import AddEditTeacherModal from './AddEditTeacherModal';
-import TeacherService from '../../Services/TeacherService';
+import React, { useState, useEffect } from 'react';
+import { PlusCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { teacherService } from '../../Services/TeacherService';
+import TeacherForm from './TeacherForm';
 
-export default function TeacherManagementSystem() {
+const TeacherManagement = () => {
   const [teachers, setTeachers] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [currentTeacher, setCurrentTeacher] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [filterClass, setFilterClass] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalTeachers, setTotalTeachers] = useState(0);
 
-  const classOptions = [
-    'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5',
-    'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9'
-  ];
+  useEffect(() => {
+    fetchTeachers();
+  }, [currentPage, pageSize]);
 
-  // Fetch teachers from TeacherService
   const fetchTeachers = async () => {
     try {
       setLoading(true);
-      const data = await TeacherService.fetchTeachers();
-      setTeachers(data || []);
-    } catch (err) {
-      console.error('Error fetching teachers:', err);
-      setError('Failed to fetch teachers. Please try again.');
-    } finally {
+      const response = await teacherService.getTeachers(currentPage, pageSize);
+      setTeachers(response.results);
+      setTotalTeachers(response.count);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching teachers:', error);
       setLoading(false);
     }
   };
 
-  // Initial data fetch
-  useEffect(() => {
-    fetchTeachers();
-  }, []);
-
-  const handleAddClick = () => {
+  const handleAddTeacher = () => {
     setCurrentTeacher(null);
-    setIsModalOpen(true);
+    setShowForm(true);
   };
 
-  const handleEditClick = (teacher) => {
+  const handleEditTeacher = (teacher) => {
     setCurrentTeacher(teacher);
-    setIsModalOpen(true);
+    setShowForm(true);
   };
 
-  const handleDeleteClick = async (id) => {
+  const handleDeleteTeacher = async (id) => {
     if (window.confirm('Are you sure you want to delete this teacher?')) {
       try {
-        await TeacherService.deleteTeacher(id);
+        await teacherService.deleteTeacher(id);
         fetchTeachers();
-      } catch (err) {
-        console.error('Error deleting teacher:', err);
-        alert('Failed to delete teacher. Please try again.');
+      } catch (error) {
+        console.error('Error deleting teacher:', error);
       }
     }
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleFormSubmit = async (teacher) => {
+    try {
+      if (currentTeacher) {
+        await teacherService.updateTeacher(currentTeacher.id, teacher);
+      } else {
+        await teacherService.createTeacher(teacher);
+      }
+      setShowForm(false);
+      fetchTeachers();
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
-  const handleSaveTeacher = () => {
-    fetchTeachers();
-    setIsModalOpen(false);
+  const handleFormClose = () => {
+    setShowForm(false);
   };
 
-  const filteredTeachers = teachers
-    .filter(teacher => !filterClass || teacher.class_name === filterClass)
-    .filter(teacher => {
-      const query = searchQuery.toLowerCase();
-      return !query || teacher.class_teacher.toLowerCase().includes(query);
-    });
+  const totalPages = Math.ceil(totalTeachers / pageSize);
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 min-h-screen p-0 relative">
-      <div className="max-w-7xl mx-0 bg-white dark:bg-gray-800 rounded-none sm:rounded-xl shadow-lg overflow-hidden sm:mx-auto sm:my-6">
-        {/* Header Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-800 p-6 flex flex-col md:flex-row justify-between items-center text-white">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2 md:mb-0">Class Teachers Management</h1>
-          <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center">
-            <span className="text-sm font-medium">Total:</span>
-            <span className="ml-2 font-bold text-2xl">{filteredTeachers.length}</span>
-            <span className="ml-1 text-sm">teachers</span>
+    <div className="bg-gray-50 min-h-screen p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-white rounded-lg shadow-lg transition-all duration-300 transform hover:shadow-xl p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold text-gray-800">Teacher Management</h1>
+            <button
+              onClick={handleAddTeacher}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center transition-all duration-300 transform hover:scale-105"
+            >
+              <PlusCircle className="mr-2 h-5 w-5" />
+              Add Teacher
+            </button>
           </div>
-        </div>
 
-        {/* Action Button Section */}
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Class Filter */}
-            <div className="relative">
-              <label htmlFor="classFilter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Filter by Class
-              </label>
-              <select 
-                id="classFilter"
-                className="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:text-gray-100 transition-all duration-200"
-                value={filterClass}
-                onChange={(e) => setFilterClass(e.target.value)}
-              >
-                <option value="">All Classes</option>
-                {classOptions.map(option => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
             </div>
-            
-            {/* Search */}
-            <div className="relative">
-              <label htmlFor="searchField" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Search Teachers
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <input
-                  id="searchField"
-                  type="text"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:text-gray-100 transition-all duration-200"
-                  placeholder="Search by name"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </div>
-            
-            {/* Add Button */}
-            <div className="flex items-end justify-start md:justify-end">
-              <button 
-                onClick={handleAddClick}
-                className="w-full md:w-auto bg-gradient-to-r from-green-500 to-emerald-600 text-white px-5 py-3 rounded-lg hover:from-green-600 hover:to-emerald-700 shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center font-medium"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-                </svg>
-                Add Teacher
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Error Message */}
-        {error && (
-          <div className="mx-6 mt-4 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 dark:border-red-600 text-red-700 dark:text-red-100 p-4 rounded-r-lg">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-500 dark:text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm">{error}</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Loading Spinner */}
-        {loading ? (
-          <div className="flex justify-center items-center py-12">
-            <div className="relative">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 dark:border-blue-400"></div>
-              <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-                <div className="h-8 w-8 bg-white dark:bg-gray-800 rounded-full"></div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="p-2 sm:p-4 md:p-6">
-            <div className="-mx-4 sm:-mx-0 overflow-x-auto">
-              <div className="inline-block min-w-full align-middle">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead className="bg-gray-50 dark:bg-gray-700/60">
+          ) : (
+            <>
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white rounded-lg overflow-hidden">
+                  <thead className="bg-gray-100">
                     <tr>
-                      <th className="py-2 sm:py-3.5 px-3 sm:px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase whitespace-nowrap">#</th>
-                      <th className="py-2 sm:py-3.5 px-3 sm:px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase">Name</th>
-                      <th className="py-2 sm:py-3.5 px-3 sm:px-4 text-left text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase">Class</th>
-                      <th className="py-2 sm:py-3.5 px-3 sm:px-4 text-right text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase whitespace-nowrap">Actions</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">#</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Full Name</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Role</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Phone Number</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Staff No.</th>
+                      <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
-                    {filteredTeachers.map((teacher, index) => (
-                      <tr key={teacher.id || `teacher-${index}`} className="hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors duration-150">
-                        <td className="py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-200">{index + 1}</td>
-                        <td className="py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm text-gray-700 dark:text-gray-300">{teacher.class_teacher}</td>
-                        <td className="py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm text-gray-700 dark:text-gray-300">{teacher.class_name}</td>
-                        <td className="py-2 sm:py-3 px-3 sm:px-4">
-                          <div className="flex flex-col xs:flex-row justify-end gap-2 sm:gap-3">
-                            <button 
-                              onClick={() => handleEditClick(teacher)}
-                              className="w-full xs:w-auto bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md hover:bg-amber-200 dark:hover:bg-amber-900/60 text-xs font-medium transition-colors duration-150 flex items-center justify-center"
+                  <tbody className="divide-y divide-gray-200">
+                    {teachers.length > 0 ? (
+                      teachers.map((teacher, index) => (
+                        <tr key={teacher.id} className="hover:bg-gray-50 transition-colors duration-200">
+                          <td className="py-3 px-4 text-sm text-gray-700">
+                            {(currentPage - 1) * pageSize + index + 1}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-gray-700">{teacher.full_name}</td>
+                          <td className="py-3 px-4 text-sm text-gray-700">{teacher.role}</td>
+                          <td className="py-3 px-4 text-sm text-gray-700">{teacher.phone_number}</td>
+                          <td className="py-3 px-4 text-sm text-gray-700">{teacher.staff_no}</td>
+                          <td className="py-3 px-4 text-sm flex space-x-2">
+                            <button
+                              onClick={() => handleEditTeacher(teacher)}
+                              className="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 py-1 px-3 rounded-md transition-colors duration-200"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 sm:h-4 sm:w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                              </svg>
                               Edit
                             </button>
-                            <button 
-                              onClick={() => handleDeleteClick(teacher.id)}
-                              className="w-full xs:w-auto bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md hover:bg-red-200 dark:hover:bg-red-900/60 text-xs font-medium transition-colors duration-150 flex items-center justify-center"
+                            <button
+                              onClick={() => handleDeleteTeacher(teacher.id)}
+                              className="bg-red-100 hover:bg-red-200 text-red-700 py-1 px-3 rounded-md transition-colors duration-200"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 sm:h-4 sm:w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                              </svg>
                               Delete
                             </button>
-                          </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="py-10 text-center text-gray-500">
+                          No teachers found
                         </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>
-            </div>
-          </div>
-        )}
-        
-        {/* No Data Message */}
-        {!loading && filteredTeachers.length === 0 && (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            No teachers found
-          </div>
-        )}
 
-        {/* Teacher Modal */}
-        {isModalOpen && (
-          <AddEditTeacherModal 
-            teacher={currentTeacher}
-            onClose={handleCloseModal}
-            onSave={handleSaveTeacher}
-            apiUrl={TeacherService.API_URL}
-          />
-        )}
+              <div className="mt-6 flex flex-col sm:flex-row justify-between items-center">
+                <div className="flex items-center mb-4 sm:mb-0">
+                  <span className="text-sm text-gray-700 mr-2">Rows per page:</span>
+                  <select
+                    value={pageSize}
+                    onChange={(e) => {
+                      setPageSize(Number(e.target.value));
+                      setCurrentPage(1);
+                    }}
+                    className="bg-white border border-gray-300 rounded-md px-2 py-1 text-sm"
+                  >
+                    {[10, 20, 50].map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="ml-4 text-sm text-gray-700">
+                    {`Showing ${teachers.length ? (currentPage - 1) * pageSize + 1 : 0} - ${
+                      Math.min(currentPage * pageSize, totalTeachers)
+                    } of ${totalTeachers}`}
+                  </span>
+                </div>
+
+                <div className="flex items-center">
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className={`p-1 rounded-md ${
+                      currentPage === 1
+                        ? 'text-gray-400 cursor-not-allowed'
+                        : 'text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  
+                  <div className="mx-2 flex space-x-1">
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      const pageNum = i + 1;
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => setCurrentPage(pageNum)}
+                          className={`px-3 py-1 rounded-md ${
+                            currentPage === pageNum
+                              ? 'bg-blue-600 text-white'
+                              : 'text-gray-700 hover:bg-gray-200'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className={`p-1 rounded-md ${
+                      currentPage === totalPages
+                        ? 'text-gray-400 cursor-not-allowed'
+                        : 'text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
+
+      {showForm && (
+        <TeacherForm
+          teacher={currentTeacher}
+          onSubmit={handleFormSubmit}
+          onClose={handleFormClose}
+        />
+      )}
     </div>
   );
-}
+};
+
+export default TeacherManagement;

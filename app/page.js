@@ -6,12 +6,12 @@ import {
   ChevronDown, ChevronRight, BarChart3, Menu, X
 } from 'lucide-react';  
 
-// Import all page components  
-import DashboardPage from '@/Components/Core/DashboardPage/dashboard';  
+// Import all page components   
 import TimetablePage from '@/Components/Core/TimetablePage/StudentManagementSystem';
 import TeacherManagementSystem from '@/Components/Core/TeacherManagementSystem/TeacherManagementSystem';
 import EnterMarksPage from '@/Components/Management/EnterMarkspage/StudentGradingSystem';
 import StudentMarksPage from '@/Components/Management/showGrade/StudentMarksPage';
+import SubjectPage from '@/Components/Core/Subject/Subjects';
 
 
 const VoroniPrimarySchoolDashboard = () => {  
@@ -123,9 +123,8 @@ const VoroniPrimarySchoolDashboard = () => {
       title: 'Core Features',
       items: [
       
-        { page: 'dashboard', title: 'Dashboard', icon: BarChart3 },
-        { page: 'studentManagement', title: 'Student Management', icon: Users },
-        { page: 'teacherManagement', title: 'Teacher Management', icon: School },
+       
+       
       ],
     },
     {
@@ -133,6 +132,9 @@ const VoroniPrimarySchoolDashboard = () => {
       items: [
         { page: 'enterMarks', title: 'Enter Marks', icon: BookOpen },
         { page: 'studentMarks', title: 'Student Marks', icon: Calendar },
+        { page: 'studentManagement', title: 'Student Management', icon: Users },
+        { page: 'teacherManagement', title: 'Teacher Management', icon: School },
+        {page: 'subject', title: 'Subject', icon: BookOpen },
       ]
     },
    
@@ -146,20 +148,18 @@ const VoroniPrimarySchoolDashboard = () => {
         return foundItem.title;
       }
     }
-    return 'Dashboard'; // Default fallback
+    return ''; // Default fallback
   };
 
   // Page content components  
   const renderPageContent = () => {  
-    switch (activePage) {  
-      case 'home': return <HomePage />;
-      case 'dashboard': return <DashboardPage />;  
+    switch (activePage) {    
       case 'studentManagement': return <TimetablePage />;
       case 'teacherManagement': return <TeacherManagementSystem />;
       case 'enterMarks': return <EnterMarksPage />;
       case 'studentMarks': return <StudentMarksPage />;
-      case 'auth': return <AuthApp />; // Auth page
-      default: return <HomePage />;  
+      case 'subject': return <SubjectPage/>
+      default: return ;  
     }  
   };  
 

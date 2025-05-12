@@ -1,13 +1,5 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/enterMarks/page": "app/enterMarks/page.js",
-  "/home/page": "app/home/page.js",
-  "/login/page": "app/login/page.js",
-  "/register/page": "app/register/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/teacherManagement/page": "app/teacherManagement/page.js",
-  "/showmarks/page": "app/showmarks/page.js",
-  "/studentManagement/page": "app/studentManagement/page.js",
-  "/page": "app/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/home/page": "app/home/page.js"
 }

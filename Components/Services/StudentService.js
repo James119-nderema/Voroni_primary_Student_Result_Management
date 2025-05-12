@@ -1,71 +1,62 @@
-import API_BASE_URL from './HostConfig';
+import axios from 'axios';
 
-const StudentService = {
-  API_URL: `${API_BASE_URL}/students/`,
+const API_URL = 'http://localhost:8000/api';
 
-  fetchStudents: async () => {
+class StudentService {
+  // Fetch all students
+  async getAllStudents() {
     try {
-      const apiUrl = `${API_BASE_URL}/students/`;
-      console.log('Attempting to fetch from:', apiUrl);
-
-      if (!API_BASE_URL) {
-        throw new Error('API_BASE_URL is not configured');
-      }
-
-      const response = await fetch(apiUrl);
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch students. Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data; // Return the array directly
+      const response = await axios.get(`${API_URL}/students/`);
+      return response.data;
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error("Error fetching students:", error);
       throw error;
     }
-  },
-
-  getStudentCount: async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/students/count`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch student count. Status: ${response.status}`);
-      }
-      const data = await response.json();
-      return data.total || 0;  // Return total from API or 0 if not found
-    } catch (error) {
-      console.error('Error fetching student count:', error);
-      return 0; // Return 0 as fallback
-    }
-  },
-
-  addStudent: async (studentData) => {
-    const response = await fetch(`${API_BASE_URL}/students/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(studentData),
-    });
-    if (!response.ok) throw new Error(`Failed to add student. Status: ${response.status}`);
-    return response.json();
-  },
-
-  updateStudent: async (id, studentData) => {
-    const response = await fetch(`${API_BASE_URL}/students/${id}/`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(studentData),
-    });
-    if (!response.ok) throw new Error(`Failed to update student. Status: ${response.status}`);
-    return response.json();
-  },
-
-  deleteStudent: async (id) => {
-    const response = await fetch(`${API_BASE_URL}/students/${id}/`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) throw new Error(`Failed to delete student. Status: ${response.status}`);
   }
-};
 
-export default StudentService;
+  // Add a single student
+  async addStudent(studentData) {
+    try {
+      const response = await axios.post(`${API_URL}/students/`, studentData);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding student:", error);
+      throw error;
+    }
+  }
+
+  // Add multiple students at once
+  async addMultipleStudents(studentsArray) {
+    try {
+      const response = await axios.post(`${API_URL}/students/bulk/`, { students: studentsArray });
+      return response.data;
+    } catch (error) {
+      console.error("Error adding multiple students:", error);
+      throw error;
+    }
+  }
+
+  // Update a student
+  async updateStudent(id, updatedData) {
+    try {
+      const response = await axios.put(`${API_URL}/students/${id}/`, updatedData);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating student with id ${id}:`, error);
+      throw error;
+    }
+  }
+
+  // Delete a student
+  async deleteStudent(id) {
+    try {
+      const response = await axios.delete(`${API_URL}/students/${id}/`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error deleting student with id ${id}:`, error);
+      throw error;
+    }
+  }
+}
+
+export default new StudentService();
