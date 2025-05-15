@@ -6,13 +6,13 @@ import {
   ChevronDown, ChevronRight, BarChart3, Menu, X
 } from 'lucide-react';  
 
-// Import all page components   
-import TimetablePage from '@/Components/Core/TimetablePage/StudentManagementSystem';
+// Import all page components
+import StudentsTable from '@/Components/Management/StudentsPage/StudentsTable';   
 import TeacherManagementSystem from '@/Components/Core/TeacherManagementSystem/TeacherManagementSystem';
 import EnterMarksPage from '@/Components/Management/EnterMarkspage/StudentGradingSystem';
-import StudentMarksPage from '@/Components/Management/showGrade/StudentMarksPage';
 import SubjectPage from '@/Components/Core/Subject/Subjects';
-
+import StudentMarksTable from '@/Components/Management/ViewMarkspage/StudentMarksTable';
+import GradePage from '@/Components/Core/Grades/GradePage';
 
 const VoroniPrimarySchoolDashboard = () => {  
   const [activePage, setActivePage] = useState('dashboard');  
@@ -131,10 +131,11 @@ const VoroniPrimarySchoolDashboard = () => {
       title: 'Management',
       items: [
         { page: 'enterMarks', title: 'Enter Marks', icon: BookOpen },
-        { page: 'studentMarks', title: 'Student Marks', icon: Calendar },
         { page: 'studentManagement', title: 'Student Management', icon: Users },
         { page: 'teacherManagement', title: 'Teacher Management', icon: School },
-        {page: 'subject', title: 'Subject', icon: BookOpen },
+        { page: 'subject', title: 'Subject', icon: BookOpen },
+        { page: 'studentPerformance', title: 'Student Performance', icon: BarChart3 },
+        { page: 'grade', title: 'Grade', icon: BookOpen },
       ]
     },
    
@@ -154,12 +155,13 @@ const VoroniPrimarySchoolDashboard = () => {
   // Page content components  
   const renderPageContent = () => {  
     switch (activePage) {    
-      case 'studentManagement': return <TimetablePage />;
+      case 'studentManagement': return <StudentsTable />;
       case 'teacherManagement': return <TeacherManagementSystem />;
       case 'enterMarks': return <EnterMarksPage />;
-      case 'studentMarks': return <StudentMarksPage />;
-      case 'subject': return <SubjectPage/>
-      default: return ;  
+      case 'studentPerformance' : return <StudentMarksTable/>;
+      case 'subject': return <SubjectPage/>;
+      case 'grade': return <GradePage />;
+      default: return null;  
     }  
   };  
 
