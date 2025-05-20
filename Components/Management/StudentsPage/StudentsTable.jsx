@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect, useCallback } from 'react';
 import { studentService } from '../../../Services/StudentService';
 import { getAllGrades } from '../../Services/GradeService';

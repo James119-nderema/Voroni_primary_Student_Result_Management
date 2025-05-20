@@ -1,6 +1,6 @@
 'use client';
-import StudentMarksPage from '@/Components/Management/showGrade/StudentMarksPage';
+import StudentMarksTable from '@/Components/Management/ViewMarkspage/StudentMarksTable';
 
 export default function ShowMarksPage() {
-  return <StudentMarksPage />;
+  return <StudentMarksTable />;
 }

@@ -12,8 +12,8 @@ const handleResponse = async (response) => {
 
 export const teacherService = {
   // Get teachers with pagination
-  getTeachers: async (page = 1, pageSize = 10) => {
-    const response = await fetch(`${API_URL}/teachers/?page=${page}&page_size=${pageSize}`);
+  getTeachers: async () => {
+    const response = await fetch(`${API_URL}/teachers/`);
     return handleResponse(response);
   },
   

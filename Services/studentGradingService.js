@@ -141,6 +141,35 @@ export const studentGradingService = {
       params,
       responseType: 'blob' // Important for handling file downloads
     });
+  },
+  
+  /**
+   * Download marks report based on grade
+   * @param {string} grade - The grade to download report for (empty for all grades)
+   * @param {string} filename - The filename to save as
+   * @returns {Promise} Promise that resolves when download is complete
+   */
+  downloadMarksReport: async (grade, filename) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/student-marks-report/download_report/`, {
+        params: { grade },
+        responseType: 'blob'
+      });
+      
+      // Create a blob link to download the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename || 'report.pdf');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      
+      return true;
+    } catch (error) {
+      console.error('Error downloading report:', error);
+      throw error;
+    }
   }
 };
 

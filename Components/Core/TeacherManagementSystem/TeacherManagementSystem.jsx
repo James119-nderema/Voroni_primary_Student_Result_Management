@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PlusCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import { teacherService } from '../../Services/TeacherService';
 import TeacherForm from './TeacherForm';
 
@@ -8,23 +8,30 @@ const TeacherManagement = () => {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [currentTeacher, setCurrentTeacher] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalTeachers, setTotalTeachers] = useState(0);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchTeachers();
-  }, [currentPage, pageSize]);
+  }, []);
 
   const fetchTeachers = async () => {
     try {
       setLoading(true);
-      const response = await teacherService.getTeachers(currentPage, pageSize);
-      setTeachers(response.results);
-      setTotalTeachers(response.count);
+      setError(null);
+      const response = await teacherService.getTeachers();
+      
+      // Now expecting a direct array instead of paginated results
+      if (response && Array.isArray(response)) {
+        setTeachers(response);
+      } else {
+        setTeachers([]);
+        setError('Invalid response format from server');
+      }
       setLoading(false);
     } catch (error) {
       console.error('Error fetching teachers:', error);
+      setTeachers([]);
+      setError('Failed to fetch teachers');
       setLoading(false);
     }
   };
@@ -68,8 +75,6 @@ const TeacherManagement = () => {
     setShowForm(false);
   };
 
-  const totalPages = Math.ceil(totalTeachers / pageSize);
-
   return (
     <div className="bg-gray-50 min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
@@ -89,6 +94,10 @@ const TeacherManagement = () => {
             <div className="flex justify-center items-center h-64">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
             </div>
+          ) : error ? (
+            <div className="flex justify-center items-center h-64">
+              <p className="text-red-500">{error}</p>
+            </div>
           ) : (
             <>
               <div className="overflow-x-auto">
@@ -104,11 +113,11 @@ const TeacherManagement = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {teachers.length > 0 ? (
+                    {teachers && teachers.length > 0 ? (
                       teachers.map((teacher, index) => (
                         <tr key={teacher.id} className="hover:bg-gray-50 transition-colors duration-200">
                           <td className="py-3 px-4 text-sm text-gray-700">
-                            {(currentPage - 1) * pageSize + index + 1}
+                            {index + 1}
                           </td>
                           <td className="py-3 px-4 text-sm text-gray-700">{teacher.full_name}</td>
                           <td className="py-3 px-4 text-sm text-gray-700">{teacher.role}</td>
@@ -139,76 +148,6 @@ const TeacherManagement = () => {
                     )}
                   </tbody>
                 </table>
-              </div>
-
-              <div className="mt-6 flex flex-col sm:flex-row justify-between items-center">
-                <div className="flex items-center mb-4 sm:mb-0">
-                  <span className="text-sm text-gray-700 mr-2">Rows per page:</span>
-                  <select
-                    value={pageSize}
-                    onChange={(e) => {
-                      setPageSize(Number(e.target.value));
-                      setCurrentPage(1);
-                    }}
-                    className="bg-white border border-gray-300 rounded-md px-2 py-1 text-sm"
-                  >
-                    {[10, 20, 50].map((size) => (
-                      <option key={size} value={size}>
-                        {size}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="ml-4 text-sm text-gray-700">
-                    {`Showing ${teachers.length ? (currentPage - 1) * pageSize + 1 : 0} - ${
-                      Math.min(currentPage * pageSize, totalTeachers)
-                    } of ${totalTeachers}`}
-                  </span>
-                </div>
-
-                <div className="flex items-center">
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className={`p-1 rounded-md ${
-                      currentPage === 1
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    <ChevronLeft className="h-5 w-5" />
-                  </button>
-                  
-                  <div className="mx-2 flex space-x-1">
-                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                      const pageNum = i + 1;
-                      return (
-                        <button
-                          key={i}
-                          onClick={() => setCurrentPage(pageNum)}
-                          className={`px-3 py-1 rounded-md ${
-                            currentPage === pageNum
-                              ? 'bg-blue-600 text-white'
-                              : 'text-gray-700 hover:bg-gray-200'
-                          }`}
-                        >
-                          {pageNum}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className={`p-1 rounded-md ${
-                      currentPage === totalPages
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    <ChevronRight className="h-5 w-5" />
-                  </button>
-                </div>
               </div>
             </>
           )}

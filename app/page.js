@@ -13,6 +13,11 @@ import EnterMarksPage from '@/Components/Management/EnterMarkspage/StudentGradin
 import SubjectPage from '@/Components/Core/Subject/Subjects';
 import StudentMarksTable from '@/Components/Management/ViewMarkspage/StudentMarksTable';
 import GradePage from '@/Components/Core/Grades/GradePage';
+import StaffNumberGenerator from '@/Components/Management/StaffNumber/StaffNumberGenerator'
+import Class from '@/Components/Timetable/Classes/Class'
+import TimeSlot from '@/Components/Timetable/Time/TimeSlot'
+import DaysManager from '@/Components/Timetable/Days/DayManager';
+import TeacherSubjectManager from '@/Components/Timetable/TeacherSubject/TeacherSubjectManager';
 
 const VoroniPrimarySchoolDashboard = () => {  
   const [activePage, setActivePage] = useState('dashboard');  
@@ -136,8 +141,18 @@ const VoroniPrimarySchoolDashboard = () => {
         { page: 'subject', title: 'Subject', icon: BookOpen },
         { page: 'studentPerformance', title: 'Student Performance', icon: BarChart3 },
         { page: 'grade', title: 'Grade', icon: BookOpen },
+        { page: 'staffNumber', title: 'Staff Number', icon: BookOpen },
       ]
     },
+    {
+      title: 'Timetable',
+      items: [
+        { page: 'timetable', title: 'Timetable', icon: Calendar },
+        { page: 'time', title: 'Time', icon: Clock },
+        { page: 'day', title: 'Day', icon: Calendar },
+        { page: 'teachersubject', title: 'Teacher-Subject', icon: BookOpen },
+      ]
+    }
    
   ];
 
@@ -161,6 +176,11 @@ const VoroniPrimarySchoolDashboard = () => {
       case 'studentPerformance' : return <StudentMarksTable/>;
       case 'subject': return <SubjectPage/>;
       case 'grade': return <GradePage />;
+      case 'staffNumber': return <StaffNumberGenerator/>;
+      case 'timetable': return <Class/>;
+      case 'time': return <TimeSlot/>;
+      case 'day': return <DaysManager/>;
+      case 'teachersubject': return <TeacherSubjectManager/>
       default: return null;  
     }  
   };  

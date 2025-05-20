@@ -1,19 +1,19 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-export default function Login() {
+const Login = () => {
   const [formData, setFormData] = useState({
-    staffNumber: '',
+    username: '',
     password: ''
   });
-  const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
   const router = useRouter();
-
-  // Define your API base URL here - adjust this to match your Django backend location 
-  const API_BASE_URL = 'http://localhost:8000'; 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,169 +21,106 @@ export default function Login() {
       ...formData,
       [name]: value
     });
-    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
     
-    // Basic validation
-    if (!formData.staffNumber || !formData.password) {
-      setError('Please fill in all fields');
-      return;
-    }
-    
-    setIsSubmitting(true);
     try {
-      // Use the full URL to your API endpoint
-      const apiUrl = `${API_BASE_URL}/api/login/`;
-      console.log('Sending login request to:', apiUrl);
+      const response = await axios.post('/api/login/', formData);
       
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      // Store tokens in localStorage
+      localStorage.setItem('accessToken', response.data.access);
+      localStorage.setItem('refreshToken', response.data.refresh);
       
-      console.log('Response status:', response.status);
+      // Store user info
+      localStorage.setItem('user', JSON.stringify(response.data.user));
       
-      const data = await response.json();
+      // Set default authorization header for future requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
       
-      if (response.ok) {
-        console.log('Login successful:', data);
-        // Clear form and errors
-        setFormData({
-          staffNumber: '',
-          password: ''
-        });
-        setError('');
-        
-        // Redirect to dashboard after successful login
-        router.push('/dashboard');
-      } else {
-        console.error('Login failed:', data);
-        setError(data.message || 'Invalid credentials. Please try again.');
-      }
-    } catch (error) {
-      console.error('Network error:', error);
-      setError('Network error. Please try again later.');
+      // Redirect to dashboard or home page
+      router.push('/dashboard');
+      
+    } catch (err) {
+      setError(err.response?.data || { message: 'Login failed. Please check your credentials.' });
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8" style={{ scrollbarWidth: 'none' }}>
-      {/* Global style to hide scrollbars */}
-      <style jsx global>{`
-        body {
-          overflow-y: scroll;
-          scrollbar-width: none; /* Firefox */
-          -ms-overflow-style: none; /* IE and Edge */
-        }
-        
-        body::-webkit-scrollbar {
-          display: none; /* Chrome, Safari, Opera */
-        }
-      `}</style>
+    <div className="max-w-md mx-auto my-8 p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login to Your Account</h2>
       
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <div className="flex justify-center">
-            <div className="bg-blue-700 text-white p-4 rounded-full">
-              <i className="fas fa-school text-3xl"></i>
-            </div>
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Staff Login
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Sign in to your staff account
-          </p>
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {typeof error === 'object' ? 
+            Object.values(error).map((err, index) => <div key={index}>{err}</div>) : 
+            error}
+        </div>
+      )}
+      
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label htmlFor="username" className="block text-gray-700 text-sm font-medium mb-1">
+            Username (Staff Number)
+          </label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
         
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <span className="block sm:inline">{error}</span>
-          </div>
-        )}
-        
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <input type="hidden" name="remember" value="true" />
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div className="mb-4">
-              <label htmlFor="staff-number" className="sr-only">Staff Number</label>
-              <input
-                id="staff-number"
-                name="staffNumber"
-                type="text"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Staff Number"
-                value={formData.staffNumber}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember_me"
-                name="remember_me"
-                type="checkbox"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-900">
-                Remember me
-              </label>
-            </div>
-
-            <div className="text-sm">
-              <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
-                Forgot your password?
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${isSubmitting ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
+        <div className="mb-6">
+          <label htmlFor="password" className="block text-gray-700 text-sm font-medium mb-1">
+            Password
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button 
+              type="button" 
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+              onClick={togglePasswordVisibility}
             >
-              {isSubmitting ? 'Signing in...' : 'Sign in'}
+              {showPassword ? "Hide" : "Show"}
             </button>
           </div>
-        </form>
-        
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-600">
-            Don't have an account?{' '}
-            <Link href="/register" className="font-medium text-blue-600 hover:text-blue-500">
-              Register here
-            </Link>
-          </p>
         </div>
         
-      </div>
+        <button 
+          type="submit" 
+          className={`w-full py-2 px-4 ${loading ? 'bg-blue-300' : 'bg-blue-600 hover:bg-blue-700'} text-white font-medium rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
+        
+        <div className="mt-4 text-center text-sm text-gray-600">
+          Don't have an account? <Link href="/register" className="text-blue-600 hover:underline">Register here</Link>
+        </div>
+      </form>
     </div>
   );
-}
+};
+
+export default Login;

@@ -5,7 +5,7 @@ import MonthFilter from './Filters/MonthFilter';
 import PerformanceStats from './Stats/PerformanceStats';
 import StudentMarksMobileView from './StudentMarksMobileView';
 import MarksTable from './MarksTable';
-import ReportDownloadButton from '../../Common/ReportDownloadButton';
+import ReportDownloadButtonWithDropdown from '../../Common/ReportDownloadButtonWithDropdown';
 import useMarksData from './hooks/useMarksData';
 import useResponsiveView from './hooks/useResponsiveView';
 import { processTableData, extractUniqueGrades, filterStudentRows } from './utils/dataProcessing';
@@ -49,16 +49,9 @@ export default function StudentMarksTable() {
     return selectedGrade ? `Results_Grade_${selectedGrade}` : 'AllResults';
   }, [selectedGrade]);
 
-  if (loading) {
-    return <div className="text-center p-8">Loading student marks data...</div>;
-  }
-
+  // Error handling at component level
   if (error) {
     return <div className="text-center p-8 text-red-600">{error}</div>;
-  }
-
-  if (!processedData.tableSubjects.length) {
-    return <div className="text-center p-8">No marks data available.</div>;
   }
 
   return (
@@ -106,14 +99,10 @@ export default function StudentMarksTable() {
           </button>
         </div>
         
-        {/* Make the download button more visible with improved styling */}
         <div className="flex-shrink-0">
-          <ReportDownloadButton 
-            grade={selectedGrade}
-            month={selectedMonth}
+          <ReportDownloadButtonWithDropdown 
             buttonText="Download Report"
-            className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 text-sm font-medium"
-            filename={generateFilename}
+            className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 text-sm font-medium rounded"
           />
         </div>
       </div>
@@ -136,19 +125,39 @@ export default function StudentMarksTable() {
         </button>
       </div>
       
-      {/* Mobile view (cards) - only show if in mobile view mode */}
+      {/* Mobile view (cards) - only show loading state here */}
       {isMobileView && (
-        <StudentMarksMobileView 
-          students={filteredRows} 
-          subjects={processedData.tableSubjects}
-          getAverageColor={getAverageColor}
-        />
+        loading ? (
+          <div className="text-center p-8 bg-white rounded-lg shadow">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+            <p className="mt-2 text-gray-600">Loading student marks data...</p>
+          </div>
+        ) : processedData.tableSubjects.length ? (
+          <StudentMarksMobileView 
+            students={filteredRows} 
+            subjects={processedData.tableSubjects}
+            getAverageColor={getAverageColor}
+          />
+        ) : (
+          <div className="text-center p-8">No marks data available.</div>
+        )
       )}
       
-      {/* Desktop view (table) - show if not in mobile view mode */}
-      {!isMobileView && <MarksTable filteredRows={filteredRows} processedData={processedData} />}
+      {/* Desktop view (table) - show loading state here */}
+      {!isMobileView && (
+        loading ? (
+          <div className="text-center p-8 bg-white rounded-lg shadow">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+            <p className="mt-2 text-gray-600">Loading student marks data...</p>
+          </div>
+        ) : processedData.tableSubjects.length ? (
+          <MarksTable filteredRows={filteredRows} processedData={processedData} />
+        ) : (
+          <div className="text-center p-8">No marks data available.</div>
+        )
+      )}
       
-      {filteredRows.length === 0 && !loading && (
+      {filteredRows.length === 0 && !loading && processedData.tableSubjects.length > 0 && (
         <div className="text-center py-4 text-gray-500">
           No students match your current filters.
         </div>

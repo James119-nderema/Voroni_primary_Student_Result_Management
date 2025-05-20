@@ -1,6 +1,6 @@
 'use clent';
-import StudentManagementSystem from '@/Components/Core/TimetablePage/StudentManagementSystem';
+import StudentsTable from '@/Components/Management/StudentsPage/StudentsTable'
 
 export default function StudentManagementPage() {
-  return <StudentManagementSystem />;
+  return <StudentsTable />;
 }
