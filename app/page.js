@@ -18,6 +18,9 @@ import Class from '@/Components/Timetable/Classes/Class'
 import TimeSlot from '@/Components/Timetable/Time/TimeSlot'
 import DaysManager from '@/Components/Timetable/Days/DayManager';
 import TeacherSubjectManager from '@/Components/Timetable/TeacherSubject/TeacherSubjectManager';
+import SubjectAssignment from '@/Components/Timetable/SubjectAssignment/SubjectAssignment';
+import SubjectPriority from '@/Components/Timetable/SubjectPriority/SubjectPriority';
+import TimetableViewer from '@/Components/Timetable/TimetableViewer/TimetableViewer';
 
 const VoroniPrimarySchoolDashboard = () => {  
   const [activePage, setActivePage] = useState('dashboard');  
@@ -151,6 +154,9 @@ const VoroniPrimarySchoolDashboard = () => {
         { page: 'time', title: 'Time', icon: Clock },
         { page: 'day', title: 'Day', icon: Calendar },
         { page: 'teachersubject', title: 'Teacher-Subject', icon: BookOpen },
+        { page: 'assign', title: 'SubjectAssignment', icon: BookOpen },
+        { page: 'priority', title: 'SubjectPriority', icon: BookOpen },
+        { page: 'timetableview', title: 'Timetable View', icon: BookOpen },
       ]
     }
    
@@ -180,7 +186,10 @@ const VoroniPrimarySchoolDashboard = () => {
       case 'timetable': return <Class/>;
       case 'time': return <TimeSlot/>;
       case 'day': return <DaysManager/>;
-      case 'teachersubject': return <TeacherSubjectManager/>
+      case 'teachersubject': return <TeacherSubjectManager/>;
+      case 'assign': return <SubjectAssignment/>;
+      case 'priority': return <SubjectPriority/>;
+      case 'timetableview': return <TimetableViewer/>;
       default: return null;  
     }  
   };  

@@ -57,6 +57,20 @@ const teacherSubjectService = {
       console.error('Error creating assignments:', error);
       throw error;
     }
+  },
+  
+  // Delete a teacher-subject assignment
+  deleteAssignment: async (teacherId, subjectId) => {
+    try {
+      const response = await axios.post(`${API_URL}/teacher-subjects/delete_assignment/`, {
+        teacher_id: teacherId,
+        subject_id: subjectId
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting assignment:', error);
+      throw error;
+    }
   }
 };
 
