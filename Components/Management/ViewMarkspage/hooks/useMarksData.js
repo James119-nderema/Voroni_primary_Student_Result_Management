@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import studentGradingService from '../../../../Services/studentGradingService';
+import studentGradingService from '../../../Services/studentGradingService';
 
 export default function useMarksData() {
   const [allMarks, setAllMarks] = useState([]);

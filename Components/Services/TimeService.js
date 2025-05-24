@@ -1,7 +1,8 @@
 // TimeService.js
 import axios from 'axios';
+import { secondary as API_BASE_URL } from './HostConfig';
 
-const API_URL = 'http://localhost:8001/timeslots/';
+const API_URL = `${API_BASE_URL}/timeslots/`;
 
 class TimeService {
   getAll() {

@@ -1,6 +1,7 @@
 import axios from 'axios';
+import API_BASE_URL from './HostConfig';
 
-const API_URL = 'http://10.0.1.166:8000/api';
+const API_URL = `${API_BASE_URL}`;
 
 class StudentService {
   // Fetch all students

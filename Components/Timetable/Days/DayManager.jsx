@@ -16,7 +16,7 @@ const DaysManager = () => {
   const [newDays, setNewDays] = useState([{ name: '' }]);
 
   // API base URL
-  const API_URL = 'http://127.0.0.1:8001/days/';
+  const API_URL = 'http://127.0.0.1:8001/api/days/';
 
   // Fetch all days
   const fetchDays = async () => {

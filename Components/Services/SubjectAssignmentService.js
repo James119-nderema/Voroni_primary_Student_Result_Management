@@ -1,37 +1,52 @@
-// src/services/SubjectAssignmentService.js
+// src/Services/SubjectAssignmentService.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8001/api/subject-assignments';
+const API_URL = 'http://localhost:8001/api';
 
 class SubjectAssignmentService {
-    // Get all subjects from main database
+    // Get all subject assignments
+    getAssignments() {
+        return axios.get(`${API_URL}/subject-assignments/`);
+    }
+
+    // Get all subjects
     getSubjects() {
         return axios.get(`${API_URL}/subjects/`);
     }
 
-    // Get all subject assignments with names
-    getAssignments() {
-        return axios.get(`${API_URL}/assignments/with-names/`);
+    // Create a single subject assignment
+    createAssignment(assignmentData) {
+        // Transform data to match backend expectations
+        const transformedData = {
+            subject: assignmentData.subject_id,
+            lessons_per_week: assignmentData.assignments_per_week
+        };
+        return axios.post(`${API_URL}/subject-assignments/`, transformedData);
     }
 
-    // Create new subject assignment
-    createAssignment(data) {
-        return axios.post(`${API_URL}/assignments/`, data);
+    // Bulk create subject assignments
+    bulkCreateAssignments(assignmentsData) {
+        // Transform each item in the array to match backend field names
+        const transformedData = assignmentsData.map(item => ({
+            subject: item.subject_id,
+            lessons_per_week: item.assignments_per_week
+        }));
+        return axios.post(`${API_URL}/subject-assignments/bulk_create/`, transformedData);
     }
 
-    // Bulk create/update subject assignments
-    bulkCreateAssignments(data) {
-        return axios.post(`${API_URL}/assignments/bulk-create/`, data);
+    // Update a subject assignment
+    updateAssignment(id, assignmentData) {
+        // Transform data to match backend expectations
+        const transformedData = {
+            subject: assignmentData.subject_id,
+            lessons_per_week: assignmentData.assignments_per_week
+        };
+        return axios.put(`${API_URL}/subject-assignments/${id}/`, transformedData);
     }
 
-    // Update subject assignment
-    updateAssignment(id, data) {
-        return axios.put(`${API_URL}/assignments/${id}/`, data);
-    }
-
-    // Delete subject assignment
+    // Delete a subject assignment
     deleteAssignment(id) {
-        return axios.delete(`${API_URL}/assignments/${id}/`);
+        return axios.delete(`${API_URL}/subject-assignments/${id}/`);
     }
 }
 

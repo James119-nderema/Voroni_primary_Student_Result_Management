@@ -1,5 +1,6 @@
-// API base URL - adjust this to match your Django server's address
-const API_URL = 'http://127.0.0.1:8000/api/grades/';
+import { secondary as API_BASE_URL } from './HostConfig';
+
+const API_URL = `${API_BASE_URL}/api/grades/`;
 
 /**
  * Fetch all subjects from the API

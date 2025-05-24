@@ -1,6 +1,8 @@
 // ClassNameService.js - Handles all API interactions for class names
+import { secondary as API_BASE_URL } from './HostConfig';
 
-const API_URL = 'http://127.0.0.1:8001/classnames';
+// Define the API endpoint using the base URL
+const API_URL = `${API_BASE_URL}/classnames`;
 
 export const ClassNameService = {
   // Fetch all class names

@@ -7,6 +7,7 @@ const TeacherSubjectAssignment = () => {
   const [selectedTeacher, setSelectedTeacher] = useState('');
   const [selectedSubjects, setSelectedSubjects] = useState({});
   const [existingAssignments, setExistingAssignments] = useState({});
+  const [allTeacherSubjects, setAllTeacherSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
@@ -15,13 +16,15 @@ const TeacherSubjectAssignment = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [teacherData, subjectData] = await Promise.all([
+        const [teacherData, subjectData, relationshipsData] = await Promise.all([
           teacherSubjectService.getAllTeachers(),
-          teacherSubjectService.getAllSubjects()
+          teacherSubjectService.getAllSubjects(),
+          teacherSubjectService.getAllTeacherSubjects()
         ]);
 
         setTeachers(teacherData);
         setSubjects(subjectData);
+        setAllTeacherSubjects(relationshipsData);
 
         // Initialize selected subjects object
         const initialSubjectState = {};
@@ -31,6 +34,7 @@ const TeacherSubjectAssignment = () => {
         setSelectedSubjects(initialSubjectState);
         setExistingAssignments({});
       } catch (error) {
+        console.error('Error fetching initial data:', error);
         setMessage({ type: 'error', text: 'Failed to load data. Please try again.' });
       } finally {
         setLoading(false);
@@ -47,27 +51,35 @@ const TeacherSubjectAssignment = () => {
     
     // Reset existing assignments
     setExistingAssignments({});
+    
+    // Reset selected subjects
+    const resetSubjects = {};
+    subjects.forEach(subject => {
+      resetSubjects[subject.id] = false;
+    });
+    setSelectedSubjects(resetSubjects);
 
     if (teacherId) {
       setLoading(true);
       try {
-        const statusData = await teacherSubjectService.getSubjectStatusForTeacher(teacherId);
+        // Get subjects assigned to this teacher
+        const teacherSubjects = await teacherSubjectService.getSubjectsByTeacher(teacherId);
         
-        // Update checkboxes based on allocation status
-        const newSelectedSubjects = {};
+        // Update checkboxes based on assignments
         const newExistingAssignments = {};
+        const newSelectedSubjects = { ...resetSubjects };
         
-        statusData.forEach(item => {
-          newSelectedSubjects[item.subject_id] = item.is_allocated;
-          if (item.is_allocated) {
-            newExistingAssignments[item.subject_id] = true;
-          }
+        teacherSubjects.forEach(assignment => {
+          const subjectId = assignment.subject;
+          newSelectedSubjects[subjectId] = true;
+          newExistingAssignments[subjectId] = assignment.id; // Store relationship ID
         });
         
         setSelectedSubjects(newSelectedSubjects);
         setExistingAssignments(newExistingAssignments);
       } catch (error) {
-        setMessage({ type: 'error', text: 'Failed to load subject status.' });
+        console.error('Error fetching teacher subjects:', error);
+        setMessage({ type: 'error', text: 'Failed to load subject assignments.' });
       } finally {
         setLoading(false);
       }
@@ -84,7 +96,7 @@ const TeacherSubjectAssignment = () => {
 
   // Handle "Select All" checkbox
   const handleSelectAll = (isChecked) => {
-    const newSelectedSubjects = { ...existingAssignments };
+    const newSelectedSubjects = { ...selectedSubjects };
     subjects.forEach(subject => {
       newSelectedSubjects[subject.id] = isChecked;
     });
@@ -100,7 +112,16 @@ const TeacherSubjectAssignment = () => {
 
     setLoading(true);
     try {
-      await teacherSubjectService.deleteAssignment(selectedTeacher, subjectId);
+      const relationshipId = existingAssignments[subjectId];
+      
+      if (relationshipId) {
+        // If we know the relationship ID, use it directly
+        await teacherSubjectService.deleteTeacherSubject(relationshipId);
+      } else {
+        // Otherwise, look it up
+        await teacherSubjectService.deleteByTeacherAndSubject(selectedTeacher, subjectId);
+      }
+      
       setMessage({ type: 'success', text: 'Subject assignment removed successfully!' });
 
       // Update the UI to reflect the deletion
@@ -116,6 +137,7 @@ const TeacherSubjectAssignment = () => {
       });
       
     } catch (error) {
+      console.error('Error deleting assignment:', error);
       setMessage({ type: 'error', text: 'Failed to remove assignment. Please try again.' });
     } finally {
       setLoading(false);
@@ -129,32 +151,59 @@ const TeacherSubjectAssignment = () => {
       return;
     }
 
-    // Get only subjects that are selected but not already existing
-    const selectedSubjectIds = Object.entries(selectedSubjects)
+    // Get subjects that are selected but not already assigned
+    const newAssignments = Object.entries(selectedSubjects)
       .filter(([id, isSelected]) => isSelected && !existingAssignments[id])
-      .map(([id]) => parseInt(id));
+      .map(([id]) => ({ teacher: parseInt(selectedTeacher), subject: parseInt(id) }));
 
-    if (selectedSubjectIds.length === 0) {
+    if (newAssignments.length === 0) {
       setMessage({ type: 'info', text: 'No new subjects were selected for assignment.' });
       return;
     }
 
     setLoading(true);
     try {
-      await teacherSubjectService.createAssignments(selectedTeacher, selectedSubjectIds);
+      let response;
       
-      // Update existing assignments after successful creation
-      const newExistingAssignments = { ...existingAssignments };
-      selectedSubjectIds.forEach(id => {
-        newExistingAssignments[id] = true;
-      });
-      setExistingAssignments(newExistingAssignments);
+      if (newAssignments.length === 1) {
+        // Create a single assignment
+        response = await teacherSubjectService.createTeacherSubject(
+          newAssignments[0].teacher, 
+          newAssignments[0].subject
+        );
+        
+        // Update existingAssignments with the new assignment ID
+        setExistingAssignments(prev => ({
+          ...prev,
+          [newAssignments[0].subject]: response.id
+        }));
+      } else {
+        // Create multiple assignments
+        response = await teacherSubjectService.createBulkTeacherSubjects(newAssignments);
+        
+        // Refresh all teacher-subject relationships
+        const allRelationships = await teacherSubjectService.getAllTeacherSubjects();
+        setAllTeacherSubjects(allRelationships);
+        
+        // Update the existingAssignments with new relationships
+        const newExistingAssignments = { ...existingAssignments };
+        newAssignments.forEach(assignment => {
+          const relationship = allRelationships.find(
+            r => r.teacher === assignment.teacher && r.subject === assignment.subject
+          );
+          if (relationship) {
+            newExistingAssignments[assignment.subject] = relationship.id;
+          }
+        });
+        setExistingAssignments(newExistingAssignments);
+      }
       
       setMessage({
         type: 'success',
-        text: `${selectedSubjectIds.length} subject${selectedSubjectIds.length > 1 ? 's' : ''} assigned successfully!`
+        text: `${newAssignments.length} subject${newAssignments.length > 1 ? 's' : ''} assigned successfully!`
       });
     } catch (error) {
+      console.error('Error saving assignments:', error);
       setMessage({ type: 'error', text: 'Failed to save assignments. Please try again.' });
     } finally {
       setLoading(false);
@@ -195,7 +244,7 @@ const TeacherSubjectAssignment = () => {
           <option value="">-- Select a Teacher --</option>
           {teachers.map((teacher) => (
             <option key={teacher.id} value={teacher.id}>
-              {teacher.full_name}
+              {teacher.fullName || teacher.full_name}
             </option>
           ))}
         </select>
@@ -210,7 +259,7 @@ const TeacherSubjectAssignment = () => {
               <input
                 id="selectAll"
                 type="checkbox"
-                checked={subjects.every(subject => selectedSubjects[subject.id])}
+                checked={subjects.length > 0 && subjects.every(subject => selectedSubjects[subject.id])}
                 onChange={(e) => handleSelectAll(e.target.checked)}
                 disabled={loading}
                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"

@@ -21,6 +21,11 @@ import TeacherSubjectManager from '@/Components/Timetable/TeacherSubject/Teacher
 import SubjectAssignment from '@/Components/Timetable/SubjectAssignment/SubjectAssignment';
 import SubjectPriority from '@/Components/Timetable/SubjectPriority/SubjectPriority';
 import TimetableViewer from '@/Components/Timetable/TimetableViewer/TimetableViewer';
+import TeacherSchedule from '@/Components/Timetable/TecherSchedule/TeacherSchedule';
+import TeachersTimetable from '@/Components/Timetable/Teachers/TeachersTimetable';
+import SubjectTimetable from '@/Components/Timetable/Subject/SubjectTimetable';
+import ClassSchedule from '@/Components/Timetable/ClassSchedule/ClassSchedule';
+import TeacherClasses from '@/Components/Timetable/TeacherClasses/TeacherClasses';
 
 const VoroniPrimarySchoolDashboard = () => {  
   const [activePage, setActivePage] = useState('dashboard');  
@@ -71,12 +76,8 @@ const VoroniPrimarySchoolDashboard = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        setShowHeader(false);
-      } else {
-        setShowHeader(true);
-      }
       setLastScrollY(currentScrollY);
+      setShowHeader(true);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -150,13 +151,19 @@ const VoroniPrimarySchoolDashboard = () => {
     {
       title: 'Timetable',
       items: [
-        { page: 'timetable', title: 'Timetable', icon: Calendar },
+        { page: 'teachers', title: 'Teachers', icon: School },
+        { page: 'timetable', title: 'Class', icon: Calendar },
+        { page: 'subjects', title: 'Subjects', icon: BookOpen },
         { page: 'time', title: 'Time', icon: Clock },
         { page: 'day', title: 'Day', icon: Calendar },
         { page: 'teachersubject', title: 'Teacher-Subject', icon: BookOpen },
         { page: 'assign', title: 'SubjectAssignment', icon: BookOpen },
         { page: 'priority', title: 'SubjectPriority', icon: BookOpen },
+        { page: 'classSchedule', title: 'ClassSchedule', icon: BookOpen },
+        { page: 'teacherClasses', title: 'Teacher Classes', icon: BookOpen },
         { page: 'timetableview', title: 'Timetable View', icon: BookOpen },
+        { page: 'teacherSchedule', title: 'Teacher Schedule', icon: BookOpen },
+        
       ]
     }
    
@@ -190,6 +197,11 @@ const VoroniPrimarySchoolDashboard = () => {
       case 'assign': return <SubjectAssignment/>;
       case 'priority': return <SubjectPriority/>;
       case 'timetableview': return <TimetableViewer/>;
+      case 'teacherSchedule': return <TeacherSchedule/>;
+      case 'teachers': return <TeachersTimetable/>;
+      case 'subjects': return <SubjectTimetable/>;
+      case 'classSchedule': return <ClassSchedule/>;
+      case 'teacherClasses': return <TeacherClasses/>;
       default: return null;  
     }  
   };  
@@ -197,12 +209,10 @@ const VoroniPrimarySchoolDashboard = () => {
   // Is this a mobile view?
   const isMobile = windowWidth < 768;
 
-  // Navigation Header component - Now mobile only
+  // Navigation Header component - Now mobile only, but always visible
   const NavHeader = () => (
     isMobile ? (
-      <div className={`bg-white shadow-md border-b border-gray-200 fixed top-0 left-0 right-0 z-40 ${
-        showHeader ? 'translate-y-0' : '-translate-y-full'
-      }`}>
+      <div className={`bg-white shadow-md border-b border-gray-200 fixed top-0 left-0 right-0 z-40 translate-y-0`}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
@@ -326,8 +336,8 @@ const VoroniPrimarySchoolDashboard = () => {
                 )}
                 
                 <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                  expandedGroups[group.title] ? 'max-h-96' : 'max-h-0'
-                } ${sidebarCollapsed ? 'max-h-96' : ''}`}>
+                  expandedGroups[group.title] ? 'max-h-[800px]' : 'max-h-0'
+                } ${sidebarCollapsed ? 'max-h-[800px]' : ''}`}>
                   <ul className="mt-1 space-y-1">
                     {group.items.map(({ page, title, icon: Icon }) => (
                       <li key={page}>

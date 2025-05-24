@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { studentGradingService } from '../../Services/studentGradingService';
+import { studentGradingService } from '../Services/studentGradingService';
 
 const ReportDownloadButtonWithDropdown = ({ className = '', buttonText = 'Download Report' }) => {
   const [showModal, setShowModal] = useState(false);

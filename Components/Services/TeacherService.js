@@ -1,5 +1,6 @@
-// Base URL for API endpoints
-const API_URL = 'http://localhost:8000/api';
+import API_BASE_URL from './HostConfig';
+
+const API_URL = `${API_BASE_URL}/api`;
 
 // Helper function to handle HTTP errors
 const handleResponse = async (response) => {

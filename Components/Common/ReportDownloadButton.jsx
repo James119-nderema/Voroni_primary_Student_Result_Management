@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import studentGradingService from '../../Services/studentGradingService';
+import studentGradingService from '../Services/studentGradingService';
 
 /**
  * A reusable button component for downloading student reports

@@ -1,6 +1,7 @@
 import axios from 'axios';
+import API_BASE_URL from './HostConfig';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE= `${API_BASE_URL}/api`;
 
 /**
  * Service for interacting with the Student Management API endpoints
@@ -12,7 +13,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   getStudents: async () => {
-    return axios.get(`${API_BASE_URL}/students/`);
+    return axios.get(`${API_BASE}/students/`);
   },
 
   /**
@@ -21,7 +22,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   getStudent: async (id) => {
-    return axios.get(`${API_BASE_URL}/students/${id}/`);
+    return axios.get(`${API_BASE}/students/${id}/`);
   },
 
   // Subject endpoints
@@ -30,7 +31,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   getSubjects: async () => {
-    return axios.get(`${API_BASE_URL}/subjects/`);
+    return axios.get(`${API_BASE}/subjects/`);
   },
 
   /**
@@ -39,7 +40,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   getSubject: async (id) => {
-    return axios.get(`${API_BASE_URL}/subjects/${id}/`);
+    return axios.get(`${API_BASE}/subjects/${id}/`);
   },
 
   // Student Marks - Standard CRUD operations
@@ -48,7 +49,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   getAllMarks: async () => {
-    return axios.get(`${API_BASE_URL}/student-marks/`);
+    return axios.get(`${API_BASE}/student-marks/`);
   },
   
   /**
@@ -57,7 +58,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   createMark: async (markData) => {
-    return axios.post(`${API_BASE_URL}/student-marks/`, markData);
+    return axios.post(`${API_BASE}/student-marks/`, markData);
   },
   
   /**
@@ -66,7 +67,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   getMark: async (id) => {
-    return axios.get(`${API_BASE_URL}/student-marks/${id}/`);
+    return axios.get(`${API_BASE}/student-marks/${id}/`);
   },
   
   /**
@@ -76,7 +77,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   updateMark: async (id, markData) => {
-    return axios.patch(`${API_BASE_URL}/student-marks/${id}/`, markData);
+    return axios.patch(`${API_BASE}/student-marks/${id}/`, markData);
   },
   
   /**
@@ -86,7 +87,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   replaceMark: async (id, markData) => {
-    return axios.put(`${API_BASE_URL}/student-marks/${id}/`, markData);
+    return axios.put(`${API_BASE}/student-marks/${id}/`, markData);
   },
   
   /**
@@ -95,7 +96,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   deleteMark: async (id) => {
-    return axios.delete(`${API_BASE_URL}/student-marks/${id}/`);
+    return axios.delete(`${API_BASE}/student-marks/${id}/`);
   },
   
   // Student Marks - Custom actions
@@ -105,7 +106,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   enterBulkMarks: async (marksData) => {
-    return axios.post(`${API_BASE_URL}/student-marks/enter_marks/`, marksData);
+    return axios.post(`${API_BASE}/student-marks/enter_marks/`, marksData);
   },
   
   /**
@@ -114,7 +115,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   getStudentMarks: async (studentId) => {
-    return axios.get(`${API_BASE_URL}/student-marks/student_records/`, {
+    return axios.get(`${API_BASE}/student-marks/student_records/`, {
       params: { student_id: studentId }
     });
   },
@@ -125,7 +126,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data
    */
   deleteStudentMarks: async (studentId) => {
-    return axios.delete(`${API_BASE_URL}/student-marks/delete_student_records/`, {
+    return axios.delete(`${API_BASE}/student-marks/delete_student_records/`, {
       params: { student_id: studentId }
     });
   },
@@ -137,7 +138,7 @@ export const studentGradingService = {
    * @returns {Promise} Promise with response data containing report URL or blob
    */
   generateMarksReport: async (params) => {
-    return axios.get(`${API_BASE_URL}/student-reports/generate_marks_report/`, {
+    return axios.get(`${API_BASE}/student-reports/generate_marks_report/`, {
       params,
       responseType: 'blob' // Important for handling file downloads
     });
@@ -151,7 +152,7 @@ export const studentGradingService = {
    */
   downloadMarksReport: async (grade, filename) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/student-marks-report/download_report/`, {
+      const response = await axios.get(`${API_BASE}/student-marks-report/download_report/`, {
         params: { grade },
         responseType: 'blob'
       });
