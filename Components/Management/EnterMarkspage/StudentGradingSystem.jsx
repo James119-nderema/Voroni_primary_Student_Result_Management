@@ -6,6 +6,8 @@ export default function MarksEntryForm() {
   const [subjects, setSubjects] = useState([]);
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedTerm, setSelectedTerm] = useState('');
+  const [selectedExamType, setSelectedExamType] = useState('');
   const [totalMarks, setTotalMarks] = useState(100);
   const [studentMarks, setStudentMarks] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -14,6 +16,8 @@ export default function MarksEntryForm() {
   const [warningPopup, setWarningPopup] = useState({ visible: false, message: '' });
 
   const classes = ['Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9'];
+  const terms = ['Term 1', 'Term 2', 'Term 3'];
+  const examTypes = ['Exam 1', 'Exam 2', 'Exam 3'];
 
   const getStudentDisplayName = (student) => {
     if (!student) return 'Unknown Student';
@@ -26,7 +30,7 @@ export default function MarksEntryForm() {
     if (student.first_name && student.last_name) 
       return `${student.first_name} ${student.last_name}`;
     if (student.firstName && student.lastName) 
-      return `${student.firstName} ${student.lastName}`;
+      return `${student.firstName} ${student.LastName}`;
 
     if (student.user) {
       if (student.user.name) return student.user.name;
@@ -158,6 +162,16 @@ export default function MarksEntryForm() {
       return;
     }
 
+    if (!selectedTerm) {
+      setError('Please select a term');
+      return;
+    }
+
+    if (!selectedExamType) {
+      setError('Please select an exam type');
+      return;
+    }
+
     if (!validateMarks()) return;
 
     const marksData = studentMarks
@@ -166,7 +180,9 @@ export default function MarksEntryForm() {
         student_id: mark.studentId,
         subject_id: parseInt(selectedSubject),
         raw_mark: mark.mark,
-        total_marks: totalMarks
+        total_marks: totalMarks,
+        term: selectedTerm,
+        exam_type: selectedExamType
       }));
 
     if (marksData.length === 0) {
@@ -299,6 +315,38 @@ export default function MarksEntryForm() {
               onChange={(e) => setTotalMarks(parseInt(e.target.value))}
               required
             />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1">Term</label>
+            <select
+              className="w-full border px-3 py-2 rounded"
+              value={selectedTerm}
+              onChange={(e) => setSelectedTerm(e.target.value)}
+              required
+            >
+              <option value="">Select Term</option>
+              {terms.map(term => (
+                <option key={term} value={term}>{term}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block mb-1">Exam Type</label>
+            <select
+              className="w-full border px-3 py-2 rounded"
+              value={selectedExamType}
+              onChange={(e) => setSelectedExamType(e.target.value)}
+              required
+            >
+              <option value="">Select Exam Type</option>
+              {examTypes.map(examType => (
+                <option key={examType} value={examType}>{examType}</option>
+              ))}
+            </select>
           </div>
         </div>
 

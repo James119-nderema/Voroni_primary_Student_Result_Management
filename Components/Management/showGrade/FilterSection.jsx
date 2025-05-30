@@ -7,12 +7,18 @@ const FilterSection = ({
   setFilteredClass,
   filteredMonth,
   setFilteredMonth,
+  filteredTerm,
+  setFilteredTerm,
+  filteredExamType,
+  setFilteredExamType,
   showDownloadSection,
   setShowDownloadSection
 }) => {
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
   const handleClassChange = (e) => setFilteredClass(e.target.value);
   const handleMonthChange = (e) => setFilteredMonth(e.target.value);
+  const handleTermChange = (e) => setFilteredTerm(e.target.value);
+  const handleExamTypeChange = (e) => setFilteredExamType(e.target.value);
 
   return (
     <div className="flex flex-wrap gap-4">
@@ -42,6 +48,32 @@ const FilterSection = ({
           <option value="Grade 7">Grade 7</option>
           <option value="Grade 8">Grade 8</option>
           <option value="Grade 9">Grade 9</option>
+        </select>
+      </div>
+
+      <div className="flex-1 min-w-[150px]">
+        <select
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={filteredTerm}
+          onChange={handleTermChange}
+        >
+          <option value="">All Terms</option>
+          <option value="Term 1">Term 1</option>
+          <option value="Term 2">Term 2</option>
+          <option value="Term 3">Term 3</option>
+        </select>
+      </div>
+
+      <div className="flex-1 min-w-[150px]">
+        <select
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={filteredExamType}
+          onChange={handleExamTypeChange}
+        >
+          <option value="">All Exams</option>
+          <option value="Exam 1">Exam 1</option>
+          <option value="Exam 2">Exam 2</option>
+          <option value="Exam 3">Exam 3</option>
         </select>
       </div>
 

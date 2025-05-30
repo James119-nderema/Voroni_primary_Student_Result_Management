@@ -143,12 +143,12 @@ const TimetableViewer = () => {
                     {timetableData.timeslots.map((ts) => {
                       const entry = timetableData.timetable[cls.id]?.[day.id]?.[ts.id];
                       const subject = entry?.subject || '—';
-                      const teacher = entry?.teacher;
+                     
 
                       return (
                         <td key={ts.id} className="border p-2 text-sm text-center">
                           <div>{subject}</div>
-                          {teacher && <div className="text-xs text-gray-500">{teacher}</div>}
+                         
                         </td>
                       );
                     })}

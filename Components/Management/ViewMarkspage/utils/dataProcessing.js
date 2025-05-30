@@ -152,32 +152,94 @@ export const filterStudentRowsByMonth = (rows, selectedMonth) => {
   });
 };
 
-export function filterStudentRows(studentRows, selectedGrade, searchTerm, selectedMonth) {
-  if (!studentRows.length) return [];
+export const filterStudentRows = (
+  studentRows, 
+  selectedGrade, 
+  searchTerm, 
+  selectedMonth,
+  selectedTerm = '',
+  selectedExamType = ''
+) => {
+  console.log('Filtering with:', { 
+    selectedGrade, 
+    searchTerm, 
+    selectedMonth, 
+    selectedTerm, 
+    selectedExamType 
+  });
   
-  let filteredRows = studentRows;
-  
-  // Filter by grade if selected
-  if (selectedGrade) {
-    filteredRows = filteredRows.filter(row => 
-      row.student.class_name === selectedGrade || 
-      row.student.grade === selectedGrade
-    );
-  }
-  
-  // Filter by search term if provided
-  if (searchTerm) {
-    const lowerCaseTerm = searchTerm.toLowerCase();
-    filteredRows = filteredRows.filter(row => {
-      const studentName = row.student.fullName || `Student ${row.student.id}`;
-      return studentName.toLowerCase().includes(lowerCaseTerm);
-    });
-  }
-  
-  // Filter by month if selected
-  if (selectedMonth) {
-    filteredRows = filterStudentRowsByMonth(filteredRows, selectedMonth);
-  }
-  
-  return filteredRows;
-}
+  return studentRows.filter(student => {
+    // For debugging - log the structure of the first student to understand data
+    if (studentRows.indexOf(student) === 0) {
+      console.log('First student structure:', JSON.stringify(student, null, 2));
+    }
+    
+    // Grade filter
+    const matchesGrade = !selectedGrade || 
+      (student.student && student.student.class_name === selectedGrade);
+    
+    // Search term filter
+    const matchesSearch = !searchTerm || 
+      (student.student && 
+       ((student.student.fullName && student.student.fullName.toLowerCase().includes(searchTerm.toLowerCase())) || 
+        (student.student.name && student.student.name.toLowerCase().includes(searchTerm.toLowerCase()))));
+    
+    // Month filter
+    let matchesMonth = !selectedMonth;
+    if (!matchesMonth && student.marks && Array.isArray(student.marks)) {
+      matchesMonth = student.marks.some(mark => {
+        if (!mark || !mark.submission_date) return false;
+        
+        try {
+          const markDate = new Date(mark.submission_date);
+          if (isNaN(markDate.getTime())) return false;
+          
+          const markMonth = markDate.getMonth();
+          const selectedMonthInt = parseInt(selectedMonth);
+          
+          return markMonth === selectedMonthInt;
+        } catch (error) {
+          return false;
+        }
+      });
+    }
+    
+    // Term filter - check both term and term_name properties
+    let matchesTerm = !selectedTerm;
+    if (!matchesTerm && student.marks && Array.isArray(student.marks)) {
+      matchesTerm = student.marks.some(mark => 
+        mark && (
+          (mark.term && mark.term === selectedTerm) || 
+          (mark.term_name && mark.term_name === selectedTerm)
+        )
+      );
+    }
+    
+    // Exam type filter - check both examType and exam_type properties
+    let matchesExamType = !selectedExamType;
+    if (!matchesExamType && student.marks && Array.isArray(student.marks)) {
+      matchesExamType = student.marks.some(mark => 
+        mark && (
+          (mark.examType && mark.examType === selectedExamType) || 
+          (mark.exam_type && mark.exam_type === selectedExamType)
+        )
+      );
+      
+      // If still no match, check if the exam type might be stored in a nested object
+      if (!matchesExamType) {
+        matchesExamType = student.marks.some(mark => 
+          mark && mark.exam && mark.exam.type === selectedExamType
+        );
+      }
+    }
+    
+    const result = matchesGrade && matchesSearch && matchesMonth && matchesTerm && matchesExamType;
+    
+    // Debug output for troubleshooting filters
+    if (selectedExamType && student.student && student.student.fullName) {
+      console.log(`Student ${student.student.fullName} - matches exam type: ${matchesExamType}`);
+    }
+    
+    return result;
+  });
+};

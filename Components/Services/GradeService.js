@@ -1,4 +1,4 @@
-import { secondary as API_BASE_URL } from './HostConfig';
+import API_BASE_URL from './HostConfig';;
 
 const API_URL = `${API_BASE_URL}/api/grades/`;
 

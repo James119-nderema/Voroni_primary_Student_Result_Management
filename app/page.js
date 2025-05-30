@@ -26,6 +26,7 @@ import TeachersTimetable from '@/Components/Timetable/Teachers/TeachersTimetable
 import SubjectTimetable from '@/Components/Timetable/Subject/SubjectTimetable';
 import ClassSchedule from '@/Components/Timetable/ClassSchedule/ClassSchedule';
 import TeacherClasses from '@/Components/Timetable/TeacherClasses/TeacherClasses';
+import Dashboard from '@/Components/Dashboard/Dashboard';
 
 const VoroniPrimarySchoolDashboard = () => {  
   const [activePage, setActivePage] = useState('dashboard');  
@@ -132,7 +133,7 @@ const VoroniPrimarySchoolDashboard = () => {
       title: 'Core Features',
       items: [
       
-       
+       { page: 'Dashboard', title: 'Dashboard', icon: Home },
        
       ],
     },
@@ -202,6 +203,7 @@ const VoroniPrimarySchoolDashboard = () => {
       case 'subjects': return <SubjectTimetable/>;
       case 'classSchedule': return <ClassSchedule/>;
       case 'teacherClasses': return <TeacherClasses/>;
+      case 'Dashboard' : return <Dashboard/>;
       default: return null;  
     }  
   };  

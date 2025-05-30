@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from 'react';
 import GradeFilter from './Filters/GradeFilter';
 import StudentSearch from './Filters/StudentSearch';
 import MonthFilter from './Filters/MonthFilter';
+import TermFilter from './Filters/TermFilter';
+import ExamTypeFilter from './Filters/ExamTypeFilter';
 import PerformanceStats from './Stats/PerformanceStats';
 import StudentMarksMobileView from './StudentMarksMobileView';
 import MarksTable from './MarksTable';
@@ -20,6 +22,8 @@ export default function StudentMarksTable() {
   const [selectedGrade, setSelectedGrade] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedTerm, setSelectedTerm] = useState('');
+  const [selectedExamType, setSelectedExamType] = useState('');
   const [showStats, setShowStats] = useState(false);
   
   // Data structure to hold processed marks for display
@@ -39,10 +43,17 @@ export default function StudentMarksTable() {
     extractUniqueGrades(students),
   [students]);
   
-  // Filter the rows based on selected grade, search term, and month
+  // Filter the rows based on all filters
   const filteredRows = useMemo(() => 
-    filterStudentRows(processedData.studentRows, selectedGrade, searchTerm, selectedMonth),
-  [processedData.studentRows, selectedGrade, searchTerm, selectedMonth]);
+    filterStudentRows(
+      processedData.studentRows, 
+      selectedGrade, 
+      searchTerm, 
+      selectedMonth,
+      selectedTerm,
+      selectedExamType
+    ),
+  [processedData.studentRows, selectedGrade, searchTerm, selectedMonth, selectedTerm, selectedExamType]);
 
   // Generate filename based on selected grade
   const generateFilename = useMemo(() => {
@@ -58,7 +69,7 @@ export default function StudentMarksTable() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Student Marks Overview</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-4">
         <GradeFilter 
           grades={uniqueGrades}
           selectedGrade={selectedGrade}
@@ -71,6 +82,14 @@ export default function StudentMarksTable() {
         <MonthFilter
           selectedMonth={selectedMonth}
           onMonthChange={setSelectedMonth}
+        />
+        <TermFilter
+          selectedTerm={selectedTerm}
+          onTermChange={setSelectedTerm}
+        />
+        <ExamTypeFilter
+          selectedExamType={selectedExamType}
+          onExamTypeChange={setSelectedExamType}
         />
       </div>
       
